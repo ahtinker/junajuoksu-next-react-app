@@ -4,7 +4,7 @@ import "./logo.css";
 const Logo = () => {
     return (
         <span className="logo-container">
-            <Image className="logo" src="/junajuoksu-logo.png" alt="Junajuoksu Logo" width={120} height={40} />
+            <Image className="logo" src="/junajuoksu-logo.png" alt="Junajuoksu Logo" height="28" width="28" />
             <span className="domain">junajuoksu.fi</span>
         </span>
     );

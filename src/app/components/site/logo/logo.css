@@ -7,8 +7,8 @@
 }
 
 .logo {
-    height: 35px;
     position: absolute;
+    margin-top: 2px;
 }
 
 .logo-container {
