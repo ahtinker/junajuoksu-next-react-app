@@ -165,7 +165,7 @@ export default function VaulDrawer() {
                             {isLocating ? (
                                 <>
                                     <Drawer.Title style={{ fontWeight: 500, marginBottom: '1rem' }}>
-                                        {t('stationList.nearbyDrawer.Locating')}
+                                        {t('stationList.nearbyDrawer.PleaseAcceptLocation')}
                                     </Drawer.Title>
                                     <p style={{ marginBottom: '0.5rem' }}>
                                         {t('stationList.nearbyDrawer.PleaseWait')}
@@ -229,7 +229,7 @@ export default function VaulDrawer() {
                                         {t('stationList.nearbyDrawer.PleaseAcceptLocation')}
                                     </Drawer.Title>
                                     <p style={{ marginBottom: '0.5rem' }}>
-                                        {t('stationList.nearbyDrawer.Explanation')}
+                                                    {t('stationList.nearbyDrawer.PleaseWait')}
                                     </p>
                                 </>
                             )}

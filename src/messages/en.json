@@ -22,10 +22,8 @@
         "searchResults": "Search results",
         "noResults": "No stations found matching your search",
         "nearbyDrawer": {
-            "PleaseAcceptLocation": "Please accept location access to find nearby stations.",
-            "Explanation": "We need your location to find nearby stations.",
-            "Locating": "Locating...",
-            "PleaseWait": "Please wait while we get your location.",
+            "PleaseAcceptLocation": "Please accept location access",
+            "PleaseWait": "We need your location to find nearby stations.",
             "LocationFound": "Location Found",
             "LocationError": "Location Error",
             "ErrorMessage": "Could not get your location",

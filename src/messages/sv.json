@@ -22,10 +22,8 @@
         "searchResults": "Sökresultat",
         "noResults": "Inga stationer hittades som matchar din sökning",
         "nearbyDrawer": {
-            "PleaseAcceptLocation": "Acceptera platsåtkomst för att hitta närliggande stationer.",
-            "Explanation": "Vi behöver din platsinformation för att hitta närliggande stationer.",
-            "Locating": "Lokaliserar...",
-            "PleaseWait": "Vänta medan vi hämtar din position.",
+            "PleaseAcceptLocation": "Acceptera platsåtkomst",
+            "PleaseWait": "Vi behöver din platsinformation för att hitta närliggande stationer.",
             "LocationFound": "Position hittad",
             "LocationError": "Positionsfel",
             "ErrorMessage": "Kunde inte hämta din position",

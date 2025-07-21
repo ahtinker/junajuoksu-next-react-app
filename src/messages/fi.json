@@ -22,10 +22,8 @@
         "searchResults": "Hakutulokset",
         "noResults": "Yhtään asemaa ei löytynyt hakusanallasi",
         "nearbyDrawer": {
-            "PleaseAcceptLocation": "Hyväksy sijainnin käyttö löytääksesi lähimmät asemat.",
-            "Explanation": "Tarvitsemme sijaintitietoja löytääksemme lähellä olevat asemat.",
-            "Locating": "Paikantaa...",
-            "PleaseWait": "Odota hetki, haemme sijaintiasi.",
+            "PleaseAcceptLocation": "Hyväksy sijainnin käyttö",
+            "PleaseWait": "Tarvitsemme sijaintitietoja löytääksemme lähellä olevat asemat.",
             "LocationFound": "Sijainti löytyi",
             "LocationError": "Sijaintiin liittyvä virhe",
             "ErrorMessage": "Sijaintiasi ei voitu hakea",
