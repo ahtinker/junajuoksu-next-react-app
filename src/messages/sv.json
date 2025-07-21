@@ -33,6 +33,12 @@
             "NoNearbyStations": "Inga närliggande stationer hittades.",
             "YourLocationDetails": "Dina positionsuppgifter",
             "PrivacyNotice": "Dina positionsuppgifter hålls privata och används endast för att hitta närliggande stationer."
+        },
+        "mapDrawer": {
+            "title": "Stationskarta",
+            "loadingStations": "Laddar stationsdata...",
+            "errorLoading": "Fel vid inläsning av stationer",
+            "stationCount": "Visar %count% passagerarstationer"
         }
     }
 }

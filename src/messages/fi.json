@@ -33,6 +33,12 @@
             "NoNearbyStations": "Läheisiä asemia ei löytynyt.",
             "YourLocationDetails": "Sijaintitietosi",
             "PrivacyNotice": "Sijaintitietosi pidetään yksityisinä ja niitä käytetään vain läheisten asemien löytämiseen."
+        },
+        "mapDrawer": {
+            "title": "Asemakartta",
+            "loadingStations": "Ladataan asematietoja...",
+            "errorLoading": "Virhe asemien lataamisessa",
+            "stationCount": "Näytetään %count% matkustaja-asemaa"
         }
     }
 }

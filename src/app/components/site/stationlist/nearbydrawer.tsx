@@ -27,7 +27,7 @@ interface NearbyStation {
     distance: number;
 }
 
-export default function VaulDrawer() {
+export default function NearbyDrawer() {
     const t = useTranslations();
     const [location, setLocation] = useState<{ latitude: number, longitude: number } | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -120,7 +120,7 @@ export default function VaulDrawer() {
                     borderWidth: "none !important",
                 }}
             >
-                <div className="button is-primary is-fullwidth ml-2 px-1">
+                <div className="button is-primary is-fullwidth ml-1 px-1">
                     <span className="icon">
                         <i className="fas fa-location-dot" aria-hidden="true"></i>
                     </span>

@@ -33,6 +33,12 @@
             "NoNearbyStations": "No nearby stations found.",
             "YourLocationDetails": "Your Location Details",
             "PrivacyNotice": "Your location data is kept private and is only used to find nearby stations."
+        },
+        "mapDrawer": {
+            "title": "Station Map",
+            "loadingStations": "Loading station data...",
+            "errorLoading": "Error loading stations",
+            "stationCount": "Showing %count% passenger stations"
         }
     }
 }

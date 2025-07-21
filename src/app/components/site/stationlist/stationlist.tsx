@@ -3,7 +3,8 @@ import { useRef, useState, useMemo } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import StationElement from './stationelement';
 import { getSearchResults } from './searchUtils';
-import VaulDrawer from './nearbydrawer';
+import NearbyDrawer from './nearbydrawer';
+import MapDrawer from './mapdrawer';
 
 const StationList = () => {
     const inputRef = useRef(null);
@@ -80,15 +81,8 @@ const StationList = () => {
             {!searchTerm.trim() && (
                 <>
                     <div className="panel-block px-4">
-                        <div className="button is-primary is-fullwidth px-1">
-                            <span className="icon">
-                                <i className="fas fa-map" aria-hidden="true"></i>
-                            </span>
-                            <span>
-                                {t('stationList.map')}
-                            </span>
-                        </div>
-                        <VaulDrawer />
+                        <MapDrawer />
+                        <NearbyDrawer />
 
                     </div>
                     <div className="buttons panel-block pb-4">
