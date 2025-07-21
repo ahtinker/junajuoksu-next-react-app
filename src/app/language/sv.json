@@ -1,0 +1,36 @@
+{
+    "translation": {
+        "navbar": {
+            "login": "Logga in",
+            "language": {
+                "fi": "Finska",
+                "sv": "Svenska",
+                "en": "Engelska"
+            }
+        },
+        "footer": {
+            "contact": "Kontaktinformation",
+            "additionalInfo": "Ytterligare information",
+            "implementedBy": "Tjänsten är utvecklad av Verkkokehitys Ankeriasniemi som en offentlig demonstration av våra färdigheter.",
+            "privacyPolicy": "Integritetspolicy",
+            "termsOfService": "Användarvillkor"
+        },
+        "stationList": {
+            "searchPlaceholder": "Sök station",
+            "map": "Karta",
+            "nearestStation": "Nära mig",
+            "suggestions": "Förslag",
+            "searchResults": "Sökresultat",
+            "noResults": "Inga stationer hittades som matchar din sökning",
+            "nearbyDrawer": {
+                "PleaseAcceptLocation": "Acceptera platsåtkomst för att hitta närliggande stationer.",
+                "Explanation": "Vi behöver din platsinformation för att hitta närliggande stationer.",
+                "Locating": "Lokaliserar...",
+                "PleaseWait": "Vänta medan vi hämtar din position.",
+                "LocationFound": "Position hittad",
+                "LocationError": "Positionsfel",
+                "ErrorMessage": "Kunde inte hämta din position"
+            }
+        }
+    }
+}

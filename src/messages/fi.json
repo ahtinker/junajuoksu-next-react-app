@@ -1,0 +1,34 @@
+{
+    "navbar": {
+        "login": "Kirjaudu",
+        "language": {
+            "fi": "Suomi",
+            "sv": "Svenska",
+            "en": "English"
+        }
+    },
+    "footer": {
+        "contact": "Yhteystiedot",
+        "additionalInfo": "Lisätiedot",
+        "implementedBy": "Toteutettu Verkkokehitys Ankeriasniemen toimesta julkisena esimerkkinä taidoistamme.",
+        "privacyPolicy": "Yksityisyysseloste",
+        "termsOfService": "Käyttöehdot"
+    },
+    "stationList": {
+        "searchPlaceholder": "Etsi asemaa",
+        "map": "Kartta",
+        "nearestStation": "Lähelläni",
+        "suggestions": "Ehdotukset",
+        "searchResults": "Hakutulokset",
+        "noResults": "Yhtään asemaa ei löytynyt hakusanallasi",
+        "nearbyDrawer": {
+            "PleaseAcceptLocation": "Hyväksy sijainnin käyttö löytääksesi lähimmät asemat.",
+            "Explanation": "Tarvitsemme sijaintitietoja löytääksemme lähellä olevat asemat.",
+            "Locating": "Paikantaa...",
+            "PleaseWait": "Odota hetki, haemme sijaintiasi.",
+            "LocationFound": "Sijainti löytyi",
+            "LocationError": "Sijaintiin liittyvä virhe",
+            "ErrorMessage": "Sijaintiasi ei voitu hakea"
+        }
+    }
+}

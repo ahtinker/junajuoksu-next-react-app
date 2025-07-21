@@ -1,0 +1,34 @@
+{
+    "navbar": {
+        "login": "Login",
+        "language": {
+            "fi": "Finnish",
+            "sv": "Swedish",
+            "en": "English"
+        }
+    },
+    "footer": {
+        "contact": "Contact Information",
+        "additionalInfo": "Additional Information",
+        "implementedBy": "Developed by Verkkokehitys Ankeriasniemi as a public demo of our skills.",
+        "privacyPolicy": "Privacy Policy",
+        "termsOfService": "Terms of Service"
+    },
+    "stationList": {
+        "searchPlaceholder": "Search for station",
+        "map": "Map",
+        "nearestStation": "Near me",
+        "suggestions": "Suggestions",
+        "searchResults": "Search results",
+        "noResults": "No stations found matching your search",
+        "nearbyDrawer": {
+            "PleaseAcceptLocation": "Please accept location access to find nearby stations.",
+            "Explanation": "We need your location to find nearby stations.",
+            "Locating": "Locating...",
+            "PleaseWait": "Please wait while we get your location.",
+            "LocationFound": "Location Found",
+            "LocationError": "Location Error",
+            "ErrorMessage": "Could not get your location"
+        }
+    }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "junajuoksu-next-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "bulma": "^1.0.4",
+    "next": "15.4.2",
+    "next-intl": "^4.3.4",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "sass": "^1.89.2",
+    "vaul": "^1.1.2"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.4.2",
+    "typescript": "^5"
+  }
+}
