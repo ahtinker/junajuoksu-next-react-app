@@ -3,12 +3,80 @@
 import { Drawer } from 'vaul';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
+import StationElement from './stationelement';
+
+interface StationFeature {
+    type: 'Feature';
+    geometry: {
+        type: 'Point';
+        coordinates: [number, number];
+    };
+    properties: {
+        passengerTraffic: boolean;
+        type: 'STATION';
+        stationName: string;
+        stationShortCode: string;
+        stationUICCode: number;
+        countryCode: string;
+    };
+}
+
+interface NearbyStation {
+    uicCode: number;
+    name: string;
+    distance: number;
+}
 
 export default function VaulDrawer() {
     const t = useTranslations();
     const [location, setLocation] = useState<{ latitude: number, longitude: number } | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [isLocating, setIsLocating] = useState(false);
+    const [nearbyStations, setNearbyStations] = useState<NearbyStation[]>([]);
+    const [isLoadingStations, setIsLoadingStations] = useState(false);
+
+    // Calculate distance between two points using Haversine formula
+    const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
+        const R = 6371; // Earth's radius in kilometers
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = 
+            Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+            Math.sin(dLon/2) * Math.sin(dLon/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return R * c;
+    };
+
+    const findNearbyStations = async (userLat: number, userLon: number) => {
+        setIsLoadingStations(true);
+        try {
+            const response = await fetch('https://rata.digitraffic.fi/api/v1/metadata/stations.geojson');
+            const data = await response.json();
+            
+            // Filter passenger stations and calculate distances
+            const stationsWithDistance = data.features
+                .filter((station: StationFeature) => station.properties.passengerTraffic)
+                .map((station: StationFeature) => {
+                    const [stationLon, stationLat] = station.geometry.coordinates;
+                    const distance = calculateDistance(userLat, userLon, stationLat, stationLon);
+                    
+                    return {
+                        uicCode: station.properties.stationUICCode,
+                        name: station.properties.stationName,
+                        distance: distance
+                    };
+                })
+                .sort((a: NearbyStation, b: NearbyStation) => a.distance - b.distance)
+                .slice(0, 3); // Get 3 closest stations
+            
+            setNearbyStations(stationsWithDistance);
+        } catch (err) {
+            setError('Failed to fetch station data');
+        } finally {
+            setIsLoadingStations(false);
+        }
+    };
 
     const requestLocation = () => {
         if (!navigator.geolocation) {
@@ -18,14 +86,18 @@ export default function VaulDrawer() {
 
         setIsLocating(true);
         setError(null);
+        setNearbyStations([]);
 
         navigator.geolocation.getCurrentPosition(
             (position) => {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
                 setLocation({
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude
+                    latitude: lat,
+                    longitude: lon
                 });
                 setIsLocating(false);
+                findNearbyStations(lat, lon);
             },
             (error) => {
                 setError(error.message);
@@ -104,12 +176,40 @@ export default function VaulDrawer() {
                                     <Drawer.Title style={{ fontWeight: 500, marginBottom: '1rem' }}>
                                         {t('stationList.nearbyDrawer.LocationFound')}
                                     </Drawer.Title>
-                                    <p style={{ marginBottom: '0.5rem' }}>
-                                        <strong>Latitude:</strong> {location.latitude.toFixed(6)}
-                                    </p>
-                                    <p style={{ marginBottom: '0.5rem' }}>
-                                        <strong>Longitude:</strong> {location.longitude.toFixed(6)}
-                                    </p>
+                                    
+                                    {isLoadingStations ? (
+                                        <p style={{ marginBottom: '1rem', textAlign: 'center' }}>
+                                            <i className="fas fa-spinner fa-spin"></i> Loading nearby stations...
+                                        </p>
+                                    ) : nearbyStations.length > 0 ? (
+                                        <div style={{ marginBottom: '1rem' }}>
+                                            <h4 style={{ marginBottom: '0.5rem', fontWeight: 'bold' }}>Nearest Stations:</h4>
+                                            {nearbyStations.map((station, index) => (
+                                                <div key={station.uicCode} style={{ marginBottom: '0.5rem' }}>
+                                                    <StationElement stationUIC={station.uicCode.toString()} />
+                                                    <p style={{ fontSize: '0.875rem', color: 'gray', marginTop: '0.25rem' }}>
+                                                        {station.distance.toFixed(1)} km away
+                                                    </p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <p style={{ marginBottom: '0.5rem' }}>
+                                            No nearby stations found.
+                                        </p>
+                                    )}
+                                    
+                                    <details style={{ marginTop: '1rem' }}>
+                                        <summary style={{ cursor: 'pointer', marginBottom: '0.5rem' }}>
+                                            Your Location Details
+                                        </summary>
+                                        <p style={{ marginBottom: '0.5rem', fontSize: '0.875rem' }}>
+                                            <strong>Latitude:</strong> {location.latitude.toFixed(6)}
+                                        </p>
+                                        <p style={{ marginBottom: '0.5rem', fontSize: '0.875rem' }}>
+                                            <strong>Longitude:</strong> {location.longitude.toFixed(6)}
+                                        </p>
+                                    </details>
                                 </>
                             ) : error ? (
                                 <>
