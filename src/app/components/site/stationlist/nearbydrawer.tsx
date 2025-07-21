@@ -179,35 +179,38 @@ export default function VaulDrawer() {
                                     
                                     {isLoadingStations ? (
                                         <p style={{ marginBottom: '1rem', textAlign: 'center' }}>
-                                            <i className="fas fa-spinner fa-spin"></i> Loading nearby stations...
+                                                <i className="fas fa-spinner fa-spin"></i> {t('stationList.nearbyDrawer.LoadingStations')}
                                         </p>
                                     ) : nearbyStations.length > 0 ? (
                                         <div style={{ marginBottom: '1rem' }}>
-                                            <h4 style={{ marginBottom: '0.5rem', fontWeight: 'bold' }}>Nearest Stations:</h4>
+                                                    <h4 style={{ marginBottom: '0.5rem', fontWeight: 'bold' }}>{t('stationList.nearbyDrawer.NearestStations')}</h4>
                                             {nearbyStations.map((station, index) => (
                                                 <div key={station.uicCode} style={{ marginBottom: '0.5rem' }}>
                                                     <StationElement stationUIC={station.uicCode.toString()} />
                                                     <p style={{ fontSize: '0.875rem', color: 'gray', marginTop: '0.25rem' }}>
-                                                        {station.distance.toFixed(1)} km away
+                                                        {station.distance.toFixed(1)} {t('stationList.nearbyDrawer.KmAway')}
                                                     </p>
                                                 </div>
                                             ))}
                                         </div>
                                     ) : (
                                         <p style={{ marginBottom: '0.5rem' }}>
-                                            No nearby stations found.
+                                                        {t('stationList.nearbyDrawer.NoNearbyStations')}
                                         </p>
                                     )}
                                     
                                     <details style={{ marginTop: '1rem' }}>
                                         <summary style={{ cursor: 'pointer', marginBottom: '0.5rem' }}>
-                                            Your Location Details
+                                                {t('stationList.nearbyDrawer.YourLocationDetails')}
                                         </summary>
                                         <p style={{ marginBottom: '0.5rem', fontSize: '0.875rem' }}>
-                                            <strong>Latitude:</strong> {location.latitude.toFixed(6)}
+                                                <strong>LAT:</strong> {location.latitude.toFixed(6)}
                                         </p>
                                         <p style={{ marginBottom: '0.5rem', fontSize: '0.875rem' }}>
-                                            <strong>Longitude:</strong> {location.longitude.toFixed(6)}
+                                                <strong>LON:</strong> {location.longitude.toFixed(6)}
+                                            </p>
+                                            <p>
+                                                {t('stationList.nearbyDrawer.PrivacyNotice')}
                                         </p>
                                     </details>
                                 </>

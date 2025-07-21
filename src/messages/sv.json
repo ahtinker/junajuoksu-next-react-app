@@ -28,7 +28,13 @@
             "PleaseWait": "Vänta medan vi hämtar din position.",
             "LocationFound": "Position hittad",
             "LocationError": "Positionsfel",
-            "ErrorMessage": "Kunde inte hämta din position"
+            "ErrorMessage": "Kunde inte hämta din position",
+            "LoadingStations": "Laddar närliggande stationer...",
+            "NearestStations": "Närmaste stationer:",
+            "KmAway": "km bort",
+            "NoNearbyStations": "Inga närliggande stationer hittades.",
+            "YourLocationDetails": "Dina positionsuppgifter",
+            "PrivacyNotice": "Dina positionsuppgifter hålls privata och används endast för att hitta närliggande stationer."
         }
     }
 }

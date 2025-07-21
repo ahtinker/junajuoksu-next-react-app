@@ -28,7 +28,13 @@
             "PleaseWait": "Please wait while we get your location.",
             "LocationFound": "Location Found",
             "LocationError": "Location Error",
-            "ErrorMessage": "Could not get your location"
+            "ErrorMessage": "Could not get your location",
+            "LoadingStations": "Loading nearby stations...",
+            "NearestStations": "Nearest Stations:",
+            "KmAway": "km away",
+            "NoNearbyStations": "No nearby stations found.",
+            "YourLocationDetails": "Your Location Details",
+            "PrivacyNotice": "Your location data is kept private and is only used to find nearby stations."
         }
     }
 }

@@ -28,7 +28,13 @@
             "PleaseWait": "Odota hetki, haemme sijaintiasi.",
             "LocationFound": "Sijainti löytyi",
             "LocationError": "Sijaintiin liittyvä virhe",
-            "ErrorMessage": "Sijaintiasi ei voitu hakea"
+            "ErrorMessage": "Sijaintiasi ei voitu hakea",
+            "LoadingStations": "Ladataan läheisiä asemia...",
+            "NearestStations": "Lähimmät asemat:",
+            "KmAway": "km päässä",
+            "NoNearbyStations": "Läheisiä asemia ei löytynyt.",
+            "YourLocationDetails": "Sijaintitietosi",
+            "PrivacyNotice": "Sijaintitietosi pidetään yksityisinä ja niitä käytetään vain läheisten asemien löytämiseen."
         }
     }
 }
