@@ -64,7 +64,7 @@ const StationList = () => {
                             searchResults.map((station) => (
                                 <StationElement
                                     key={station.stationUICCode}
-                                    stationUIC={station.stationUICCode}
+                                    stationUIC={station.stationUICCode.toString()}
                                 />
                             ))
                         ) : (

@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Logo from "./logo/logo";
 import { useTranslations } from 'next-intl';
 
@@ -29,7 +30,7 @@ const Footer = () => {
                     <div className="column">
                         <h4>{t('footer.additionalInfo')}</h4>
                         <div>{t('footer.implementedBy')}</div>
-                        <img className="mt-5" src="/va-logo.svg" alt="Verkkokehitys Ankeriasniemi" width="75" />
+                        <Image className="mt-5" src="/va-logo.svg" alt="Verkkokehitys Ankeriasniemi" width={75} height={30} />
 
                         <div className="my-4">
                             <a href="/privacy" className="has-text-info-45">{t('footer.privacyPolicy')}</a><br />

@@ -1,5 +1,25 @@
 import stationTranslations from '../../../resources/station_translations.json';
 
+interface Station {
+    stationUICCode: number;
+    stationName_fi: string;
+    stationName_sv: string;
+    stationName_en: string;
+}
+
+const getStationNameByLocale = (station: Station, locale: string): string => {
+    switch (locale) {
+        case 'fi':
+            return station.stationName_fi;
+        case 'sv':
+            return station.stationName_sv;
+        case 'en':
+            return station.stationName_en;
+        default:
+            return station.stationName_fi;
+    }
+};
+
 // Levenshtein distance calculation
 export const levenshteinDistance = (str1: string, str2: string): number => {
     const matrix = [];
@@ -63,10 +83,10 @@ export const getSearchResults = (searchTerm: string, currentLocale: string, resu
     const threshold = 0.1; // Very low threshold
 
     // Calculate similarity scores for all stations
-    const stationsWithScores = stationTranslations.stations.map((station: any) => {
+    const stationsWithScores = stationTranslations.stations.map((station: Station) => {
         // Determine the primary name to use for the current language
         const currentLangName =
-            station[`stationName_${currentLocale}`] ||
+            getStationNameByLocale(station, currentLocale) ||
             station.stationName_fi ||
             station.stationName_sv ||
             station.stationName_en || '';
