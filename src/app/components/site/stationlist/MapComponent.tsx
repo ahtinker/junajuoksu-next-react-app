@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { useLocale } from 'next-intl';
 import L from 'leaflet';
 import StationDetailsDrawer from './stationdetailsdrawer';
-import stationTranslations from '../../../resources/station_translations.json';
+import { getTranslatedStationName, type StationFeature } from '../../../../lib/stationUtils';
 import 'leaflet/dist/leaflet.css';
 
 // Component to handle map events
@@ -16,22 +16,6 @@ function MapEvents({ onZoomChange }: { onZoomChange: (zoom: number) => void }) {
         },
     });
     return null;
-}
-
-interface StationFeature {
-    type: 'Feature';
-    geometry: {
-        type: 'Point';
-        coordinates: [number, number];
-    };
-    properties: {
-        passengerTraffic: boolean;
-        type: 'STATION';
-        stationName: string;
-        stationShortCode: string;
-        stationUICCode: number;
-        countryCode: string;
-    };
 }
 
 interface MapComponentProps {
@@ -55,41 +39,6 @@ export default function MapComponent({ stations }: MapComponentProps) {
 
     // Show station names when zoomed in enough
     const showStationNames = zoomLevel >= 10;
-
-    // Function to get translated station name
-    const getTranslatedStationName = (stationUICCode: number): string => {
-        const translation = stationTranslations.stations.find(
-            station => station.stationUICCode === stationUICCode
-        );
-
-        if (!translation) {
-            // Fallback to the original station name from API
-            const station = stations.find(s => s.properties.stationUICCode === stationUICCode);
-            return station?.properties.stationName || '';
-        }
-
-        // Get name based on current locale with fallback priority
-        const localeKey = `stationName_${locale}` as keyof typeof translation;
-        let stationName = String(translation[localeKey] || '');
-
-        // Fallback hierarchy: current locale -> Finnish -> Swedish -> English -> original API name
-        if (!stationName || stationName.trim() === '') {
-            stationName = String(translation.stationName_fi || '');
-        }
-        if (!stationName || stationName.trim() === '') {
-            stationName = String(translation.stationName_sv || '');
-        }
-        if (!stationName || stationName.trim() === '') {
-            stationName = String(translation.stationName_en || '');
-        }
-        if (!stationName || stationName.trim() === '') {
-            // Final fallback to API name
-            const station = stations.find(s => s.properties.stationUICCode === stationUICCode);
-            stationName = station?.properties.stationName || '';
-        }
-
-        return stationName;
-    };
 
     // Handle station click
     const handleStationClick = (station: StationFeature) => {
@@ -175,7 +124,7 @@ export default function MapComponent({ stations }: MapComponentProps) {
 
                 {stations.map((station) => {
                     const [lon, lat] = station.geometry.coordinates;
-                    const translatedName = getTranslatedStationName(station.properties.stationUICCode);
+                    const translatedName = getTranslatedStationName(station.properties.stationUICCode, locale, stations);
 
                     // Create a custom icon for station name labels
                     const stationNameIcon = showStationNames ? L.divIcon({

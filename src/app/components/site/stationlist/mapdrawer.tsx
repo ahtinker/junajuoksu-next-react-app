@@ -2,7 +2,7 @@
 
 import { Drawer } from 'vaul';
 import { useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import dynamic from 'next/dynamic';
 
 // Dynamically import the Map component to avoid SSR issues
@@ -46,7 +46,7 @@ export default function MapDrawer() {
                 (station: StationFeature) => station.properties.passengerTraffic
             );
             setStations(passengerStations);
-        } catch (err) {
+        } catch (_err) {
             setError('Failed to load station data');
         } finally {
             setIsLoading(false);

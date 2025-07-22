@@ -71,7 +71,7 @@ export default function NearbyDrawer() {
                 .slice(0, 3); // Get 3 closest stations
             
             setNearbyStations(stationsWithDistance);
-        } catch (err) {
+        } catch (_err) {
             setError('Failed to fetch station data');
         } finally {
             setIsLoadingStations(false);
@@ -184,7 +184,7 @@ export default function NearbyDrawer() {
                                     ) : nearbyStations.length > 0 ? (
                                         <div style={{ marginBottom: '1rem' }}>
                                                     <h4 style={{ marginBottom: '0.5rem', fontWeight: 'bold' }}>{t('stationList.nearbyDrawer.NearestStations')}</h4>
-                                            {nearbyStations.map((station, index) => (
+                                            {nearbyStations.map((station) => (
                                                 <div key={station.uicCode} style={{ marginBottom: '0.5rem' }}>
                                                     <StationElement stationUIC={station.uicCode.toString()} />
                                                     <p style={{ fontSize: '0.875rem', color: 'gray', marginTop: '0.25rem' }}>

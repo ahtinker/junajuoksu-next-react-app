@@ -1,24 +1,9 @@
 'use client';
 
 import { Drawer } from 'vaul';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import StationElement from './stationelement';
-
-interface StationFeature {
-    type: 'Feature';
-    geometry: {
-        type: 'Point';
-        coordinates: [number, number];
-    };
-    properties: {
-        passengerTraffic: boolean;
-        type: 'STATION';
-        stationName: string;
-        stationShortCode: string;
-        stationUICCode: number;
-        countryCode: string;
-    };
-}
+import { getTranslatedStationNameWithFallback, type StationFeature } from '../../../../lib/stationUtils';
 
 interface StationDetailsDrawerProps {
     station: StationFeature | null;
@@ -28,10 +13,17 @@ interface StationDetailsDrawerProps {
 
 export default function StationDetailsDrawer({ station, isOpen, onClose }: StationDetailsDrawerProps) {
     const t = useTranslations();
+    const locale = useLocale();
 
     if (!station) return null;
 
     // Note: station coordinates not used in this drawer
+
+    const translatedStationName = getTranslatedStationNameWithFallback(
+        station.properties.stationUICCode,
+        locale,
+        station.properties.stationName
+    );
 
     // Debug log
     console.log('StationDetailsDrawer render:', { isOpen, station: station?.properties.stationName });
@@ -91,7 +83,7 @@ export default function StationDetailsDrawer({ station, isOpen, onClose }: Stati
                             marginBottom: '1rem'
                         }}>
                             <Drawer.Title className="title is-4 my-5" style={{ color: 'var(--bulma-text)', margin: 0 }}>
-                                {station.properties.stationName}
+                                {translatedStationName}
                             </Drawer.Title>
                             <p className="mb-4">{t('stationList.mapDrawer.openTimetable')}</p>
                             <StationElement stationUIC={station.properties.stationUICCode.toString()} />
