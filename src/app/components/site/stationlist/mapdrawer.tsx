@@ -69,7 +69,7 @@ export default function MapDrawer() {
                     borderWidth: "none !important",
                 }}
             >
-                <div className="button is-primary is-fullwidth mr-1 px-1">
+                <div className="button is-primary is-fullwidth px-1">
                     <span className="icon">
                         <i className="fas fa-map" aria-hidden="true"></i>
                     </span>

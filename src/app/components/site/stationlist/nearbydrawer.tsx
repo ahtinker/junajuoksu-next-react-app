@@ -120,7 +120,7 @@ export default function NearbyDrawer() {
                     borderWidth: "none !important",
                 }}
             >
-                <div className="button is-primary is-fullwidth ml-1 px-1">
+                <div className="button is-primary is-fullwidth ml-2 px-1">
                     <span className="icon">
                         <i className="fas fa-location-dot" aria-hidden="true"></i>
                     </span>
