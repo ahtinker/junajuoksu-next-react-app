@@ -40,3 +40,11 @@ a {
     color-scheme: dark;
   }
 }
+
+.themebackground {
+  background-color: var(--bulma-background) !important;
+}
+
+.themetext {
+  color: var(--bulma-color) !important;
+}

@@ -38,7 +38,8 @@
             "title": "Station Map",
             "loadingStations": "Loading station data...",
             "errorLoading": "Error loading stations",
-            "stationCount": "Showing %count% passenger stations"
+            "openTimetable": "Open the timetable for this location by pressing the button below.",
+            "close": "Close"
         }
     }
 }

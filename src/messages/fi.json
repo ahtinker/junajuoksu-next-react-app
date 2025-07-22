@@ -38,7 +38,8 @@
             "title": "Asemakartta",
             "loadingStations": "Ladataan asematietoja...",
             "errorLoading": "Virhe asemien lataamisessa",
-            "stationCount": "Näytetään %count% matkustaja-asemaa"
+            "openTimetable": "Avaa tämän kohteen juna-aikataulut painamalla allaolevaa painiketta.",
+            "close": "Sulje"
         }
     }
 }

@@ -88,8 +88,9 @@ export default function MapDrawer() {
                         borderTopLeftRadius: '10px',
                         borderTopRightRadius: '10px',
                         marginTop: '1rem',
-                        height: '90%',
+                        height: '100%',
                         position: 'fixed',
+                        zIndex: 1000,
                         bottom: 0,
                         left: 0,
                         right: 0,
@@ -132,20 +133,20 @@ export default function MapDrawer() {
                                 position: 'absolute',
                                 top: '0.5rem',
                                 right: '0.5rem',
-                                background: 'transparent',
                                 border: 'none',
                                 cursor: 'pointer',
-                                padding: '0.5rem',
-                                borderRadius: '50%',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
                                 color: 'var(--bulma-text)',
-                                fontSize: '1.2rem'
                             }}
                             aria-label="Close map"
+                            className="button"
                         >
-                            <i className="fas fa-times"></i>
+                            <span className="icon">
+                                <i className="fas fa-close"></i>
+                            </span>
+                            <span>
+                                {t('stationList.mapDrawer.close')}
+                            </span>
+
                         </button>
                     </div>
 
@@ -179,22 +180,7 @@ export default function MapDrawer() {
                             </div>
                         ) : (
                             <>
-                                <MapWithNoSSR stations={stations} />
-                                {/* Station count overlay */}
-                                <div style={{
-                                    position: 'absolute',
-                                    bottom: '1rem',
-                                    right: '1rem',
-                                    backgroundColor: 'rgba(0, 209, 178, 0.9)',
-                                    color: 'white',
-                                    padding: '0.5rem 0.75rem',
-                                    borderRadius: '20px',
-                                    fontSize: '0.875rem',
-                                    fontWeight: 'bold',
-                                    boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
-                                }}>
-                                    {t('stationList.mapDrawer.stationCount').replace('%count%', stations.length.toString())}
-                                </div>
+                                        <MapWithNoSSR stations={stations} />
                             </>
                         )}
                     </div>

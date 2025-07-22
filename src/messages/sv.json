@@ -38,7 +38,8 @@
             "title": "Stationskarta",
             "loadingStations": "Laddar stationsdata...",
             "errorLoading": "Fel vid inläsning av stationer",
-            "stationCount": "Visar %count% passagerarstationer"
+            "openTimetable": "Öppna tidtabellen för denna plats genom att trycka på knappen nedan.",
+            "close": "Stäng"
         }
     }
 }
