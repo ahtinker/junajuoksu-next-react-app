@@ -31,7 +31,7 @@ export default function StationDetailsDrawer({ station, isOpen, onClose }: Stati
 
     if (!station) return null;
 
-    const [lon, lat] = station.geometry.coordinates;
+    // Note: station coordinates not used in this drawer
 
     // Debug log
     console.log('StationDetailsDrawer render:', { isOpen, station: station?.properties.stationName });

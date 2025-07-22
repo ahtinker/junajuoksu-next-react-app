@@ -1,7 +1,6 @@
 'use client';
 
 import { MapContainer, TileLayer, CircleMarker, useMapEvents, Marker } from 'react-leaflet';
-import { useTranslations } from 'next-intl';
 import { useState, useEffect } from 'react';
 import L from 'leaflet';
 import StationDetailsDrawer from './stationdetailsdrawer';
@@ -37,8 +36,12 @@ interface MapComponentProps {
     stations: StationFeature[];
 }
 
+// Declare global window interface for station click handler
+declare global {
+  interface Window { handleStationNameClick?: (stationUICCode: number) => void; }
+}
+
 export default function MapComponent({ stations }: MapComponentProps) {
-    const t = useTranslations();
     const [zoomLevel, setZoomLevel] = useState(5);
     const [isDarkTheme, setIsDarkTheme] = useState(false);
     const [selectedStation, setSelectedStation] = useState<StationFeature | null>(null);
@@ -94,16 +97,11 @@ export default function MapComponent({ stations }: MapComponentProps) {
 
     // Set up global function for station name clicks
     useEffect(() => {
-        (window as any).handleStationNameClick = (stationUICCode: number) => {
+        window.handleStationNameClick = (stationUICCode: number) => {
             const station = stations.find(s => s.properties.stationUICCode === stationUICCode);
-            if (station) {
-                handleStationClick(station);
-            }
+            if (station) handleStationClick(station);
         };
-
-        return () => {
-            delete (window as any).handleStationNameClick;
-        };
+        return () => { delete window.handleStationNameClick; };
     }, [stations]);
 
     // Choose tile layer based on theme
