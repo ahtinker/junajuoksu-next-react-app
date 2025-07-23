@@ -4,28 +4,13 @@ import { Drawer } from 'vaul';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
+import { StationFeature } from '../../../../lib/types';
 
 // Dynamically import the Map component to avoid SSR issues
 const MapWithNoSSR = dynamic(() => import('./MapComponent'), {
     ssr: false,
     loading: () => <p style={{ textAlign: 'center', padding: '2rem' }}>Loading map...</p>
 });
-
-interface StationFeature {
-    type: 'Feature';
-    geometry: {
-        type: 'Point';
-        coordinates: [number, number];
-    };
-    properties: {
-        passengerTraffic: boolean;
-        type: 'STATION';
-        stationName: string;
-        stationShortCode: string;
-        stationUICCode: number;
-        countryCode: string;
-    };
-}
 
 export default function MapDrawer() {
     const t = useTranslations();
@@ -46,7 +31,7 @@ export default function MapDrawer() {
                 (station: StationFeature) => station.properties.passengerTraffic
             );
             setStations(passengerStations);
-        } catch (_err) {
+        } catch {
             setError('Failed to load station data');
         } finally {
             setIsLoading(false);

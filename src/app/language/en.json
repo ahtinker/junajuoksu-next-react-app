@@ -1,0 +1,10 @@
+    "timetables": {
+        "up": "Scroll to top",
+        "departsFrom": "Departs from",
+        "arrivesAt": "Arrives at",
+        "track": "Track",
+        "departs": "Departs",
+        "arrives": "Arrives",
+        "timeToArrival": "Time to arrival",
+        "cancelled": "Cancelled"
+    }

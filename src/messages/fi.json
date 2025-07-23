@@ -16,6 +16,7 @@
     },
     "stationList": {
         "searchPlaceholder": "Etsi asemaa",
+        "search": "Hae",
         "map": "Kartta",
         "nearestStation": "Lähelläni",
         "suggestions": "Ehdotukset",
@@ -41,5 +42,32 @@
             "openTimetable": "Avaa tämän kohteen juna-aikataulut painamalla allaolevaa painiketta.",
             "close": "Sulje"
         }
+    },
+    "timetables": {
+        "title": "Juna-aikataulut",
+        "subtitle": "Katso junien lähtö- ja saapumisajat",
+        "comingSoon": "Aikataulutoiminto tulossa pian!",
+        "description": "Täältä voit tulevaisuudessa hakea ja katsella juna-aikatauluja, lähtöaikoja ja myöhästymisiä kaikille Suomen rautatieasemille.",
+        "loadingStation": "Ladataan asematietoja...",
+        "stationNotFound": "Asemaa ei löytynyt",
+        "stationSearchHelp": "Tarkista aseman nimi, UIC-koodi tai lyhenne ja yritä uudelleen.",
+        "searchedFor": "Haettiin",
+        "stationCode": "Asemakoodi",
+        "futureFeatures": "Tulevat ominaisuudet:",
+        "features": {
+            "departures": "Reaaliaikaiset lähtöajat",
+            "arrivals": "Reaaliaikaiset saapumisajat",
+            "delays": "Myöhästymistiedot",
+            "platformInfo": "Laiturtieto",
+            "realTime": "Reaaliaikaiset päivitykset"
+        },
+        "from": "Asemalta",
+        "up": "Ylös",
+        "arrivesAt": "Saapuu klo",
+        "departsAt": "Lähtee klo",
+        "track": "Laituri",
+        "arrivesTo": "Saapuu",
+        "departsFrom": "Lähtee",
+        "timeToArrival": "Saapumisaika"
     }
 }

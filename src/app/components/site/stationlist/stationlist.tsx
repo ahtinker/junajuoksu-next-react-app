@@ -80,9 +80,13 @@ const StationList = () => {
             {/* Show map/nearby buttons and suggestions only when not searching */}
             {!searchTerm.trim() && (
                 <>
-                    <div className="panel-block px-4">
-                        <MapDrawer />
-                        <NearbyDrawer />
+                    <div className="panel-block columns is-1 is-mobile m-0 py-1 px-3">
+                        <p className="column">
+                            <MapDrawer />
+                        </p>
+                        <p className="column">
+                            <NearbyDrawer />
+                        </p>
 
                     </div>
                     <div className="buttons panel-block pb-4">

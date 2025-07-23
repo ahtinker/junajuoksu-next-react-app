@@ -43,7 +43,7 @@ const NavBar = () => {
                                 <div className="dropdown-trigger">
                                     <button className="button is-rounded" aria-haspopup="true" aria-controls="dropdown-menu4">
                                         <span className="icon pr-1">
-                                            <Image src={getCurrentLanguageFlag()} alt={getCurrentLanguageName()} width={20} height={15} />
+                                            <Image src={`/${getCurrentLanguageFlag()}`} alt={getCurrentLanguageName()} width={20} height={15} />
                                         </span>
                                         <span className="is-hidden-mobile">{getCurrentLanguageName()}</span>
                                         <span className="icon is-small">
@@ -56,7 +56,7 @@ const NavBar = () => {
                                         <a href="#fi" className={`dropdown-item p-4 ${currentLocale === 'fi' ? 'is-active has-background-primary has-text-white' : ''}`} onClick={() => changeLanguage('fi')} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                             <span className="icon-text pr-1">
                                                 <span className="icon">
-                                                    <Image src="flag_fi.svg" alt="Suomi" width={20} height={15} />
+                                                    <Image src="/flag_fi.svg" alt="Suomi" width={20} height={15} />
                                                 </span>
                                                 <span className="has-text-weight-semibold is-size-6">Suomi</span> {/* This text needs to be hard coded so that the translation function is not used, because a foreigner looking for Finnish might not understand the translation. */}
                                             </span>
@@ -65,7 +65,7 @@ const NavBar = () => {
                                         <a href="#sv" className={`dropdown-item p-4 ${currentLocale === 'sv' ? 'is-active has-background-primary has-text-white' : ''}`} onClick={() => changeLanguage('sv')} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                             <span className="icon-text pr-1">
                                                 <span className="icon">
-                                                    <Image src="flag_sv.svg" alt="Svenska" width={20} height={15} />
+                                                    <Image src="/flag_sv.svg" alt="Svenska" width={20} height={15} />
                                                 </span>
                                                 <span className="has-text-weight-semibold is-size-6">Svenska</span>
                                             </span>
@@ -74,7 +74,7 @@ const NavBar = () => {
                                         <a href="#en" className={`dropdown-item p-4 ${currentLocale === 'en' ? 'is-active has-background-primary has-text-white' : ''}`} onClick={() => changeLanguage('en')} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                             <span className="icon-text pr-1">
                                                 <span className="icon">
-                                                    <Image src="flag_en.svg" alt="English" width={20} height={15} />
+                                                    <Image src="/flag_en.svg" alt="English" width={20} height={15} />
                                                 </span>
                                                 <span className="has-text-weight-semibold is-size-6">English</span>
                                             </span>

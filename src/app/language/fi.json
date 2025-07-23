@@ -1,0 +1,10 @@
+    "timetables": {
+        "up": "Siirry ylös",
+        "departsFrom": "Lähtee asemalta",
+        "arrivesAt": "Saapuu asemalle",
+        "track": "Raide",
+        "departs": "Lähtee",
+        "arrives": "Saapuu",
+        "timeToArrival": "Aikaa saapumiseen",
+        "cancelled": "Peruttu"
+    }

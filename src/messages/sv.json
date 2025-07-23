@@ -16,6 +16,7 @@
     },
     "stationList": {
         "searchPlaceholder": "Sök station",
+        "search": "Sök",
         "map": "Karta",
         "nearestStation": "Nära mig",
         "suggestions": "Förslag",
@@ -41,5 +42,32 @@
             "openTimetable": "Öppna tidtabellen för denna plats genom att trycka på knappen nedan.",
             "close": "Stäng"
         }
+    },
+    "timetables": {
+        "title": "Tågtidtabeller",
+        "subtitle": "Visa avgångs- och ankomsttider för tåg",
+        "comingSoon": "Tidtabellsfunktion kommer snart!",
+        "description": "Här kommer du att kunna söka och visa tågtidtabeller, avgångstider och förseningar för alla finska järnvägsstationer.",
+        "loadingStation": "Laddar stationsinformation...",
+        "stationNotFound": "Station hittades inte",
+        "stationSearchHelp": "Kontrollera stationsnamnet, UIC-koden eller förkortningen och försök igen.",
+        "searchedFor": "Sökte efter",
+        "stationCode": "Stationskod",
+        "futureFeatures": "Kommande funktioner:",
+        "features": {
+            "departures": "Realtidsavgångar",
+            "arrivals": "Realtidsankomster",
+            "delays": "Förseningsinformation",
+            "platformInfo": "Plattformsinformation",
+            "realTime": "Liveuppdateringar"
+        },
+        "from": "Från",
+        "up": "Upp",
+        "arrivesAt": "Anländer kl",
+        "departsAt": "Avgår kl",
+        "track": "Spår",
+        "arrivesTo": "Anländer till",
+        "departsFrom": "Avgår från",
+        "timeToArrival": "Tid till ankomst"
     }
 }

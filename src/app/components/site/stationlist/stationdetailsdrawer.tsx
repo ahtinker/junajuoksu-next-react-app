@@ -4,6 +4,7 @@ import { Drawer } from 'vaul';
 import { useTranslations, useLocale } from 'next-intl';
 import StationElement from './stationelement';
 import { getTranslatedStationNameWithFallback, type StationFeature } from '../../../../lib/stationUtils';
+import TimetableList from '@/app/station/[stationId]/components/TimeTableList';
 
 interface StationDetailsDrawerProps {
     station: StationFeature | null;
@@ -24,6 +25,13 @@ export default function StationDetailsDrawer({ station, isOpen, onClose }: Stati
         locale,
         station.properties.stationName
     );
+
+    const stationData = {
+        uicCode: station.properties.stationUICCode,
+        shortCode: station.properties.stationShortCode,
+        name: station.properties.stationName,
+        translatedName: translatedStationName
+    }
 
     // Debug log
     console.log('StationDetailsDrawer render:', { isOpen, station: station?.properties.stationName });
@@ -49,21 +57,23 @@ export default function StationDetailsDrawer({ station, isOpen, onClose }: Stati
                         left: 0,
                         right: 0,
                         display: 'flex',
-                        height: '60vh',
+                        height: '90vh', // Increased height
                         flexDirection: 'column',
                         borderRadius: '10px 10px 0 0',
                         zIndex: 10002,
-                        backgroundColor: 'var(--bulma-background)',
+                        backgroundColor: 'var(--bulma-scheme-main)',
                         color: 'var(--bulma-text)',
                         width: '100%',
                         maxWidth: '600px',
-                        margin: '0 auto'
+                        maxHeight: '75%',
+                        margin: '0 auto',
+                        textAlign: 'left'
                     }}
                 >
+                    {/* Header section */}
                     <div style={{
-                        flex: 1,
-                        borderRadius: '10px 10px 0 0',
-                        padding: '1rem'
+                        padding: '1rem',
+                        flexShrink: 0
                     }}>
                         {/* Handle bar */}
                         <div
@@ -72,22 +82,23 @@ export default function StationDetailsDrawer({ station, isOpen, onClose }: Stati
                                 height: '6px',
                                 backgroundColor: 'var(--bulma-text-weak)',
                                 borderRadius: '3px',
-                                margin: 'auto',
-                                flexShrink: 0
+                                margin: '0 auto 1rem',
                             }}
                         />
+                        <Drawer.Title className="title is-4" style={{ color: 'var(--bulma-text)', margin: 0 }}>
+                            {translatedStationName}
+                        </Drawer.Title>
+                        <p className="my-4">{t('stationList.mapDrawer.openTimetable')}</p>
+                        <StationElement stationUIC={station.properties.stationUICCode.toString()} />
+                    </div>
 
-                        {/* Header with close button */}
-                        <div style={{
-                            alignItems: 'center',
-                            marginBottom: '1rem'
-                        }}>
-                            <Drawer.Title className="title is-4 my-5" style={{ color: 'var(--bulma-text)', margin: 0 }}>
-                                {translatedStationName}
-                            </Drawer.Title>
-                            <p className="mb-4">{t('stationList.mapDrawer.openTimetable')}</p>
-                            <StationElement stationUIC={station.properties.stationUICCode.toString()} />
-                        </div>
+                    {/* Scrollable content */}
+                    <div style={{
+                        flex: 1,
+                        overflowY: 'scroll',
+                        padding: '0 1rem 1rem'
+                    }}>
+                        <TimetableList stationData={stationData} hideTop={true} />
                     </div>
                 </Drawer.Content>
             </Drawer.Portal>

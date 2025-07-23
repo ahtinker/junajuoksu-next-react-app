@@ -16,6 +16,7 @@
     },
     "stationList": {
         "searchPlaceholder": "Search for station",
+        "search": "Search",
         "map": "Map",
         "nearestStation": "Near me",
         "suggestions": "Suggestions",
@@ -41,5 +42,32 @@
             "openTimetable": "Open the timetable for this location by pressing the button below.",
             "close": "Close"
         }
+    },
+    "timetables": {
+        "title": "Train Timetables",
+        "subtitle": "View departure and arrival times for trains",
+        "comingSoon": "Timetables feature coming soon!",
+        "description": "Here you will be able to search and view train timetables, departure times, and delays for all Finnish railway stations.",
+        "loadingStation": "Loading station information...",
+        "stationNotFound": "Station not found",
+        "stationSearchHelp": "Please check the station name, UIC code, or short code and try again.",
+        "searchedFor": "Searched for",
+        "stationCode": "Station code",
+        "futureFeatures": "Coming features:",
+        "features": {
+            "departures": "Real-time departure times",
+            "arrivals": "Real-time arrival times",
+            "delays": "Delay information",
+            "platformInfo": "Platform information",
+            "realTime": "Live updates"
+        },
+        "from": "From",
+        "up": "Up",
+        "arrivesAt": "Arrives at",
+        "departsAt": "Departs at",
+        "track": "Track",
+        "arrivesTo": "Arrives to",
+        "departsFrom": "Departs from",
+        "timeToArrival": "Time to Arrival"
     }
 }

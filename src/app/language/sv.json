@@ -1,0 +1,10 @@
+    "timetables": {
+        "up": "Bläddra upp",
+        "departsFrom": "Avgår från",
+        "arrivesAt": "Anländer till",
+        "track": "Spår",
+        "departs": "Avgår",
+        "arrives": "Anländer",
+        "timeToArrival": "Tid till ankomst",
+        "cancelled": "Inställd"
+    }
