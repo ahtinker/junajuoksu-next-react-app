@@ -68,6 +68,8 @@
         "track": "Track",
         "arrivesTo": "Arrives to",
         "departsFrom": "Departs from",
-        "timeToArrival": "Time to Arrival"
+        "timeToArrival": "Time to Arrival",
+        "timeToDeparture": "Time to Departure",
+        "cancelled": "Cancelled"
     }
 }

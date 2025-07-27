@@ -91,9 +91,9 @@ const StationList = () => {
                     </div>
                     <div className="buttons panel-block pb-4">
                         <label className="label mb-0">{t('stationList.suggestions')}</label>
-                        <StationElement stationUIC="1" />
-                        <StationElement stationUIC="30" />
-                        <StationElement stationUIC="18" />
+                        <StationElement stationUIC="1" shortCode="HKI" popup={true} />
+                        <StationElement stationUIC="30" shortCode="HY" popup={true} />
+                        <StationElement stationUIC="18" shortCode="TKL" popup={true} />
                     </div>
                 </>
             )}

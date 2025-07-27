@@ -17,8 +17,12 @@
         height: auto;
         position: static;
     }
-
+        .tablet-primary-background {
+            background-color: var(--bulma-background) !important;
+            color: var(--bulma-color) !important;
+        }
     .mobile-border {
         border-width: 10px 0 0 0 !important;
     }
+                                
 }

@@ -2,6 +2,7 @@
 
 import { Drawer } from 'vaul';
 import { useTranslations, useLocale } from 'next-intl';
+import { useState } from 'react';
 import StationElement from './stationelement';
 import { getTranslatedStationNameWithFallback, type StationFeature } from '../../../../lib/stationUtils';
 import TimetableList from '@/app/station/[stationId]/components/TimeTableList';
@@ -15,6 +16,10 @@ interface StationDetailsDrawerProps {
 export default function StationDetailsDrawer({ station, isOpen, onClose }: StationDetailsDrawerProps) {
     const t = useTranslations();
     const locale = useLocale();
+
+    // Snap points: first snap point shows header + button, second is fully open
+    const snapPoints = ['280px', 1];
+    const [activeSnapPoint, setActiveSnapPoint] = useState<number | string | null>(snapPoints[0]);
 
     if (!station) return null;
 
@@ -37,7 +42,14 @@ export default function StationDetailsDrawer({ station, isOpen, onClose }: Stati
     console.log('StationDetailsDrawer render:', { isOpen, station: station?.properties.stationName });
 
     return (
-        <Drawer.Root open={isOpen} onOpenChange={onClose} dismissible={true}>
+        <Drawer.Root
+            open={isOpen}
+            onOpenChange={onClose}
+            dismissible={true}
+            snapPoints={snapPoints}
+            activeSnapPoint={activeSnapPoint}
+            setActiveSnapPoint={setActiveSnapPoint}
+        >
             <Drawer.Portal>
                 <Drawer.Overlay
                     style={{
@@ -65,7 +77,6 @@ export default function StationDetailsDrawer({ station, isOpen, onClose }: Stati
                         color: 'var(--bulma-text)',
                         width: '100%',
                         maxWidth: '600px',
-                        maxHeight: '75%',
                         margin: '0 auto',
                         textAlign: 'left'
                     }}
@@ -95,7 +106,7 @@ export default function StationDetailsDrawer({ station, isOpen, onClose }: Stati
                     {/* Scrollable content */}
                     <div style={{
                         flex: 1,
-                        overflowY: 'scroll',
+                        overflowY: activeSnapPoint === snapPoints[1] ? 'scroll' : 'hidden',
                         padding: '0 1rem 1rem'
                     }}>
                         <TimetableList stationData={stationData} hideTop={true} />
