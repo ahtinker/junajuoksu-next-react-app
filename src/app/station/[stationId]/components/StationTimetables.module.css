@@ -19,10 +19,15 @@
     }
         .tablet-primary-background {
             background-color: var(--bulma-background) !important;
-            color: var(--bulma-color) !important;
+            color: var(--bulma-color);
         }
     .mobile-border {
         border-width: 10px 0 0 0 !important;
     }
                                 
+}
+@media (min-width: 769px) {
+    .tablet-primary-background {
+        color: var(--bulma-light);
+    }
 }

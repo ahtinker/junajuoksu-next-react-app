@@ -62,7 +62,7 @@ export default function TimetableList({ stationData, hideTop = false, classNames
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    // Initialize activeTab from URL parameter - memoized to prevent recreations
+    // Initialize activeTab from URL parameter, but allow local state to override
     const getInitialTab = useCallback((): TabType => {
         const showParam = searchParams.get('show');
         if (showParam === 'arrivals' || showParam === 'departures') {
@@ -71,28 +71,31 @@ export default function TimetableList({ stationData, hideTop = false, classNames
         return 'all';
     }, [searchParams]);
 
+    // Use local state for instant updates, sync with URL afterwards
     const [activeTab, setActiveTab] = useState<TabType>(() => getInitialTab());
 
-    // Function to handle tab change and update URL
+    // Function to handle tab change - instant UI update, async URL update
     const handleTabChange = useCallback((newTab: TabType) => {
-        // Update state immediately for smooth UI
+        // Update state immediately for instant UI response
         setActiveTab(newTab);
 
-        // Update URL without causing re-renders
-        const currentParams = new URLSearchParams(searchParams.toString());
+        // Update URL asynchronously to avoid blocking the UI
+        setTimeout(() => {
+            const currentParams = new URLSearchParams(searchParams.toString());
 
-        if (newTab === 'all') {
-            currentParams.delete('show');
-        } else {
-            currentParams.set('show', newTab);
-        }
+            if (newTab === 'all') {
+                currentParams.delete('show');
+            } else {
+                currentParams.set('show', newTab);
+            }
 
-        const newUrl = currentParams.toString()
-            ? `${window.location.pathname}?${currentParams.toString()}`
-            : window.location.pathname;
+            const newUrl = currentParams.toString()
+                ? `${window.location.pathname}?${currentParams.toString()}`
+                : window.location.pathname;
 
-        // Use replace instead of push to avoid history pollution
-        router.replace(newUrl, { scroll: false });
+            // Use replace instead of push to avoid history pollution
+            router.replace(newUrl, { scroll: false });
+        }, 0);
     }, [router, searchParams]);
 
     // Helper function to create a unique key for each train stop
@@ -257,14 +260,11 @@ export default function TimetableList({ stationData, hideTop = false, classNames
 
     const filteredTimetables = getFilteredTimetables();
 
-    // Effect to handle URL parameter changes (browser back/forward)
+    // Sync activeTab with URL changes (for browser back/forward navigation)
     useEffect(() => {
         const urlTab = getInitialTab();
-        // Only update state if it's actually different to prevent flickering
-        if (urlTab !== activeTab) {
-            setActiveTab(urlTab);
-        }
-    }, [searchParams, getInitialTab, activeTab]); // Add activeTab to dependencies
+        setActiveTab(urlTab);
+    }, [getInitialTab]);
 
     useEffect(() => {
         const fetchTimetables = async (isInitialLoad = false) => {
@@ -615,7 +615,7 @@ nextDate: trainsByDepartureDate(departureDate: "${nextDateStr}", where: {timeTab
             <div className={`${styles['mobile-border']}`} style={hideTop ? { position: 'sticky', top: 0, zIndex: 1 } : { position: 'sticky', top: 0, zIndex: 1, border: 'solid var(--bulma-scheme-main)' }}>
                 <div className={`panel-heading level is-mobile mb-0 py-2 ${styles['tablet-primary-background']} `}>
                     <div className="level-left has-text-left is-block py-2">
-                        <div className={`title is-4 has-text-left m-0 ${isRealtime ? "has-text-light" : "has-text-primary-80"} ${styles['tablet-primary-background']}`}>
+                        <div className={`title is-4 has-text-left m-0  ${styles['tablet-primary-background']} ${isRealtime ? "" : "has-text-primary-70"}`}>
                             {isRealtime ? currentTime.toLocaleTimeString() : selectedDateTime?.toLocaleTimeString("fi-FI", {
                                 hour: '2-digit',
                                 minute: '2-digit'
