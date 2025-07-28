@@ -13,6 +13,26 @@ import styles from './StationTimetables.module.css';
 import { Train, TimeTableRow } from '../../../../lib/types';
 import { getTranslatedStationNameWithFallback } from '../../../../lib/stationUtils';
 
+interface TrainStop {
+    arrivalRow?: TimeTableRow;
+    departureRow?: TimeTableRow;
+    stopIndex: number;
+    train: Train;
+}
+
+interface StationStop {
+    arrivalRow?: TimeTableRow;
+    departureRow?: TimeTableRow;
+    stopIndex: number;
+}
+
+interface FormattedTimeInfo {
+    scheduledTime: string;
+    liveTime: string | null;
+    hasScheduleChange: boolean;
+    track?: string;
+}
+
 interface TimetableListProps {
     stationData: StationData,
     hideTop?: boolean
@@ -24,7 +44,7 @@ export default function TimetableList({ stationData, hideTop = false, classNames
     const locale = useLocale();
     const [currentTime, setCurrentTime] = useState(new Date());
     const [showScrollButton, setShowScrollButton] = useState(false);
-    const [timetables, setTimetables] = useState<any[]>([]);
+    const [timetables, setTimetables] = useState<TrainStop[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -35,11 +55,7 @@ export default function TimetableList({ stationData, hideTop = false, classNames
 
     // Helper function to get all stops at the current station for a train
     const getStationStops = useCallback((train: Train) => {
-        const stops: Array<{
-            arrivalRow?: TimeTableRow,
-            departureRow?: TimeTableRow,
-            stopIndex: number
-        }> = [];
+        const stops: StationStop[] = [];
 
         // Group timetable rows by their order/index to identify separate stops
         const stationRows = train.timeTableRows
@@ -80,10 +96,10 @@ export default function TimetableList({ stationData, hideTop = false, classNames
     }, [stationData.shortCode]);
 
     // Helper function to compare if two train stops are the same with same data
-    const areTrainStopsEqual = useCallback((stop1: any, stop2: any) => {
+    const areTrainStopsEqual = useCallback((stop1: TrainStop, stop2: TrainStop) => {
         if (!stop1 || !stop2) return false;
 
-        const getData = (stop: any) => ({
+        const getData = (stop: TrainStop) => ({
             cancelled: stop.train.cancelled,
             arrivalTime: stop.arrivalRow?.liveEstimateTime || stop.arrivalRow?.scheduledTime,
             departureTime: stop.departureRow?.liveEstimateTime || stop.departureRow?.scheduledTime,
@@ -95,7 +111,7 @@ export default function TimetableList({ stationData, hideTop = false, classNames
     }, []);
 
     // Smart update function that handles multiple stops per train
-    const updateTimetables = useCallback((newStops: any[]) => {
+    const updateTimetables = useCallback((newStops: TrainStop[]) => {
         setTimetables(currentStops => {
             if (!Array.isArray(currentStops)) {
                 return newStops;
@@ -149,20 +165,6 @@ export default function TimetableList({ stationData, hideTop = false, classNames
         return 'Unknown';
     };
 
-    // Helper function to get origin station name
-    const getOriginName = (train: Train): string => {
-        // Find the first station in the timetable
-        const firstRow = train.timeTableRows[0];
-        if (firstRow) {
-            return getTranslatedStationNameWithFallback(
-                firstRow.stationUICCode,
-                locale,
-                firstRow.stationShortCode
-            );
-        }
-        return 'Unknown';
-    };
-
     useEffect(() => {
         const fetchTimetables = async (isInitialLoad = false) => {
             // Only show loading indicator for initial load
@@ -207,8 +209,8 @@ export default function TimetableList({ stationData, hideTop = false, classNames
                 });
 
                 // Sort stops by time
-                const sortedStops = allStops.sort((a: any, b: any) => {
-                    const getStopTime = (stop: any) => {
+                const sortedStops = allStops.sort((a: TrainStop, b: TrainStop) => {
+                    const getStopTime = (stop: TrainStop) => {
                         const { arrivalRow, departureRow } = stop;
                         if (arrivalRow && departureRow) {
                             return new Date(departureRow.liveEstimateTime || departureRow.scheduledTime);
@@ -228,7 +230,7 @@ export default function TimetableList({ stationData, hideTop = false, classNames
                 });
 
                 // Convert back to trains format, preserving the sorted order and multiple stops
-                const trainsWithStops = sortedStops.reduce((acc: any[], stop: any) => {
+                const trainsWithStops = sortedStops.reduce((acc: TrainStop[], stop: TrainStop) => {
                     const existingTrainIndex = acc.findIndex(item =>
                         item.train.trainNumber === stop.train.trainNumber &&
                         item.train.departureDate === stop.train.departureDate &&
@@ -261,7 +263,7 @@ export default function TimetableList({ stationData, hideTop = false, classNames
         const interval = setInterval(fetchTimetables, 5000);
 
         return () => clearInterval(interval);
-    }, [stationData.shortCode, updateTimetables]);
+    }, [stationData.shortCode, updateTimetables, getStationStops]);
 
     useEffect(() => {
         setIsLoading(true);
@@ -322,7 +324,7 @@ export default function TimetableList({ stationData, hideTop = false, classNames
                     {error}
                 </div>
             )}
-            {Array.isArray(timetables) && timetables.map((trainStop: any) => {
+            {Array.isArray(timetables) && timetables.map((trainStop: TrainStop) => {
                 const { train, arrivalRow, departureRow, stopIndex } = trainStop;
                 const trainKey = getTrainKey(train, stopIndex);
 
@@ -331,14 +333,13 @@ export default function TimetableList({ stationData, hideTop = false, classNames
                 }
 
                 const destination = getDestinationName(train);
-                const origin = getOriginName(train);
 
                 // Check if train will stop at Lentoasema (LEN) after the current station
                 const willStopAtAirportAfterCurrentStation = (() => {
                     // Find the current station's position in the timetable
                     const currentStationRows = train.timeTableRows
                         .map((row: TimeTableRow, index: number) => ({ ...row, originalIndex: index }))
-                        .filter((row: any) => row.stationShortCode === stationData.shortCode);
+                        .filter((row: TimeTableRow & { originalIndex: number }) => row.stationShortCode === stationData.shortCode);
 
                     if (currentStationRows.length === 0) return false;
 
@@ -353,10 +354,10 @@ export default function TimetableList({ stationData, hideTop = false, classNames
                     );
                 })();
 
-                const formatRow = (row: TimeTableRow) => {
+                const formatRow = (row: TimeTableRow): FormattedTimeInfo => {
                     const scheduledTime = formatTime(row.scheduledTime);
                     const liveTime = row.liveEstimateTime ? formatTime(row.liveEstimateTime) : null;
-                    const hasScheduleChange = liveTime && liveTime !== scheduledTime;
+                    const hasScheduleChange = !!(liveTime && liveTime !== scheduledTime);
                     return { scheduledTime, liveTime, hasScheduleChange, track: row.commercialTrack };
                 };
 
