@@ -1,4 +1,5 @@
 import stationTranslations from '../app/resources/station_translations.json';
+import stationGrammarForms from '../app/resources/station_cases.json';
 
 // Station feature interface for type safety
 export interface StationFeature {
@@ -23,6 +24,14 @@ export interface Station {
     stationName_fi: string;
     stationName_sv: string;
     stationName_en: string;
+}
+
+// Station grammar forms interface
+export interface StationGrammarForm {
+    stationUICCode: number;
+    stationName_fi: string;
+    illative: string;
+    elative: string;
 }
 
 /**
@@ -136,6 +145,43 @@ export function getTranslatedStationNameWithFallback(
     }
 
     return stationName;
+}
+
+/**
+ * Get station grammar forms (illative and elative) by UIC code
+ * @param stationUICCode - The UIC code of the station
+ * @param locale - Current locale (e.g., 'fi', 'sv', 'en')
+ * @returns Object with illative and elative forms, or null if not found
+ */
+export function getStationGrammarForms(
+    stationUICCode: number,
+    locale: string = 'fi'
+): { illative: string; elative: string; inessive: string; } | null {
+    // For Swedish and English, use the regular translated station name for both forms
+    if (locale === 'sv' || locale === 'en') {
+        const translation = getTranslatedStationNameWithFallback(stationUICCode, locale, "Unknown Station");
+
+        return {
+            illative: translation,
+            elative: translation,
+            inessive: translation
+        };
+    }
+
+    // For Finnish (and default), use the proper grammatical forms
+    const grammarForm = stationGrammarForms.stations.find(
+        station => station.stationUICCode === stationUICCode
+    );
+
+    if (!grammarForm) {
+        return null;
+    }
+
+    return {
+        illative: grammarForm.illative,
+        elative: grammarForm.elative,
+        inessive: grammarForm.inessive
+    };
 }
 
 // Levenshtein distance calculation for search functionality

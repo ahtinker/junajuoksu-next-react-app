@@ -18,7 +18,7 @@ export default function StationDetailsDrawer({ station, isOpen, onClose }: Stati
     const locale = useLocale();
 
     // Snap points: first snap point shows header + button, second is fully open
-    const snapPoints = ['280px', 1];
+    const snapPoints = ['400px', 1];
     const [activeSnapPoint, setActiveSnapPoint] = useState<number | string | null>(snapPoints[0]);
 
     if (!station) return null;

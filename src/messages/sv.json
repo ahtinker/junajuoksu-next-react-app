@@ -69,7 +69,42 @@
         "arrivesTo": "Anländer till",
         "departsFrom": "Avgår från",
         "timeToArrival": "Anländer om",
+        "stopsAt": "Stannar vid",
         "timeToDeparture": "Avgår om",
-        "cancelled": "Inställd"
+        "cancelled": "Inställd",
+        "tomorrow": "Imorgon",
+        "all": "Alla",
+        "arrivals": "Ankomster",
+        "departures": "Avgångar",
+        "notfound": "Inga tåg hittades.",
+        "dateTimeDrawer": {
+            "title": "Välj datum och tid",
+            "today": "Idag",
+            "now": "Nu",
+            "tomorrow": "Imorgon",
+            "reset": "Återställ",
+            "date": "Datum",
+            "time": "Tid",
+            "cancel": "Avbryt",
+            "apply": "Tillämpa",
+            "realtime": "Realtid",
+            "modified": "Ändrad"
+        },
+        "selection": {
+            "todayNow": "Idag, nu",
+            "todayAt": "Idag, {time}",
+            "tomorrowAt": "Imorgon, {time}",
+            "dateAt": "{date}, {time}",
+            "reset": "Återställ",
+            "selectDestination": "Välj destination"
+        },
+        "stationTimetables": {
+            "timetablesFor": "Tidtabeller för station",
+            "selectDestination": "Välj destination",
+            "currentStation": "(Nuvarande station)"
+        },
+        "passengerInformation": {
+            "title": "Observera"
+        }
     }
 }

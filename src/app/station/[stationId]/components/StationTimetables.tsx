@@ -1,10 +1,13 @@
 'use client';
 
 import { useTranslations, useLocale } from 'next-intl';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, MouseEvent } from 'react';
 import { getTranslatedStationNameWithFallback, Station } from '../../../../lib/stationUtils';
 import stationTranslations from '../../../resources/station_translations.json';
 import TimetableList from './TimeTableList'
+import DateTimeDrawer from './DateTimeDrawer';
+import DestinationDrawer from './DestinationDrawer';
+import PassengerInformation from './PassengerInformation';
 import styles from './StationTimetables.module.css';
 
 interface StationTimetablesProps {
@@ -18,12 +21,67 @@ interface StationData {
     translatedName: string;
 }
 
+interface DestinationData {
+    uicCode: number;
+    shortCode: string;
+    name: string;
+    translatedName: string;
+}
+
 export default function StationTimetables({ stationId }: StationTimetablesProps) {
     const t = useTranslations();
     const locale = useLocale();
     const [stationData, setStationData] = useState<StationData | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [selectedDateTime, setSelectedDateTime] = useState(new Date());
+    const [isRealtime, setIsRealtime] = useState(true); // Default to realtime
+    const [isDateTimeDrawerOpen, setIsDateTimeDrawerOpen] = useState(false);
+    const [isDestinationDrawerOpen, setIsDestinationDrawerOpen] = useState(false);
+    const [selectedDestination, setSelectedDestination] = useState<DestinationData | null>(null);
+
+    const handleDateTimeDrawerOpen = (e: MouseEvent) => {
+        const element = e.target as HTMLElement;
+        console.log(element.tagName);
+        if (element.tagName === 'I' || element.tagName === 'DIV') return;
+        setIsDateTimeDrawerOpen(true);
+    };
+
+    const handleDestinationDrawerOpen = (e: MouseEvent) => {
+        const element = e.target as HTMLElement;
+        console.log(element.tagName);
+        if (element.tagName === 'I' || element.tagName === 'DIV') return;
+        setIsDestinationDrawerOpen(true);
+    };
+
+    const handleDateTimeChange = (newDateTime: Date, isRealtimeState: boolean) => {
+        setSelectedDateTime(newDateTime);
+        setIsRealtime(isRealtimeState);
+    };
+
+    const handleDestinationSelect = (destination: DestinationData) => {
+        setSelectedDestination(destination);
+    };
+
+    const getDateTimeLabel = () => {
+        if (isRealtime) {
+            return t('timetables.dateTimeDrawer.today') + ', ' + t('timetables.dateTimeDrawer.now');
+        }
+        const now = new Date();
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const selectedDate = new Date(selectedDateTime.getFullYear(), selectedDateTime.getMonth(), selectedDateTime.getDate());
+
+        const isToday = selectedDate.getTime() === today.getTime();
+        const isTomorrow = selectedDate.getTime() === today.getTime() + 24 * 60 * 60 * 1000;
+
+        if (isToday) {
+            return `${t('timetables.dateTimeDrawer.today')}, ${selectedDateTime.toLocaleTimeString("fi-FI", { hour: '2-digit', minute: '2-digit' })}`;
+        } else if (isTomorrow) {
+            return `${t('timetables.dateTimeDrawer.tomorrow')}, ${selectedDateTime.toLocaleTimeString("fi-FI", { hour: '2-digit', minute: '2-digit' })}`;
+        } else {
+            return `${selectedDateTime.toLocaleDateString(locale, { day: 'numeric', month: 'short' })}, ${selectedDateTime.toLocaleTimeString("fi-FI", { hour: '2-digit', minute: '2-digit' })}`;
+        }
+    };
 
     useEffect(() => {
         const findStation = async () => {
@@ -154,10 +212,13 @@ export default function StationTimetables({ stationId }: StationTimetablesProps)
         <div className="container" style={{ marginTop: '-50px' }}>
             <div className="columns is-centered is-tablet" style={{ minHeight: '100vh' }}>
                 <div className={`column is-4-desktop is-6-tablet ${styles['mobile-full-height']}`}>
-                    <article className="panel is-shadowless is-primary themebackground" style={{ position: 'sticky', top: 50, marginTop: "50px" }}>
+                    <div style={{ position: 'sticky', top: 50, marginTop: "50px" }}>
+                        <article className="panel is-shadowless is-primary themebackground">
                         <div className="panel-heading level is-mobile mb-0">
                             <div className="level-left has-text-left is-block">
-                                <div className="subtitle is-6 has-text-light has-text-left">Aikataulut asemalle</div>
+                                    <div className="subtitle is-6 has-text-light has-text-left">
+                                        {t('timetables.stationTimetables.timetablesFor')}
+                                    </div>
                                 <div className="title is-4 has-text-left m-0 has-text-light">
                                     {stationData.translatedName}
                                 </div>
@@ -172,25 +233,59 @@ export default function StationTimetables({ stationId }: StationTimetablesProps)
                                 </button>
                             </p>
                         </div>
-                        <a className="panel-block is-active">
+                            <a className="panel-block is-active" onClick={handleDateTimeDrawerOpen} style={{ cursor: 'pointer' }}>
                             <span className="panel-icon">
                                 <i className="fas fa-calendar-days" aria-hidden="true"></i>
                             </span>
-                            Tänään, nyt
+                                {getDateTimeLabel()}
+                                <div className={`button is-small is-primary is-rounded mr-2 ${!isRealtime ? '' : 'is-hidden'}`} style={{ right: 0, position: 'absolute' }} onClick={() => { setIsRealtime(true); setSelectedDateTime(new Date()); }}>
+                                    <div className="icon">
+                                        <i className="fas fa-rotate-left" aria-hidden="true"></i>
+                                    </div>
+                                    <div>{t("timetables.selection.reset")}</div>
+                                </div>
                         </a>
-                        <a className="panel-block">
-                            <span className="panel-icon">
+                            <a className="panel-block is-active" onClick={handleDestinationDrawerOpen} style={{ cursor: 'pointer' }}>
+                                <span className="panel-icon mt-1">
                                 <i className="fas fa-plus" aria-hidden="true"></i>
                             </span>
-                            Valitse määränpää
+                                {selectedDestination ? selectedDestination.translatedName : t("timetables.stationTimetables.selectDestination")}
+                                <div className={`button is-small is-primary is-rounded mr-2 ${selectedDestination ? '' : 'is-hidden'}`} style={{ right: 0, position: 'absolute' }} onClick={setSelectedDestination.bind(null, null)}>
+                                    <div className="icon">
+                                        <i className="fas fa-rotate-left" aria-hidden="true"></i>
+                                    </div>
+                                    <div>{t("timetables.selection.reset")}</div>
+                                </div>
                         </a>
                     </article>
+                        <PassengerInformation stationShortCode={stationData.shortCode} />
+                    </div>
                 </div>
                 <div className="column is-responsive">
-                    <TimetableList stationData={stationData} classNames="is-shadowless" />
+                    <TimetableList
+                        stationData={stationData}
+                        classNames="is-shadowless"
+                        selectedDateTime={selectedDateTime}
+                        isRealtime={isRealtime}
+                        selectedDestination={selectedDestination}
+                    />
                 </div>
 
             </div>
+
+            <DateTimeDrawer
+                isOpen={isDateTimeDrawerOpen}
+                onClose={() => setIsDateTimeDrawerOpen(false)}
+                selectedDate={selectedDateTime}
+                onDateTimeChange={handleDateTimeChange}
+            />
+
+            <DestinationDrawer
+                isOpen={isDestinationDrawerOpen}
+                onClose={() => setIsDestinationDrawerOpen(false)}
+                onDestinationSelect={handleDestinationSelect}
+                currentStation={stationData}
+            />
         </div>
     );
 }

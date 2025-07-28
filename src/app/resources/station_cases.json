@@ -1,0 +1,1506 @@
+{
+    "huomioi": "Tämän tiedoston sisällön kopiointi on kielletty käyttötarkoituksesta riippumatta. Asemien nimien sijamuodot ovat Junajuoksun tiimin käsin kirjoittamia ja toivomme, että kunnioittaisitte Junajuoksun tekijänoikeutta käännöksiimme.",
+    "notice": "It is forbidden to copy the contents of this file for any purpose. The case forms of the station names were written by hand by the Junajuoksu team, and we ask you to respect our rights to our translations.",
+    "updated": "2025/07/28",
+    "description": "Finnish station names in elative (-sta/-stä), illative (-an/-än/-in/-on/-un), and inessive (-ssa/-ssä) cases",
+    "stations": [
+        {
+            "stationUICCode": 628,
+            "stationName_fi": "Ainola",
+            "elative": "Ainolasta",
+            "illative": "Ainolaan",
+            "inessive": "Ainolassa"
+        },
+        {
+            "stationUICCode": 284,
+            "stationName_fi": "Alavus",
+            "elative": "Alavudesta",
+            "illative": "Alavuteen",
+            "inessive": "Alavudessa"
+        },
+        {
+            "stationUICCode": 1331,
+            "stationName_fi": "Aviapolis",
+            "elative": "Aviopoliksesta",
+            "illative": "Aviopolikseen",
+            "inessive": "Aviopoliksessa"
+        },
+        {
+            "stationUICCode": 167,
+            "stationName_fi": "Dragsvik",
+            "elative": "Dragsvikista",
+            "illative": "Dragsvikiin",
+            "inessive": "Dragsvikissa"
+        },
+        {
+            "stationUICCode": 623,
+            "stationName_fi": "Eläinpuisto-Zoo",
+            "elative": "Eläinpuisto-Zoosta",
+            "illative": "Eläinpuisto-Zoohon",
+            "inessive": "Eläinpuisto-Zoossa"
+        },
+        {
+            "stationUICCode": 464,
+            "stationName_fi": "Eno",
+            "elative": "Enosta",
+            "illative": "Enoon",
+            "inessive": "Enossa"
+        },
+        {
+            "stationUICCode": 66,
+            "stationName_fi": "Espoo",
+            "elative": "Espoosta",
+            "illative": "Espooseen",
+            "inessive": "Espoossa"
+        },
+        {
+            "stationUICCode": 330,
+            "stationName_fi": "Haapajärvi",
+            "elative": "Haapajärveltä",
+            "illative": "Haapajärvelle",
+            "inessive": "Haapajärvellä"
+        },
+        {
+            "stationUICCode": 200,
+            "stationName_fi": "Haapamäki",
+            "elative": "Haapamäeltä",
+            "illative": "Haapamäelle",
+            "inessive": "Haapamäellä"
+        },
+        {
+            "stationUICCode": 13,
+            "stationName_fi": "Haarajoki",
+            "elative": "Haarajoelta",
+            "illative": "Haarajoelle",
+            "inessive": "Haarajoella"
+        },
+        {
+            "stationUICCode": 1015,
+            "stationName_fi": "Haksi",
+            "elative": "Haksista",
+            "illative": "Haksiin",
+            "inessive": "Haksissa"
+        },
+        {
+            "stationUICCode": 427,
+            "stationName_fi": "Hankasalmi",
+            "elative": "Hankasalmelta",
+            "illative": "Hankasalmelle",
+            "inessive": "Hankasalmella"
+        },
+        {
+            "stationUICCode": 73,
+            "stationName_fi": "Hanko",
+            "elative": "Hangosta",
+            "illative": "Hankoon",
+            "inessive": "Hangossa"
+        },
+        {
+            "stationUICCode": 879,
+            "stationName_fi": "Hanko Pohjoinen",
+            "elative": "Hanko Pohjoisesta",
+            "illative": "Hanko Pohjoiseen",
+            "inessive": "Hanko Pohjoisessa"
+        },
+        {
+            "stationUICCode": 218,
+            "stationName_fi": "Harjavalta",
+            "elative": "Harjavallasta",
+            "illative": "Harjavaltaan",
+            "inessive": "Harjavallassa"
+        },
+        {
+            "stationUICCode": 437,
+            "stationName_fi": "Heinävesi",
+            "elative": "Heinävedeltä",
+            "illative": "Heinävedelle",
+            "inessive": "Heinävedellä"
+        },
+        {
+            "stationUICCode": 1,
+            "stationName_fi": "Helsinki",
+            "elative": "Helsingistä",
+            "illative": "Helsinkiin",
+            "inessive": "Helsingissä"
+        },
+        {
+            "stationUICCode": 1164,
+            "stationName_fi": "Henna",
+            "elative": "Hennasta",
+            "illative": "Hennaan",
+            "inessive": "Hennassa"
+        },
+        {
+            "stationUICCode": 96,
+            "stationName_fi": "Herrala",
+            "elative": "Herralasta",
+            "illative": "Herralaan",
+            "inessive": "Herralassa"
+        },
+        {
+            "stationUICCode": 556,
+            "stationName_fi": "Hiekkaharju",
+            "elative": "Hiekkaharjulta",
+            "illative": "Hiekkaharjulle",
+            "inessive": "Hiekkaharjulla"
+        },
+        {
+            "stationUICCode": 91,
+            "stationName_fi": "Hikiä",
+            "elative": "Hikiältä",
+            "illative": "Hikiälle",
+            "inessive": "Hikiällä"
+        },
+        {
+            "stationUICCode": 988,
+            "stationName_fi": "Hillosensalmi",
+            "elative": "Hillosensalmelta",
+            "illative": "Hillosensalmelle",
+            "inessive": "Hillosensalmella"
+        },
+        {
+            "stationUICCode": 561,
+            "stationName_fi": "Hinthaara",
+            "elative": "Hinthaarasta",
+            "illative": "Hinthaaraan",
+            "inessive": "Hinthaarassa"
+        },
+        {
+            "stationUICCode": 144,
+            "stationName_fi": "Humppila",
+            "elative": "Humppilasta",
+            "illative": "Humppilaan",
+            "inessive": "Humppilassa"
+        },
+        {
+            "stationUICCode": 72,
+            "stationName_fi": "Huopalahti",
+            "elative": "Huopalahdesta",
+            "illative": "Huopalahteen",
+            "inessive": "Huopalahdessa"
+        },
+        {
+            "stationUICCode": 30,
+            "stationName_fi": "Hyvinkää",
+            "elative": "Hyvinkäältä",
+            "illative": "Hyvinkäälle",
+            "inessive": "Hyvinkäällä"
+        },
+        {
+            "stationUICCode": 47,
+            "stationName_fi": "Hämeenlinna",
+            "elative": "Hämeenlinnasta",
+            "illative": "Hämeenlinnaan",
+            "inessive": "Hämeenlinnassa"
+        },
+        {
+            "stationUICCode": 300,
+            "stationName_fi": "Härmä",
+            "elative": "Härmästä",
+            "illative": "Härmään",
+            "inessive": "Härmässä"
+        },
+        {
+            "stationUICCode": 938,
+            "stationName_fi": "Höljäkkä",
+            "elative": "Höljäkästä",
+            "illative": "Höljäkkään",
+            "inessive": "Höljäkässä"
+        },
+        {
+            "stationUICCode": 420,
+            "stationName_fi": "Iisalmi",
+            "elative": "Iisalmesta",
+            "illative": "Iisalmeen",
+            "inessive": "Iisalmessa"
+        },
+        {
+            "stationUICCode": 154,
+            "stationName_fi": "Iittala",
+            "elative": "Iittalasta",
+            "illative": "Iittalaan",
+            "inessive": "Iittalassa"
+        },
+        {
+            "stationUICCode": 9,
+            "stationName_fi": "Ilmala",
+            "elative": "Ilmalasta",
+            "illative": "Ilmalaan",
+            "inessive": "Ilmalassa"
+        },
+        {
+            "stationUICCode": 603,
+            "stationName_fi": "Imatra",
+            "elative": "Imatralta",
+            "illative": "Imatralle",
+            "inessive": "Imatralla"
+        },
+        {
+            "stationUICCode": 530,
+            "stationName_fi": "Inkeroinen",
+            "elative": "Inkeroisista",
+            "illative": "Inkeroisiin",
+            "inessive": "Inkeroisissa"
+        },
+        {
+            "stationUICCode": 62,
+            "stationName_fi": "Inkoo",
+            "elative": "Inkoosta",
+            "illative": "Inkooseen",
+            "inessive": "Inkoossa"
+        },
+        {
+            "stationUICCode": 295,
+            "stationName_fi": "Isokyrö",
+            "elative": "Isokyröstä",
+            "illative": "Isokyröön",
+            "inessive": "Isokyröössä"
+        },
+        {
+            "stationUICCode": 460,
+            "stationName_fi": "Joensuu",
+            "elative": "Joensuusta",
+            "illative": "Joensuuhun",
+            "inessive": "Joensuussa"
+        },
+        {
+            "stationUICCode": 28,
+            "stationName_fi": "Jokela",
+            "elative": "Jokelasta",
+            "illative": "Jokelaan",
+            "inessive": "Jokelassa"
+        },
+        {
+            "stationUICCode": 578,
+            "stationName_fi": "Jorvas",
+            "elative": "Jorvaksesta",
+            "illative": "Jorvakseen",
+            "inessive": "Jorvaksessa"
+        },
+        {
+            "stationUICCode": 499,
+            "stationName_fi": "Joutseno",
+            "elative": "Joutsenosta",
+            "illative": "Joutsenoon",
+            "inessive": "Joutsenossa"
+        },
+        {
+            "stationUICCode": 627,
+            "stationName_fi": "Juupajoki",
+            "elative": "Juupajoelta",
+            "illative": "Juupajoelle",
+            "inessive": "Juupajoella"
+        },
+        {
+            "stationUICCode": 240,
+            "stationName_fi": "Jyväskylä",
+            "elative": "Jyväskylästä",
+            "illative": "Jyväskylään",
+            "inessive": "Jyväskylässä"
+        },
+        {
+            "stationUICCode": 204,
+            "stationName_fi": "Jämsä",
+            "elative": "Jämsästä",
+            "illative": "Jämsään",
+            "inessive": "Jämsässä"
+        },
+        {
+            "stationUICCode": 95,
+            "stationName_fi": "Järvelä",
+            "elative": "Järvelästä",
+            "illative": "Järvelään",
+            "inessive": "Järvelässä"
+        },
+        {
+            "stationUICCode": 25,
+            "stationName_fi": "Järvenpää",
+            "elative": "Järvenpäästä",
+            "illative": "Järvenpäähän",
+            "inessive": "Järvenpäässä"
+        },
+        {
+            "stationUICCode": 387,
+            "stationName_fi": "Kajaani",
+            "elative": "Kajaanista",
+            "illative": "Kajaaniin",
+            "inessive": "Kajaanissa"
+        },
+        {
+            "stationUICCode": 658,
+            "stationName_fi": "Kannelmäki",
+            "elative": "Kannelmäeltä",
+            "illative": "Kannelmäelle",
+            "inessive": "Kannelmäellä"
+        },
+        {
+            "stationUICCode": 317,
+            "stationName_fi": "Kannus",
+            "elative": "Kannuksesta",
+            "illative": "Kannukseen",
+            "inessive": "Kannuksessa"
+        },
+        {
+            "stationUICCode": 60,
+            "stationName_fi": "Karjaa",
+            "elative": "Karjaalta",
+            "illative": "Karjaalle",
+            "inessive": "Karjaalla"
+        },
+        {
+            "stationUICCode": 178,
+            "stationName_fi": "Karkku",
+            "elative": "Karkusta",
+            "illative": "Karkkuun",
+            "inessive": "Karkussa"
+        },
+        {
+            "stationUICCode": 299,
+            "stationName_fi": "Kauhava",
+            "elative": "Kauhavalta",
+            "illative": "Kauhavalle",
+            "inessive": "Kauhavalla"
+        },
+        {
+            "stationUICCode": 65,
+            "stationName_fi": "Kauklahti",
+            "elative": "Kauklahdesta",
+            "illative": "Kauklahteen",
+            "inessive": "Kauklahdessa"
+        },
+        {
+            "stationUICCode": 67,
+            "stationName_fi": "Kauniainen",
+            "elative": "Kauniaisista",
+            "illative": "Kauniaisiin",
+            "inessive": "Kauniaisissa"
+        },
+        {
+            "stationUICCode": 477,
+            "stationName_fi": "Kausala",
+            "elative": "Kausalasta",
+            "illative": "Kausalaan",
+            "inessive": "Kausalassa"
+        },
+        {
+            "stationUICCode": 347,
+            "stationName_fi": "Kemi",
+            "elative": "Kemistä",
+            "illative": "Kemiin",
+            "inessive": "Kemissä"
+        },
+        {
+            "stationUICCode": 367,
+            "stationName_fi": "Kemijärvi",
+            "elative": "Kemijärveltä",
+            "illative": "Kemijärvelle",
+            "inessive": "Kemijärvellä"
+        },
+        {
+            "stationUICCode": 769,
+            "stationName_fi": "Kempele",
+            "elative": "Kempeleestä",
+            "illative": "Kempeleeseen",
+            "inessive": "Kempeleessä"
+        },
+        {
+            "stationUICCode": 621,
+            "stationName_fi": "Kera",
+            "elative": "Kerasta",
+            "illative": "Keraan",
+            "inessive": "Kerassa"
+        },
+        {
+            "stationUICCode": 20,
+            "stationName_fi": "Kerava",
+            "elative": "Keravalta",
+            "illative": "Keravalle",
+            "inessive": "Keravalla"
+        },
+        {
+            "stationUICCode": 522,
+            "stationName_fi": "Kerimäki",
+            "elative": "Kerimäeltä",
+            "illative": "Kerimäelle",
+            "inessive": "Kerimäellä"
+        },
+        {
+            "stationUICCode": 966,
+            "stationName_fi": "Kesälahti",
+            "elative": "Kesälahdesta",
+            "illative": "Kesälahteen",
+            "inessive": "Kesälahdessa"
+        },
+        {
+            "stationUICCode": 235,
+            "stationName_fi": "Keuruu",
+            "elative": "Keuruusta",
+            "illative": "Keuruuseen",
+            "inessive": "Keuruussa"
+        },
+        {
+            "stationUICCode": 1113,
+            "stationName_fi": "Kiiala",
+            "elative": "Kiialasta",
+            "illative": "Kiialaan",
+            "inessive": "Kiialassa"
+        },
+        {
+            "stationUICCode": 580,
+            "stationName_fi": "Kilo",
+            "elative": "Kilosta",
+            "illative": "Kiloon",
+            "inessive": "Kilossa"
+        },
+        {
+            "stationUICCode": 63,
+            "stationName_fi": "Kirkkonummi",
+            "elative": "Kirkkonummelta",
+            "illative": "Kirkkonummelle",
+            "inessive": "Kirkkonummella"
+        },
+        {
+            "stationUICCode": 453,
+            "stationName_fi": "Kitee",
+            "elative": "Kiteeltä",
+            "illative": "Kiteelle",
+            "inessive": "Kiteellä"
+        },
+        {
+            "stationUICCode": 417,
+            "stationName_fi": "Kiuruvesi",
+            "elative": "Kiuruvedeltä",
+            "illative": "Kiuruvedelle",
+            "inessive": "Kiuruvedellä"
+        },
+        {
+            "stationUICCode": 1330,
+            "stationName_fi": "Kivistö",
+            "elative": "Kivistöstä",
+            "illative": "Kivistöön",
+            "inessive": "Kivistössä"
+        },
+        {
+            "stationUICCode": 848,
+            "stationName_fi": "Kohtavaara",
+            "elative": "Kohtavaarasta",
+            "illative": "Kohtavaaraan",
+            "inessive": "Kohtavaarassa"
+        },
+        {
+            "stationUICCode": 675,
+            "stationName_fi": "Koivuhovi",
+            "elative": "Koivuhovista",
+            "illative": "Koivuhoviin",
+            "inessive": "Koivuhovissa"
+        },
+        {
+            "stationUICCode": 559,
+            "stationName_fi": "Koivukylä",
+            "elative": "Koivukylästä",
+            "illative": "Koivukylään",
+            "inessive": "Koivukylässä"
+        },
+        {
+            "stationUICCode": 170,
+            "stationName_fi": "Kokemäki",
+            "elative": "Kokemäeltä",
+            "illative": "Kokemäelle",
+            "inessive": "Kokemäellä"
+        },
+        {
+            "stationUICCode": 312,
+            "stationName_fi": "Kokkola",
+            "elative": "Kokkolasta",
+            "illative": "Kokkolaan",
+            "inessive": "Kokkolassa"
+        },
+        {
+            "stationUICCode": 358,
+            "stationName_fi": "Kolari",
+            "elative": "Kolarista",
+            "illative": "Kolariin",
+            "inessive": "Kolarissa"
+        },
+        {
+            "stationUICCode": 199,
+            "stationName_fi": "Kolho",
+            "elative": "Kolhosta",
+            "illative": "Kolhoon",
+            "inessive": "Kolhossa"
+        },
+        {
+            "stationUICCode": 390,
+            "stationName_fi": "Kontiomäki",
+            "elative": "Kontiomäeltä",
+            "illative": "Kontiomäelle",
+            "inessive": "Kontiomäellä"
+        },
+        {
+            "stationUICCode": 478,
+            "stationName_fi": "Koria",
+            "elative": "Korialta",
+            "illative": "Korialle",
+            "inessive": "Korialla"
+        },
+        {
+            "stationUICCode": 19,
+            "stationName_fi": "Korso",
+            "elative": "Korsosta",
+            "illative": "Korsoon",
+            "inessive": "Korsossa"
+        },
+        {
+            "stationUICCode": 532,
+            "stationName_fi": "Kotka",
+            "elative": "Kotkasta",
+            "illative": "Kotkaan",
+            "inessive": "Kotkassa"
+        },
+        {
+            "stationUICCode": 644,
+            "stationName_fi": "Kotkan satama",
+            "elative": "Kotkan satamasta",
+            "illative": "Kotkan satamaan",
+            "inessive": "Kotkan satamassa"
+        },
+        {
+            "stationUICCode": 480,
+            "stationName_fi": "Kouvola",
+            "elative": "Kouvolasta",
+            "illative": "Kouvolaan",
+            "inessive": "Kouvolassa"
+        },
+        {
+            "stationUICCode": 408,
+            "stationName_fi": "Kuopio",
+            "elative": "Kuopiosta",
+            "illative": "Kuopioon",
+            "inessive": "Kuopiossa"
+        },
+        {
+            "stationUICCode": 126,
+            "stationName_fi": "Kupittaa",
+            "elative": "Kupittaalta",
+            "illative": "Kupittaalle",
+            "inessive": "Kupittaalla"
+        },
+        {
+            "stationUICCode": 937,
+            "stationName_fi": "Kylänlahti",
+            "elative": "Kylänlahdesta",
+            "illative": "Kylänlahteen",
+            "inessive": "Kylänlahdessa"
+        },
+        {
+            "stationUICCode": 534,
+            "stationName_fi": "Kymi",
+            "elative": "Kymistä",
+            "illative": "Kymiin",
+            "inessive": "Kymissä"
+        },
+        {
+            "stationUICCode": 981,
+            "stationName_fi": "Kyminlinna",
+            "elative": "Kyminlinnasta",
+            "illative": "Kyminlinnaan",
+            "inessive": "Kyminlinnassa"
+        },
+        {
+            "stationUICCode": 977,
+            "stationName_fi": "Käpylä",
+            "elative": "Käpylästä",
+            "illative": "Käpylään",
+            "inessive": "Käpylässä"
+        },
+        {
+            "stationUICCode": 100,
+            "stationName_fi": "Lahti",
+            "elative": "Lahdesta",
+            "illative": "Lahteen",
+            "inessive": "Lahdessa"
+        },
+        {
+            "stationUICCode": 293,
+            "stationName_fi": "Laihia",
+            "elative": "Laihialta",
+            "illative": "Laihialle",
+            "inessive": "Laihialla"
+        },
+        {
+            "stationUICCode": 416,
+            "stationName_fi": "Lapinlahti",
+            "elative": "Lapinlahdesta",
+            "illative": "Lapinlahteen",
+            "inessive": "Lapinlahdessa"
+        },
+        {
+            "stationUICCode": 495,
+            "stationName_fi": "Lappeenranta",
+            "elative": "Lappeenrannasta",
+            "illative": "Lappeenrantaan",
+            "inessive": "Lappeenrannassa"
+        },
+        {
+            "stationUICCode": 94,
+            "stationName_fi": "Lappila",
+            "elative": "Lappilasta",
+            "illative": "Lappilaan",
+            "inessive": "Lappilassa"
+        },
+        {
+            "stationUICCode": 75,
+            "stationName_fi": "Lappohja",
+            "elative": "Lappohjasta",
+            "illative": "Lappohjaaan",
+            "inessive": "Lappohjassa"
+        },
+        {
+            "stationUICCode": 298,
+            "stationName_fi": "Lapua",
+            "elative": "Lapualta",
+            "illative": "Lapualle",
+            "inessive": "Lapualla"
+        },
+        {
+            "stationUICCode": 1333,
+            "stationName_fi": "Leinelä",
+            "elative": "Leinelästä",
+            "illative": "Leinelään",
+            "inessive": "Leinelässä"
+        },
+        {
+            "stationUICCode": 156,
+            "stationName_fi": "Lempäälä",
+            "elative": "Lempäälästä",
+            "illative": "Lempäälään",
+            "inessive": "Lempäälässä"
+        },
+        {
+            "stationUICCode": 1332,
+            "stationName_fi": "Lentoasema",
+            "elative": "Lentoasemalta",
+            "illative": "Lentoasemalle",
+            "inessive": "Lentoasemalla"
+        },
+        {
+            "stationUICCode": 68,
+            "stationName_fi": "Leppävaara",
+            "elative": "Leppävaarasta",
+            "illative": "Leppävaaraan",
+            "inessive": "Leppävaarassa"
+        },
+        {
+            "stationUICCode": 468,
+            "stationName_fi": "Lieksa",
+            "elative": "Lieksasta",
+            "illative": "Lieksaan",
+            "inessive": "Lieksassa"
+        },
+        {
+            "stationUICCode": 246,
+            "stationName_fi": "Lievestuore",
+            "elative": "Lievestuoreelta",
+            "illative": "Lievestuoreelle",
+            "inessive": "Lievestuoreella"
+        },
+        {
+            "stationUICCode": 142,
+            "stationName_fi": "Loimaa",
+            "elative": "Loimaalta",
+            "illative": "Loimaalle",
+            "inessive": "Loimaalla"
+        },
+        {
+            "stationUICCode": 661,
+            "stationName_fi": "Louhela",
+            "elative": "Louhelasta",
+            "illative": "Louhelaan",
+            "inessive": "Louhelassa"
+        },
+        {
+            "stationUICCode": 690,
+            "stationName_fi": "Lusto",
+            "elative": "Lustosta",
+            "illative": "Lustoon",
+            "inessive": "Lustossa"
+        },
+        {
+            "stationUICCode": 17,
+            "stationName_fi": "Malmi",
+            "elative": "Malmilta",
+            "illative": "Malmille",
+            "inessive": "Malmilla"
+        },
+        {
+            "stationUICCode": 659,
+            "stationName_fi": "Malminkartano",
+            "elative": "Malminkartanosta",
+            "illative": "Malminkartanoon",
+            "inessive": "Malminkartanossa"
+        },
+        {
+            "stationUICCode": 662,
+            "stationName_fi": "Martinlaakso",
+            "elative": "Martinlaaksosta",
+            "illative": "Martinlaaksoon",
+            "inessive": "Martinlaaksossa"
+        },
+        {
+            "stationUICCode": 64,
+            "stationName_fi": "Masala",
+            "elative": "Masalasta",
+            "illative": "Masalaan",
+            "inessive": "Masalassa"
+        },
+        {
+            "stationUICCode": 546,
+            "stationName_fi": "Mikkeli",
+            "elative": "Mikkelistä",
+            "illative": "Mikkeliin",
+            "inessive": "Mikkelissä"
+        },
+        {
+            "stationUICCode": 366,
+            "stationName_fi": "Misi",
+            "elative": "Misistä",
+            "illative": "Misiin",
+            "inessive": "Misissä"
+        },
+        {
+            "stationUICCode": 93,
+            "stationName_fi": "Mommila",
+            "elative": "Mommilasta",
+            "illative": "Mommilaan",
+            "inessive": "Mommilassa"
+        },
+        {
+            "stationUICCode": 6007,
+            "stationName_fi": "Moskova (Leningradski)",
+            "elative": "Moskovasta (Leningradski)",
+            "illative": "Moskovaan (Leningradski)",
+            "inessive": "Moskovassa (Leningradski)"
+        },
+        {
+            "stationUICCode": 375,
+            "stationName_fi": "Muhos",
+            "elative": "Muhoksesta",
+            "illative": "Muhokseen",
+            "inessive": "Muhoksessa"
+        },
+        {
+            "stationUICCode": 363,
+            "stationName_fi": "Muurola",
+            "elative": "Muurolasta",
+            "illative": "Muurolaan",
+            "inessive": "Muurolassa"
+        },
+        {
+            "stationUICCode": 536,
+            "stationName_fi": "Myllykoski",
+            "elative": "Myllykoskelta",
+            "illative": "Myllykoskelle",
+            "inessive": "Myllykoskella"
+        },
+        {
+            "stationUICCode": 263,
+            "stationName_fi": "Myllymäki",
+            "elative": "Myllymäeltä",
+            "illative": "Myllymäelle",
+            "inessive": "Myllymäellä"
+        },
+        {
+            "stationUICCode": 660,
+            "stationName_fi": "Myyrmäki",
+            "elative": "Myyrmäeltä",
+            "illative": "Myyrmäelle",
+            "inessive": "Myyrmäellä"
+        },
+        {
+            "stationUICCode": 693,
+            "stationName_fi": "Mäkkylä",
+            "elative": "Mäkkylästä",
+            "illative": "Mäkkylään",
+            "inessive": "Mäkkylässä"
+        },
+        {
+            "stationUICCode": 27,
+            "stationName_fi": "Mäntsälä",
+            "elative": "Mäntsälästä",
+            "illative": "Mäntsälään",
+            "inessive": "Mäntsälässä"
+        },
+        {
+            "stationUICCode": 544,
+            "stationName_fi": "Mäntyharju",
+            "elative": "Mäntyharjulta",
+            "illative": "Mäntyharjulle",
+            "inessive": "Mäntyharjulla"
+        },
+        {
+            "stationUICCode": 595,
+            "stationName_fi": "Nastola",
+            "elative": "Nastolasta",
+            "illative": "Nastolaan",
+            "inessive": "Nastolassa"
+        },
+        {
+            "stationUICCode": 22,
+            "stationName_fi": "Nikkilä",
+            "elative": "Nikkilästä",
+            "illative": "Nikkilään",
+            "inessive": "Nikkilässä"
+        },
+        {
+            "stationUICCode": 328,
+            "stationName_fi": "Nivala",
+            "elative": "Nivalasta",
+            "illative": "Nivalaan",
+            "inessive": "Nivalassa"
+        },
+        {
+            "stationUICCode": 181,
+            "stationName_fi": "Nokia",
+            "elative": "Nokialta",
+            "illative": "Nokialle",
+            "inessive": "Nokialla"
+        },
+        {
+            "stationUICCode": 472,
+            "stationName_fi": "Nurmes",
+            "elative": "Nurmeksesta",
+            "illative": "Nurmekseen",
+            "inessive": "Nurmeksessa"
+        },
+        {
+            "stationUICCode": 92,
+            "stationName_fi": "Oitti",
+            "elative": "Oitista",
+            "illative": "Oittiin",
+            "inessive": "Oitissa"
+        },
+        {
+            "stationUICCode": 190,
+            "stationName_fi": "Orivesi",
+            "elative": "Orivedeötä",
+            "illative": "Oriveteen",
+            "inessive": "Orivedeössä"
+        },
+        {
+            "stationUICCode": 1316,
+            "stationName_fi": "Oriveden keskusta",
+            "elative": "Oriveden keskustasta",
+            "illative": "Oriveden keskustaan",
+            "inessive": "Oriveden keskustassa"
+        },
+        {
+            "stationUICCode": 322,
+            "stationName_fi": "Oulainen",
+            "elative": "Oulaisista",
+            "illative": "Oulaisiin",
+            "inessive": "Oulaisissa"
+        },
+        {
+            "stationUICCode": 370,
+            "stationName_fi": "Oulu",
+            "elative": "Oulusta",
+            "illative": "Ouluun",
+            "inessive": "Oulussa"
+        },
+        {
+            "stationUICCode": 15,
+            "stationName_fi": "Oulunkylä",
+            "elative": "Oulunkylästä",
+            "illative": "Oulunkylään",
+            "inessive": "Oulunkylässä"
+        },
+        {
+            "stationUICCode": 768,
+            "stationName_fi": "Paimenportti",
+            "elative": "Paimenportista",
+            "illative": "Paimenporttiin",
+            "inessive": "Paimenportissa"
+        },
+        {
+            "stationUICCode": 379,
+            "stationName_fi": "Paltamo",
+            "elative": "Paltamosta",
+            "illative": "Paltamoon",
+            "inessive": "Paltamossa"
+        },
+        {
+            "stationUICCode": 510,
+            "stationName_fi": "Parikkala",
+            "elative": "Parikkalasta",
+            "illative": "Parikkalaan",
+            "inessive": "Parikkalassa"
+        },
+        {
+            "stationUICCode": 215,
+            "stationName_fi": "Parkano",
+            "elative": "Parkanosta",
+            "illative": "Parkanoon",
+            "inessive": "Parkanossa"
+        },
+        {
+            "stationUICCode": 49,
+            "stationName_fi": "Parola",
+            "elative": "Parolasta",
+            "illative": "Parolaan",
+            "inessive": "Parolassa"
+        },
+        {
+            "stationUICCode": 10,
+            "stationName_fi": "Pasila",
+            "elative": "Pasilasta",
+            "illative": "Pasilaan",
+            "inessive": "Pasilassa"
+        },
+        {
+            "stationUICCode": 1328,
+            "stationName_fi": "Pasilan autojuna-asema",
+            "elative": "Pasilan autojuna-asemalta",
+            "illative": "Pasilan autojuna-asemalle",
+            "inessive": "Pasilan autojuna-asemalla"
+        },
+        {
+            "stationUICCode": 356,
+            "stationName_fi": "Pello",
+            "elative": "Pellosta",
+            "illative": "Pelloon",
+            "inessive": "Pellossa"
+        },
+        {
+            "stationUICCode": 237,
+            "stationName_fi": "Petäjävesi",
+            "elative": "Petäjävedeötä",
+            "illative": "Petäjäveteen",
+            "inessive": "Petäjävedeössä"
+        },
+        {
+            "stationUICCode": 400,
+            "stationName_fi": "Pieksämäki",
+            "elative": "Pieksämäeltä",
+            "illative": "Pieksämäelle",
+            "inessive": "Pieksämäellä"
+        },
+        {
+            "stationUICCode": 3820,
+            "stationName_fi": "Pietari (Finljandski)",
+            "elative": "Pietarista (Finljandski)",
+            "illative": "Pietariin (Finljandski)",
+            "inessive": "Pietarissa (Finljandski)"
+        },
+        {
+            "stationUICCode": 3181,
+            "stationName_fi": "Pietari (Ladozhki)",
+            "elative": "Pietarista (Ladozhki)",
+            "illative": "Pietariin (Ladozhki)",
+            "inessive": "Pietarissa (Ladozhki)"
+        },
+        {
+            "stationUICCode": 261,
+            "stationName_fi": "Pihlajavesi",
+            "elative": "Pihlajavedeltä",
+            "illative": "Pihlajavedelle",
+            "inessive": "Pihlajavedellä"
+        },
+        {
+            "stationUICCode": 69,
+            "stationName_fi": "Pitäjänmäki",
+            "elative": "Pitäjänmäeltä",
+            "illative": "Pitäjänmäelle",
+            "inessive": "Pitäjänmäellä"
+        },
+        {
+            "stationUICCode": 657,
+            "stationName_fi": "Pohjois-Haaga",
+            "elative": "Pohjois-Haagasta",
+            "illative": "Pohjois-Haagaan",
+            "inessive": "Pohjois-Haagassa"
+        },
+        {
+            "stationUICCode": 220,
+            "stationName_fi": "Pori",
+            "elative": "Porista",
+            "illative": "Poriin",
+            "inessive": "Porissa"
+        },
+        {
+            "stationUICCode": 23,
+            "stationName_fi": "Porvoo",
+            "elative": "Porvoosta",
+            "illative": "Porvooseen",
+            "inessive": "Porvoossa"
+        },
+        {
+            "stationUICCode": 553,
+            "stationName_fi": "Puistola",
+            "elative": "Puistolasta",
+            "illative": "Puistolaan",
+            "inessive": "Puistolassa"
+        },
+        {
+            "stationUICCode": 551,
+            "stationName_fi": "Pukinmäki",
+            "elative": "Pukinmäeltä",
+            "illative": "Pukinmäelle",
+            "inessive": "Pukinmäellä"
+        },
+        {
+            "stationUICCode": 517,
+            "stationName_fi": "Punkaharju",
+            "elative": "Punkaharjulta",
+            "illative": "Punkaharjulle",
+            "inessive": "Punkaharjulla"
+        },
+        {
+            "stationUICCode": 564,
+            "stationName_fi": "Purola",
+            "elative": "Purolasta",
+            "illative": "Purolaan",
+            "inessive": "Purolassa"
+        },
+        {
+            "stationUICCode": 331,
+            "stationName_fi": "Pyhäsalmi",
+            "elative": "Pyhäsalmelta",
+            "illative": "Pyhäsalmelle",
+            "inessive": "Pyhäsalmella"
+        },
+        {
+            "stationUICCode": 305,
+            "stationName_fi": "Pännäinen",
+            "elative": "Pännäisistä",
+            "illative": "Pännäisiin",
+            "inessive": "Pännäisissä"
+        },
+        {
+            "stationUICCode": 519,
+            "stationName_fi": "Pääskylahti",
+            "elative": "Pääskylahdesta",
+            "illative": "Pääskylahteen",
+            "inessive": "Pääskylahdessa"
+        },
+        {
+            "stationUICCode": 554,
+            "stationName_fi": "Rekola",
+            "elative": "Rekolasta",
+            "illative": "Rekolaan",
+            "inessive": "Rekolassa"
+        },
+        {
+            "stationUICCode": 793,
+            "stationName_fi": "Retretti",
+            "elative": "Retretistä",
+            "illative": "Retrettiin",
+            "inessive": "Retretissä"
+        },
+        {
+            "stationUICCode": 40,
+            "stationName_fi": "Riihimäki",
+            "elative": "Riihimäeltä",
+            "illative": "Riihimäelle",
+            "inessive": "Riihimäellä"
+        },
+        {
+            "stationUICCode": 364,
+            "stationName_fi": "Rovaniemi",
+            "elative": "Rovaniemeltä",
+            "illative": "Rovaniemelle",
+            "inessive": "Rovaniemellä"
+        },
+        {
+            "stationUICCode": 886,
+            "stationName_fi": "Runni",
+            "elative": "Runnista",
+            "illative": "Runniin",
+            "inessive": "Runnissa"
+        },
+        {
+            "stationUICCode": 337,
+            "stationName_fi": "Ruukki",
+            "elative": "Ruukista",
+            "illative": "Ruukkiin",
+            "inessive": "Ruukissa"
+        },
+        {
+            "stationUICCode": 42,
+            "stationName_fi": "Ryttylä",
+            "elative": "Ryttylästä",
+            "illative": "Ryttylään",
+            "inessive": "Ryttylässä"
+        },
+        {
+            "stationUICCode": 55,
+            "stationName_fi": "Salo",
+            "elative": "Salosta",
+            "illative": "Saloon",
+            "inessive": "Salossa"
+        },
+        {
+            "stationUICCode": 827,
+            "stationName_fi": "Santala",
+            "elative": "Santalasta",
+            "illative": "Santalaan",
+            "inessive": "Santalassa"
+        },
+        {
+            "stationUICCode": 806,
+            "stationName_fi": "Saunakallio",
+            "elative": "Saunakalliosta",
+            "illative": "Saunakallioon",
+            "inessive": "Saunakalliossa"
+        },
+        {
+            "stationUICCode": 555,
+            "stationName_fi": "Savio",
+            "elative": "Saviosta",
+            "illative": "Savioon",
+            "inessive": "Saviossa"
+        },
+        {
+            "stationUICCode": 521,
+            "stationName_fi": "Savonlinna",
+            "elative": "Savonlinnasta",
+            "illative": "Savonlinnaan",
+            "inessive": "Savonlinnassa"
+        },
+        {
+            "stationUICCode": 280,
+            "stationName_fi": "Seinäjoki",
+            "elative": "Seinäjoelta",
+            "illative": "Seinäjoelle",
+            "inessive": "Seinäjoella"
+        },
+        {
+            "stationUICCode": 413,
+            "stationName_fi": "Siilinjärvi",
+            "elative": "Siilinjärveltä",
+            "illative": "Siilinjärvelle",
+            "inessive": "Siilinjärvellä"
+        },
+        {
+            "stationUICCode": 507,
+            "stationName_fi": "Simpele",
+            "elative": "Simpeleestä",
+            "illative": "Simpeleeseen",
+            "inessive": "Simpeleessä"
+        },
+        {
+            "stationUICCode": 576,
+            "stationName_fi": "Siuntio",
+            "elative": "Siuntiosta",
+            "illative": "Siuntioon",
+            "inessive": "Siuntiossa"
+        },
+        {
+            "stationUICCode": 817,
+            "stationName_fi": "Skogby",
+            "elative": "Skogbysta",
+            "illative": "Skogbyyn",
+            "inessive": "Skogbyssa"
+        },
+        {
+            "stationUICCode": 424,
+            "stationName_fi": "Sukeva",
+            "elative": "Sukevalta",
+            "illative": "Sukevalle",
+            "inessive": "Sukevalla"
+        },
+        {
+            "stationUICCode": 404,
+            "stationName_fi": "Suonenjoki",
+            "elative": "Suonenjoelta",
+            "illative": "Suonenjoelle",
+            "inessive": "Suonenjoella"
+        },
+        {
+            "stationUICCode": 76,
+            "stationName_fi": "Tammisaari",
+            "elative": "Tammisaaresta",
+            "illative": "Tammisaareen",
+            "inessive": "Tammisaaressa"
+        },
+        {
+            "stationUICCode": 160,
+            "stationName_fi": "Tampere",
+            "elative": "Tampereelta",
+            "illative": "Tampereelle",
+            "inessive": "Tampereella"
+        },
+        {
+            "stationUICCode": 552,
+            "stationName_fi": "Tapanila",
+            "elative": "Tapanilasta",
+            "illative": "Tapanilaan",
+            "inessive": "Tapanilassa"
+        },
+        {
+            "stationUICCode": 837,
+            "stationName_fi": "Tavastila",
+            "elative": "Tavastilasta",
+            "illative": "Tavastilaan",
+            "inessive": "Tavastilassa"
+        },
+        {
+            "stationUICCode": 294,
+            "stationName_fi": "Tervajoki",
+            "elative": "Tervajoelta",
+            "illative": "Tervajoelle",
+            "inessive": "Tervajoella"
+        },
+        {
+            "stationUICCode": 361,
+            "stationName_fi": "Tervola",
+            "elative": "Tervolasta",
+            "illative": "Tervolaan",
+            "inessive": "Tervolassa"
+        },
+        {
+            "stationUICCode": 1359,
+            "stationName_fi": "Tesoma",
+            "elative": "Tesomasta",
+            "illative": "Tesomaan",
+            "inessive": "Tesomassa"
+        },
+        {
+            "stationUICCode": 18,
+            "stationName_fi": "Tikkurila",
+            "elative": "Tikkurilasta",
+            "illative": "Tikkurilaan",
+            "inessive": "Tikkurilassa"
+        },
+        {
+            "stationUICCode": 150,
+            "stationName_fi": "Toijala",
+            "elative": "Toijalasta",
+            "illative": "Toijalaan",
+            "inessive": "Toijalassa"
+        },
+        {
+            "stationUICCode": 830,
+            "stationName_fi": "Tolsa",
+            "elative": "Tolsasta",
+            "illative": "Tolsaan",
+            "inessive": "Tolsassa"
+        },
+        {
+            "stationUICCode": 1318,
+            "stationName_fi": "Tornio-Itäinen",
+            "elative": "Tornio-Itäisestä",
+            "illative": "Tornio-Itäiseen",
+            "inessive": "Tornio-Itäisessä"
+        },
+        {
+            "stationUICCode": 579,
+            "stationName_fi": "Tuomarila",
+            "elative": "Tuomarilasta",
+            "illative": "Tuomarilaan",
+            "inessive": "Tuomarilassa"
+        },
+        {
+            "stationUICCode": 44,
+            "stationName_fi": "Turenki",
+            "elative": "Turengista",
+            "illative": "Turenkiin",
+            "inessive": "Turengissa"
+        },
+        {
+            "stationUICCode": 130,
+            "stationName_fi": "Turku",
+            "elative": "Turusta",
+            "illative": "Turkuun",
+            "inessive": "Turussa"
+        },
+        {
+            "stationUICCode": 135,
+            "stationName_fi": "Turun satama",
+            "elative": "Turun satamasta",
+            "illative": "Turun satamaan",
+            "inessive": "Turun satamassa"
+        },
+        {
+            "stationUICCode": 283,
+            "stationName_fi": "Tuuri",
+            "elative": "Tuurista",
+            "illative": "Tuuriin",
+            "inessive": "Tuurissa"
+        },
+        {
+            "stationUICCode": 9999,
+            "stationName_fi": "Tver",
+            "elative": "Tveristä",
+            "illative": "Tveriin",
+            "inessive": "Tverissä"
+        },
+        {
+            "stationUICCode": 465,
+            "stationName_fi": "Uimaharju",
+            "elative": "Uimaharjulta",
+            "illative": "Uimaharjulle",
+            "inessive": "Uimaharjulla"
+        },
+        {
+            "stationUICCode": 376,
+            "stationName_fi": "Utajärvi",
+            "elative": "Utajärveltä",
+            "illative": "Utajärvelle",
+            "inessive": "Utajärvellä"
+        },
+        {
+            "stationUICCode": 105,
+            "stationName_fi": "Uusikylä",
+            "elative": "Uudestakylästä",
+            "illative": "Uuteenkylään",
+            "inessive": "Uudessakylässä"
+        },
+        {
+            "stationUICCode": 377,
+            "stationName_fi": "Vaala",
+            "elative": "Vaalasta",
+            "illative": "Vaalaan",
+            "inessive": "Vaalassa"
+        },
+        {
+            "stationUICCode": 288,
+            "stationName_fi": "Vaasa",
+            "elative": "Vaasasta",
+            "illative": "Vaasaan",
+            "inessive": "Vaasassa"
+        },
+        {
+            "stationUICCode": 492,
+            "stationName_fi": "Vainikkala",
+            "elative": "Vainikkalasta",
+            "illative": "Vainikkalaan",
+            "inessive": "Vainikkalassa"
+        },
+        {
+            "stationUICCode": 847,
+            "stationName_fi": "Valimo",
+            "elative": "Valimosta",
+            "illative": "Valimoon",
+            "inessive": "Valimossa"
+        },
+        {
+            "stationUICCode": 176,
+            "stationName_fi": "Vammala",
+            "elative": "Vammalasta",
+            "illative": "Vammalaan",
+            "inessive": "Vammalassa"
+        },
+        {
+            "stationUICCode": 839,
+            "stationName_fi": "Vantaankoski",
+            "elative": "Vantaankoskelta",
+            "illative": "Vantaankoskelle",
+            "inessive": "Vantaankoskella"
+        },
+        {
+            "stationUICCode": 432,
+            "stationName_fi": "Varkaus",
+            "elative": "Varkaudesta",
+            "illative": "Varkauteen",
+            "inessive": "Varkaudessa"
+        },
+        {
+            "stationUICCode": 1337,
+            "stationName_fi": "Vehkala",
+            "elative": "Vehkalasta",
+            "illative": "Vehkalaan",
+            "inessive": "Vehkalassa"
+        },
+        {
+            "stationUICCode": 334,
+            "stationName_fi": "Vihanti",
+            "elative": "Vihannista",
+            "illative": "Vihantiin",
+            "inessive": "Vihannissa"
+        },
+        {
+            "stationUICCode": 438,
+            "stationName_fi": "Vihtari",
+            "elative": "Vihtarista",
+            "illative": "Vihtariin",
+            "inessive": "Vihtarissa"
+        },
+        {
+            "stationUICCode": 155,
+            "stationName_fi": "Viiala",
+            "elative": "Viialasta",
+            "illative": "Viialaan",
+            "inessive": "Viialassa"
+        },
+        {
+            "stationUICCode": 440,
+            "stationName_fi": "Viinijärvi",
+            "elative": "Viinijärveltä",
+            "illative": "Viinijärvelle",
+            "inessive": "Viinijärvellä"
+        },
+        {
+            "stationUICCode": 2000,
+            "stationName_fi": "Viipuri",
+            "elative": "Viipurista",
+            "illative": "Viipuriin",
+            "inessive": "Viipurissa"
+        },
+        {
+            "stationUICCode": 104,
+            "stationName_fi": "Villähde",
+            "elative": "Villähteesstä",
+            "illative": "Villähteeseen",
+            "inessive": "Villähteessä"
+        },
+        {
+            "stationUICCode": 196,
+            "stationName_fi": "Vilppula",
+            "elative": "Vilppulasta",
+            "illative": "Vilppulaan",
+            "inessive": "Vilppulassa"
+        },
+        {
+            "stationUICCode": 467,
+            "stationName_fi": "Vuonislahti",
+            "elative": "Vuonislahdesta",
+            "illative": "Vuonislahteen",
+            "inessive": "Vuonislahdessa"
+        },
+        {
+            "stationUICCode": 296,
+            "stationName_fi": "Ylistaro",
+            "elative": "Ylistarosta",
+            "illative": "Ylistaroon",
+            "inessive": "Ylistarossa"
+        },
+        {
+            "stationUICCode": 789,
+            "stationName_fi": "Ylitornio",
+            "elative": "Ylitorniosta",
+            "illative": "Ylitornioon",
+            "inessive": "Ylitorniossa"
+        },
+        {
+            "stationUICCode": 320,
+            "stationName_fi": "Ylivieska",
+            "elative": "Yliviedeestä",
+            "illative": "Ylivieskeeseen",
+            "inessive": "Yliviedeessä"
+        },
+        {
+            "stationUICCode": 265,
+            "stationName_fi": "Ähtäri",
+            "elative": "Ähtäristä",
+            "illative": "Ähtäriin",
+            "inessive": "Ähtärissä"
+        },
+        {
+            "stationUICCode": 1367,
+            "stationName_fi": "Hyvinkään Rautatiemuseo",
+            "elative": "Hyvinkään Rautatiemuseosta",
+            "illative": "Hyvinkään Rautatiemuseoon",
+            "inessive": "Hyvinkään Rautatiemuseossa"
+        }
+    ]
+}

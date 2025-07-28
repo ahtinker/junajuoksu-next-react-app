@@ -69,7 +69,42 @@
         "arrivesTo": "Saapuu",
         "departsFrom": "Lähtee",
         "timeToArrival": "Saapuu",
+        "stopsAt": "Pysähtyy",
         "timeToDeparture": "Lähtee",
-        "cancelled": "Peruttu"
+        "cancelled": "Peruttu",
+        "tomorrow": "Huomenna",
+        "all": "Kaikki",
+        "arrivals": "Saapuvat",
+        "departures": "Lähtevät",
+        "notfound": "Junia ei löytynyt.",
+        "dateTimeDrawer": {
+            "title": "Valitse päivämäärä ja aika",
+            "today": "Tänään",
+            "now": "Nyt",
+            "tomorrow": "Huomenna",
+            "reset": "Palauta",
+            "date": "Päivämäärä",
+            "time": "Aika",
+            "cancel": "Peruuta",
+            "apply": "Käytä",
+            "realtime": "Reaaliaikainen",
+            "modified": "Muokattu"
+        },
+        "selection": {
+            "todayNow": "Tänään, nyt",
+            "todayAt": "Tänään, {time}",
+            "tomorrowAt": "Huomenna, {time}",
+            "dateAt": "{date}, {time}",
+            "reset": "Palauta",
+            "selectDestination": "Valitse määränpää"
+        },
+        "stationTimetables": {
+            "timetablesFor": "Aikataulut asemalle",
+            "selectDestination": "Valitse määränpää",
+            "currentStation": "(Nykyinen asema)"
+        },
+        "passengerInformation": {
+            "title": "Tiedote"
+        }
     }
 }

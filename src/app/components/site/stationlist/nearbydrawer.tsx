@@ -134,18 +134,21 @@ export default function NearbyDrawer() {
                 <Drawer.Overlay style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0, 0, 0, 0.4)' }} />
                 <Drawer.Content
                     style={{
-                        backgroundColor: 'var(--bulma-background)',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        borderTopLeftRadius: '10px',
-                        borderTopRightRadius: '10px',
-                        marginTop: '6rem',
-                        height: 'fit-content',
                         position: 'fixed',
                         bottom: 0,
                         left: 0,
                         right: 0,
-                        outline: 'none',
+                        display: 'flex',
+                        height: 'fit-content',
+                        flexDirection: 'column',
+                        borderRadius: '10px 10px 0 0',
+                        zIndex: 10002,
+                        backgroundColor: 'var(--bulma-scheme-main)',
+                        color: 'var(--bulma-text)',
+                        width: '100%',
+                        maxWidth: '600px',
+                        margin: '0 auto',
+                        textAlign: 'left'
                     }}
                 >
                     <div style={{ padding: '1rem', backgroundColor: 'var(--bulma-background)', borderTopLeftRadius: '10px', borderTopRightRadius: '10px', flex: 1 }}>

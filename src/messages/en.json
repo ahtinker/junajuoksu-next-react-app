@@ -69,7 +69,42 @@
         "arrivesTo": "Arrives to",
         "departsFrom": "Departs from",
         "timeToArrival": "Arrives in",
+        "stopsAt": "Stops at",
         "timeToDeparture": "Departs in",
-        "cancelled": "Cancelled"
+        "cancelled": "Cancelled",
+        "tomorrow": "Tomorrow",
+        "all": "All",
+        "arrivals": "Arrivals",
+        "departures": "Departures",
+        "notfound": "No trains found.",
+        "dateTimeDrawer": {
+            "title": "Select date and time",
+            "today": "Today",
+            "now": "Now",
+            "tomorrow": "Tomorrow",
+            "reset": "Reset",
+            "date": "Date",
+            "time": "Time",
+            "cancel": "Cancel",
+            "apply": "Apply",
+            "realtime": "Real-time",
+            "modified": "Modified"
+        },
+        "selection": {
+            "todayNow": "Today, now",
+            "todayAt": "Today, {time}",
+            "tomorrowAt": "Tomorrow, {time}",
+            "dateAt": "{date}, {time}",
+            "reset": "Reset",
+            "selectDestination": "Select destination"
+        },
+        "stationTimetables": {
+            "timetablesFor": "Timetables for station",
+            "selectDestination": "Select destination",
+            "currentStation": "(Current station)"
+        },
+        "passengerInformation": {
+            "title": "Notice"
+        }
     }
 }
