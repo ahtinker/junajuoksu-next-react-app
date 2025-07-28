@@ -54,7 +54,7 @@
             "stationUICCode": 13,
             "stationName_fi": "Haarajoki",
             "illative": "Haarajokeen",
-            "elative": "Haarajoesta"
+            "elative": "Haarajoelta"
         }, {
             "stationUICCode": 1015,
             "stationName_fi": "Haksi",
@@ -109,7 +109,7 @@
             "stationUICCode": 91,
             "stationName_fi": "Hikiä",
             "illative": "Hikiään",
-            "elative": "Hikiästä"
+            "elative": "Hikiältä"
         }, {
             "stationUICCode": 988,
             "stationName_fi": "Hillosensalmi",
@@ -148,8 +148,8 @@
         }, {
             "stationUICCode": 938,
             "stationName_fi": "Höljäkkä",
-            "illative": "Höljäkään",
-            "elative": "Höljäkästä"
+            "illative": "Höljäkkään",
+            "elative": "Höljäkkästä"
         }, {
             "stationUICCode": 420,
             "stationName_fi": "Iisalmi",
