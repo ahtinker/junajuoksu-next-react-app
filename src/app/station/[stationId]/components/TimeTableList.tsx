@@ -24,74 +24,107 @@ export default function TimetableList({ stationData, hideTop = false, classNames
     const locale = useLocale();
     const [currentTime, setCurrentTime] = useState(new Date());
     const [showScrollButton, setShowScrollButton] = useState(false);
-    const [timetables, setTimetables] = useState<Train[]>([]);
+    const [timetables, setTimetables] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    // Helper function to create a unique key for each train
-    const getTrainKey = useCallback((train: Train) => {
-        return `${train.trainNumber}-${train.departureDate}`;
+    // Helper function to create a unique key for each train stop
+    const getTrainKey = useCallback((train: Train, stopIndex: number = 0) => {
+        return `${train.trainNumber}-${train.departureDate}-${stopIndex}`;
     }, []);
 
-    // Helper function to compare if two trains are the same with same data
-    const areTrainsEqual = useCallback((train1: Train, train2: Train) => {
-        if (getTrainKey(train1) !== getTrainKey(train2)) return false;
+    // Helper function to get all stops at the current station for a train
+    const getStationStops = useCallback((train: Train) => {
+        const stops: Array<{
+            arrivalRow?: TimeTableRow,
+            departureRow?: TimeTableRow,
+            stopIndex: number
+        }> = [];
 
-        // Compare relevant fields that might change
-        const getRelevantData = (train: Train) => {
-            const arrivalRow = train.timeTableRows.find(
-                row => row.stationShortCode === stationData.shortCode && row.type === 'ARRIVAL'
-            );
-            const departureRow = train.timeTableRows.find(
-                row => row.stationShortCode === stationData.shortCode && row.type === 'DEPARTURE'
-            );
+        // Group timetable rows by their order/index to identify separate stops
+        const stationRows = train.timeTableRows
+            .map((row, index) => ({ ...row, originalIndex: index }))
+            .filter(row => row.stationShortCode === stationData.shortCode);
 
-            return {
-                cancelled: train.cancelled,
-                arrivalTime: arrivalRow?.liveEstimateTime || arrivalRow?.scheduledTime,
-                departureTime: departureRow?.liveEstimateTime || departureRow?.scheduledTime,
-                arrivalTrack: arrivalRow?.commercialTrack,
-                departureTrack: departureRow?.commercialTrack,
-            };
-        };
+        // Find pairs of arrival/departure or standalone arrivals/departures
+        let currentStop: { arrivalRow?: TimeTableRow, departureRow?: TimeTableRow } = {};
+        let stopIndex = 0;
 
-        const data1 = getRelevantData(train1);
-        const data2 = getRelevantData(train2);
+        for (const row of stationRows) {
+            if (row.type === 'ARRIVAL') {
+                // If we already have an arrival for current stop, start a new stop
+                if (currentStop.arrivalRow) {
+                    if (currentStop.arrivalRow || currentStop.departureRow) {
+                        stops.push({ ...currentStop, stopIndex });
+                        stopIndex++;
+                    }
+                    currentStop = { arrivalRow: row };
+                } else {
+                    currentStop.arrivalRow = row;
+                }
+            } else if (row.type === 'DEPARTURE') {
+                currentStop.departureRow = row;
+                // Complete the current stop
+                stops.push({ ...currentStop, stopIndex });
+                stopIndex++;
+                currentStop = {};
+            }
+        }
 
-        return JSON.stringify(data1) === JSON.stringify(data2);
-    }, [stationData.shortCode, getTrainKey]);
+        // Add any remaining stop
+        if (currentStop.arrivalRow || currentStop.departureRow) {
+            stops.push({ ...currentStop, stopIndex });
+        }
 
-    // Smart update function that only changes what's necessary
-    const updateTimetables = useCallback((newTrains: Train[]) => {
-        setTimetables(currentTrains => {
-            // Create maps for quick lookup
-            const currentTrainsMap = new Map(currentTrains.map(train => [getTrainKey(train), train]));
-            const newTrainsMap = new Map(newTrains.map(train => [getTrainKey(train), train]));
+        return stops;
+    }, [stationData.shortCode]);
 
-            // Check if we need to update at all
-            const currentKeys = new Set(currentTrainsMap.keys());
-            const newKeys = new Set(newTrainsMap.keys());
+    // Helper function to compare if two train stops are the same with same data
+    const areTrainStopsEqual = useCallback((stop1: any, stop2: any) => {
+        if (!stop1 || !stop2) return false;
 
-            // If the keys are the same, check if any data has changed
-            if (currentKeys.size === newKeys.size &&
+        const getData = (stop: any) => ({
+            cancelled: stop.train.cancelled,
+            arrivalTime: stop.arrivalRow?.liveEstimateTime || stop.arrivalRow?.scheduledTime,
+            departureTime: stop.departureRow?.liveEstimateTime || stop.departureRow?.scheduledTime,
+            arrivalTrack: stop.arrivalRow?.commercialTrack,
+            departureTrack: stop.departureRow?.commercialTrack,
+        });
+
+        return JSON.stringify(getData(stop1)) === JSON.stringify(getData(stop2));
+    }, []);
+
+    // Smart update function that handles multiple stops per train
+    const updateTimetables = useCallback((newStops: any[]) => {
+        setTimetables(currentStops => {
+            if (!Array.isArray(currentStops)) {
+                return newStops;
+            }
+
+            // Create maps for comparison
+            const currentStopsMap = new Map(currentStops.map(stop => [getTrainKey(stop.train, stop.stopIndex), stop]));
+            const newStopsMap = new Map(newStops.map(stop => [getTrainKey(stop.train, stop.stopIndex), stop]));
+
+            const currentKeys = new Set(currentStopsMap.keys());
+            const newKeys = new Set(newStopsMap.keys());
+
+            // Check if stops are the same and data hasn't changed
+            if (currentKeys.size === newKeys.size && 
                 [...currentKeys].every(key => newKeys.has(key))) {
 
-                // Check if any train data has actually changed
-                const hasChanges = newTrains.some(newTrain => {
-                    const currentTrain = currentTrainsMap.get(getTrainKey(newTrain));
-                    return !currentTrain || !areTrainsEqual(currentTrain, newTrain);
+                const hasChanges = newStops.some(newStop => {
+                    const currentStop = currentStopsMap.get(getTrainKey(newStop.train, newStop.stopIndex));
+                    return !currentStop || !areTrainStopsEqual(currentStop, newStop);
                 });
 
                 if (!hasChanges) {
-                    // No changes detected, return current trains to prevent re-render
-                    return currentTrains;
+                    return currentStops;
                 }
             }
 
-            // Return new trains if there are actual changes
-            return newTrains;
+            return newStops;
         });
-    }, [getTrainKey, areTrainsEqual]);
+    }, [getTrainKey, areTrainStopsEqual]);
 
     // Helper function to format time
     const formatTime = (dateTimeString: string) => {
@@ -139,77 +172,81 @@ export default function TimetableList({ stationData, hideTop = false, classNames
             setError(null);
             try {
                 const response = await fetch(
-                    `https://rata.digitraffic.fi/api/v1/live-trains/station/${stationData.shortCode}?arrived_trains=10&arriving_trains=50&departed_trains=10&departing_trains=50&include_nonstopping=false`
+                    `https://rata.digitraffic.fi/api/v1/live-trains/station/${stationData.shortCode}?arrived_trains=10&arriving_trains=100&departed_trains=10&departing_trains=100&include_nonstopping=false`
                 );
                 const data = await response.json();
 
-                // Sort timetables by arrival/departure time
-                const sortedData = data.sort((a: Train, b: Train) => {
-                    const getStationTime = (train: Train) => {
-                        const arrivalRow = train.timeTableRows.find(
-                            row => row.stationShortCode === stationData.shortCode && row.type === 'ARRIVAL'
-                        );
-                        const departureRow = train.timeTableRows.find(
-                            row => row.stationShortCode === stationData.shortCode && row.type === 'DEPARTURE'
-                        );
+                // Create a flat list of all valid train stops
+                const allStops = data.flatMap((train: Train) => {
+                    const stops = getStationStops(train);
+                    return stops
+                        .filter(stop => {
+                            const { arrivalRow, departureRow } = stop;
 
-                        // If both arrival and departure exist, use departure time
+                            // Check if this is a commercial stop
+                            const isCommercialStop = (arrivalRow && arrivalRow.trainStopping) || (departureRow && departureRow.trainStopping);
+                            if (!isCommercialStop) return false;
+
+                            // Check if it's a passenger train
+                            const isPassengerTrain = train.trainCategory === 'Commuter' || train.trainCategory === 'Long-distance';
+                            if (!isPassengerTrain) return false;
+
+                            // Check if stop is in the future
+                            const currentTime = new Date();
+                            if (departureRow) {
+                                const departureTime = new Date(departureRow.liveEstimateTime || departureRow.scheduledTime);
+                                return departureTime.getTime() > currentTime.getTime();
+                            }
+                            if (arrivalRow && !departureRow) {
+                                const arrivalTime = new Date(arrivalRow.liveEstimateTime || arrivalRow.scheduledTime);
+                                return arrivalTime.getTime() > currentTime.getTime();
+                            }
+                            return false;
+                        })
+                        .map(stop => ({ ...stop, train }));
+                });
+
+                // Sort stops by time
+                const sortedStops = allStops.sort((a: any, b: any) => {
+                    const getStopTime = (stop: any) => {
+                        const { arrivalRow, departureRow } = stop;
                         if (arrivalRow && departureRow) {
                             return new Date(departureRow.liveEstimateTime || departureRow.scheduledTime);
                         }
-                        // If only departure exists, use departure time
                         if (departureRow) {
                             return new Date(departureRow.liveEstimateTime || departureRow.scheduledTime);
                         }
-                        // If only arrival exists, use arrival time
                         if (arrivalRow) {
                             return new Date(arrivalRow.liveEstimateTime || arrivalRow.scheduledTime);
                         }
-                        // Fallback (shouldn't happen due to filtering)
                         return new Date(0);
                     };
 
-                    const timeA = getStationTime(a);
-                    const timeB = getStationTime(b);
-
+                    const timeA = getStopTime(a);
+                    const timeB = getStopTime(b);
                     return timeA.getTime() - timeB.getTime();
                 });
 
-                // Filter out trains that have already departed or ended their journey
-                const currentTime = new Date();
-                const filteredData = sortedData.filter((train: Train) => {
-                    const arrivalRow = train.timeTableRows.find(
-                        row => row.stationShortCode === stationData.shortCode && row.type === 'ARRIVAL'
-                    );
-                    const departureRow = train.timeTableRows.find(
-                        row => row.stationShortCode === stationData.shortCode && row.type === 'DEPARTURE'
+                // Convert back to trains format, preserving the sorted order and multiple stops
+                const trainsWithStops = sortedStops.reduce((acc: any[], stop: any) => {
+                    const existingTrainIndex = acc.findIndex(item =>
+                        item.train.trainNumber === stop.train.trainNumber &&
+                        item.train.departureDate === stop.train.departureDate &&
+                        item.stopIndex === stop.stopIndex
                     );
 
-                    // Check if this is a commercial stop - if neither arrival nor departure is stopping, hide the train
-                    const isCommercialStop = (arrivalRow && arrivalRow.trainStopping) || (departureRow && departureRow.trainStopping);
-                    if (!isCommercialStop) {
-                        return false;
+                    if (existingTrainIndex === -1) {
+                        acc.push({
+                            train: stop.train,
+                            arrivalRow: stop.arrivalRow,
+                            departureRow: stop.departureRow,
+                            stopIndex: stop.stopIndex
+                        });
                     }
+                    return acc;
+                }, []);
 
-                    const isPassengerTrain = train.trainCategory === 'Commuter' || train.trainCategory === 'Long-distance';
-                    if (!isPassengerTrain) {
-                        return false;
-                    }
-                    // If train has departure, check if it hasn't departed yet
-                    if (departureRow) {
-                        const departureTime = new Date(departureRow.liveEstimateTime || departureRow.scheduledTime);
-                        return departureTime.getTime() > currentTime.getTime();
-                    }
-
-                    // If train only has arrival (ends journey at station), check if it hasn't arrived yet
-                    if (arrivalRow && !departureRow) {
-                        const arrivalTime = new Date(arrivalRow.liveEstimateTime || arrivalRow.scheduledTime);
-                        return arrivalTime.getTime() > currentTime.getTime();
-                    }
-
-                    return false;
-                });
-                updateTimetables(filteredData);
+                updateTimetables(trainsWithStops);
             } catch {
                 setError('Failed to fetch timetables');
             } finally {
@@ -285,14 +322,9 @@ export default function TimetableList({ stationData, hideTop = false, classNames
                     {error}
                 </div>
             )}
-            {timetables.map(train => {
-                const trainKey = getTrainKey(train);
-                const arrivalRow = train.timeTableRows.find(
-                    row => row.stationShortCode === stationData.shortCode && row.type === 'ARRIVAL'
-                );
-                const departureRow = train.timeTableRows.find(
-                    row => row.stationShortCode === stationData.shortCode && row.type === 'DEPARTURE'
-                );
+            {Array.isArray(timetables) && timetables.map((trainStop: any) => {
+                const { train, arrivalRow, departureRow, stopIndex } = trainStop;
+                const trainKey = getTrainKey(train, stopIndex);
 
                 if (!arrivalRow && !departureRow) {
                     return null;
@@ -300,6 +332,26 @@ export default function TimetableList({ stationData, hideTop = false, classNames
 
                 const destination = getDestinationName(train);
                 const origin = getOriginName(train);
+
+                // Check if train will stop at Lentoasema (LEN) after the current station
+                const willStopAtAirportAfterCurrentStation = (() => {
+                    // Find the current station's position in the timetable
+                    const currentStationRows = train.timeTableRows
+                        .map((row: TimeTableRow, index: number) => ({ ...row, originalIndex: index }))
+                        .filter((row: any) => row.stationShortCode === stationData.shortCode);
+
+                    if (currentStationRows.length === 0) return false;
+
+                    // Get the last occurrence of current station (in case train stops multiple times)
+                    const lastCurrentStationIndex = currentStationRows[currentStationRows.length - 1].originalIndex;
+
+                    // Check if LEN appears after the current station
+                    return train.timeTableRows.some((row: TimeTableRow, index: number) =>
+                        index > lastCurrentStationIndex &&
+                        row.stationShortCode === 'LEN' &&
+                        row.trainStopping
+                    );
+                })();
 
                 const formatRow = (row: TimeTableRow) => {
                     const scheduledTime = formatTime(row.scheduledTime);
@@ -315,7 +367,7 @@ export default function TimetableList({ stationData, hideTop = false, classNames
                     if (arrivalRow) {
                         const time = new Date(arrivalRow.liveEstimateTime || arrivalRow.scheduledTime).getTime();
                         const diff = Math.round((time - currentTime.getTime()) / 60000);
-                        if (diff > 0) {
+                        if (diff >= 0) {
                             return `${diff} min`;
                         }
                     }
@@ -326,7 +378,7 @@ export default function TimetableList({ stationData, hideTop = false, classNames
                     if (departureRow) {
                         const time = new Date(departureRow.liveEstimateTime || departureRow.scheduledTime).getTime();
                         const diff = Math.round((time - currentTime.getTime()) / 60000);
-                        if (diff > 0) {
+                        if (diff >= 0) {
                             return `${diff} min`;
                         }
                     }
@@ -335,88 +387,113 @@ export default function TimetableList({ stationData, hideTop = false, classNames
 
                 return (
                     <div className="panel-block pt-4 my-0" key={trainKey} style={{ display: 'block', marginBottom: '1rem' }}>
-                        {/* Top part */}
-                        <div className="level is-mobile">
-                            <div className="level-left">
-                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                    {train.commuterLineID ?
-                                        ["A", "E", "L", "U", "Y", "I", "P", "K"].includes(train.commuterLineID) ?
-                                            <span className="tag is-primary is-large" style={{ marginRight: '1rem', backgroundColor: "#8d3889" }}>
-                                                {train.commuterLineID}
-                                            </span>
-                                            :
-                                            <span className="tag is-primary is-large" style={{ marginRight: '1rem' }}>
-                                                {train.commuterLineID}
-                                            </span>
-                                        :
-                                        <span className="tag is-primary is-large p-2" style={{ marginRight: '1rem' }}>
-                                            {train.trainType} {train.trainNumber}
-                                        </span>
-                                    }
-                                    <div className="has-text-left">
-                                        <p className="title is-5">{destination}</p>
-                                        <p className="subtitle is-6">
-                                            {train.departureDate}/{train.trainNumber}
-                                        </p>
+                        <div className="columns is-0">
+                            <div className="column is-5 pb-4">
+                                {/* Top part */}
+                                <div className="level is-mobile">
+                                    <div className="level-left">
+                                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                                            {train.commuterLineID ?
+                                                ["A", "E", "L", "U", "Y", "I", "P", "K"].includes(train.commuterLineID) ?
+                                                    <span className="tag is-primary is-large has-text-weight-bold" style={{ marginRight: '1rem', backgroundColor: "#8d3889", width: "40px" }}>
+                                                        {train.commuterLineID}
+                                                    </span>
+                                                    :
+                                                    <span className="tag is-primary is-large has-text-weight-bold" style={{ marginRight: '1rem', width: "40px" }}>
+                                                        {train.commuterLineID}
+                                                    </span>
+                                                :
+                                                <span className="tag is-primary is-large p-2" style={{ marginRight: '1rem' }}>
+                                                    {train.trainType} {train.trainNumber}
+                                                </span>
+                                            }
+                                            <div className="has-text-left">
+                                                <p className="title is-5">
+                                                    {willStopAtAirportAfterCurrentStation && (
+                                                        <span className="icon mr-2">
+                                                            <i className="fas fa-plane-departure" aria-hidden="true"></i>
+                                                        </span>
+                                                    )}
+                                                    {destination}
+                                                </p>
+                                                <p className="subtitle is-6">
+                                                    {train.cancelled ? (
+                                                        <span style={{ color: 'var(--bulma-danger)' }}>
+                                                            {t('timetables.cancelled')}
+                                                        </span>
+                                                    ) : (
+                                                        <>
+                                                            {arrivalRow && departureRow && `${t('timetables.stopsAt')} ${stationData.translatedName || stationData.name}`}
+                                                            {arrivalRow && !departureRow && `${t('timetables.arrivesTo')} ${stationData.translatedName || stationData.name}`}
+                                                            {!arrivalRow && departureRow && `${t('timetables.departsFrom')} ${stationData.translatedName || stationData.name}`}
+                                                        </>
+                                                    )}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="level-right">
+                                        {train.cancelled && (
+                                            <span className="tag is-danger">{t('timetables.cancelled')}</span>
+                                        )}
                                     </div>
                                 </div>
                             </div>
-                            <div className="level-right">
-                                {train.cancelled && (
-                                    <span className="tag is-danger">{t('timetables.cancelled')}</span>
-                                )}
-                            </div>
-                        </div>
+                            <div className="column">
+                                {/* Bottom part */}
+                                <div className="">
+                                    <div className="columns is-mobile has-text-centered">
+                                        <div className="mr-4">
+                                            <span className="label m-0">{t('timetables.track')}</span>
+                                            <span className="is-size-5 has-text-weight-bold">{(arrivalInfo?.track || departureInfo?.track) || '-'}</span>
+                                        </div>
+                                        {arrivalInfo && (
+                                            <div className="mr-4">
+                                                <span className="label m-0">{t('timetables.arrivesAt')}</span>
+                                                <div className="is-size-5 has-text-weight-bold" style={{ color: arrivalInfo.hasScheduleChange ? 'var(--bulma-danger)' : 'inherit' }}>
+                                                    {arrivalInfo.liveTime || arrivalInfo.scheduledTime}
+                                                </div>
+                                                {arrivalInfo.liveTime && arrivalInfo.liveTime !== arrivalInfo.scheduledTime && (
+                                                    <div className="subtitle is-7" style={{ textDecoration: 'line-through' }}>
+                                                        ({arrivalInfo.scheduledTime})
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
+                                        {departureInfo && (
+                                            <div className="mr-4">
+                                                <span className="label m-0">{t('timetables.departsAt')}</span>
+                                                <div className="is-size-5 has-text-weight-bold" style={{ color: departureInfo.hasScheduleChange ? 'var(--bulma-danger)' : 'inherit' }}>
+                                                    {departureInfo.liveTime || departureInfo.scheduledTime}
+                                                </div>
+                                                {departureInfo.liveTime && departureInfo.liveTime !== departureInfo.scheduledTime && (
+                                                    <div className="subtitle is-7" style={{ textDecoration: 'line-through' }}>
+                                                        ({departureInfo.scheduledTime})
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
 
-                        {/* Bottom part */}
-                        <div className="ml-3 my-4">
-                            <div className="columns is-mobile">
-                                <div className="mr-4">
-                                    <p className="heading">{t('timetables.track')}</p>
-                                    <p className="title is-5">{(arrivalInfo?.track || departureInfo?.track) || '-'}</p>
+                                        {arrivalInfo && !departureInfo && (
+                                            <div className="">
+                                                <span className="label m-0">{t('timetables.timeToArrival')}</span>
+                                                <div className="is-size-5 has-text-weight-bold">{getEta()}</div>
+                                            </div>
+                                        )}
+
+                                        {departureInfo && !arrivalInfo && (
+                                            <div className="">
+                                                <span className="label m-0">{t('timetables.timeToDeparture')}</span>
+                                                <div className="is-size-5 has-text-weight-bold">{getEtd()}</div>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
-                                {arrivalInfo && (
-                                    <div className="mr-4">
-                                        <p className="heading">{t('timetables.arrivesAt')}</p>
-                                        <p className="title is-5" style={{ color: arrivalInfo.hasScheduleChange ? 'var(--bulma-danger)' : 'inherit' }}>
-                                            {arrivalInfo.liveTime || arrivalInfo.scheduledTime}
-                                        </p>
-                                        {arrivalInfo.liveTime && arrivalInfo.liveTime !== arrivalInfo.scheduledTime && (
-                                            <p className="subtitle is-7" style={{ textDecoration: 'line-through' }}>
-                                                ({arrivalInfo.scheduledTime})
-                                            </p>
-                                        )}
-                                    </div>
-                                )}
-                                {departureInfo && (
-                                    <div className="mr-4">
-                                        <p className="heading">{t('timetables.departsAt')}</p>
-                                        <p className="title is-5" style={{ color: departureInfo.hasScheduleChange ? 'var(--bulma-danger)' : 'inherit' }}>
-                                            {departureInfo.liveTime || departureInfo.scheduledTime}
-                                        </p>
-                                        {departureInfo.liveTime && departureInfo.liveTime !== departureInfo.scheduledTime && (
-                                            <p className="subtitle is-7" style={{ textDecoration: 'line-through' }}>
-                                                ({departureInfo.scheduledTime})
-                                            </p>
-                                        )}
-                                    </div>
-                                )}
-
-                                {arrivalInfo && !departureInfo && (
-                                    <div className="">
-                                        <p className="heading">{t('timetables.timeToArrival')}</p>
-                                        <p className="title is-5">{getEta()}</p>
-                                    </div>
-                                )}
-
-                                {departureInfo && !arrivalInfo && (
-                                    <div className="">
-                                        <p className="heading">{t('timetables.timeToDeparture')}</p>
-                                        <p className="title is-5">{getEtd()}</p>
-                                    </div>
-                                )}
                             </div>
                         </div>
+
+
+
                     </div>
                 );
             })}

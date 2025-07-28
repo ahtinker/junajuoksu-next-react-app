@@ -68,8 +68,8 @@
         "track": "Spår",
         "arrivesTo": "Anländer till",
         "departsFrom": "Avgår från",
-        "timeToArrival": "Tid till ankomst",
-        "timeToDeparture": "Tid till avgång",
+        "timeToArrival": "Anländer om",
+        "timeToDeparture": "Avgår om",
         "cancelled": "Inställd"
     }
 }

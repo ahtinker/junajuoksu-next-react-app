@@ -68,8 +68,8 @@
         "track": "Laituri",
         "arrivesTo": "Saapuu",
         "departsFrom": "Lähtee",
-        "timeToArrival": "Saapumisaika",
-        "timeToDeparture": "Lähtöaika",
+        "timeToArrival": "Saapuu",
+        "timeToDeparture": "Lähtee",
         "cancelled": "Peruttu"
     }
 }
