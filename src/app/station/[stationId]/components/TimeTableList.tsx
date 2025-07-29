@@ -669,7 +669,7 @@ nextDate: trainsByDepartureDate(departureDate: "${nextDateStr}", where: {timeTab
                     <span className="panel-icon">
                         <i className="fas fa-spinner fa-spin" aria-hidden="true"></i>
                     </span>
-                    Loading timetables...
+                    {t('timetables.loading')}
                 </div>
             )}
             {error && (
@@ -826,7 +826,7 @@ nextDate: trainsByDepartureDate(departureDate: "${nextDateStr}", where: {timeTab
                 return (
                     <div key={trainKey} className="panel-block pt-0 my-0" style={{ display: 'block', marginBottom: '1rem' }}>
                         {dateHeader}
-                        <div className="columns is-0 pt-4">
+                        <div className="columns is-0 pt-4 is-desktop">
                             <div className="column pb-4">
                                 {/* Top part */}
                                 <div className="level is-mobile">

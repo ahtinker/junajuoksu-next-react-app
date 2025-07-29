@@ -19,7 +19,7 @@
     }
         .tablet-primary-background {
             background-color: var(--bulma-background) !important;
-            color: var(--bulma-color);
+            color: var(--bulma-color) !important;
         }
     .mobile-border {
         border-width: 10px 0 0 0 !important;
@@ -28,6 +28,6 @@
 }
 @media (min-width: 769px) {
     .tablet-primary-background {
-        color: var(--bulma-light);
+        color: var(--bulma-light) !important;
     }
 }
