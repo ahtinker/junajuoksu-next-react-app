@@ -22,6 +22,14 @@ interface PassengerInfo {
         };
         deliveryRules: Record<string, unknown>;
     };
+    audio: {
+        text: {
+            fi: string;
+            sv: string;
+            en: string;
+        };
+        deliveryRules: Record<string, unknown>;
+    };
 }
 
 export default function PassengerInformation({ stationShortCode }: PassengerInformationProps) {
@@ -48,7 +56,12 @@ export default function PassengerInformation({ stationShortCode }: PassengerInfo
                 }
 
                 const data = await response.json();
-                setPassengerInfo(data || []);
+                setPassengerInfo(data.filter((info: PassengerInfo) => {
+                    if (info.audio?.deliveryRules.deliveryType === "NOW" || info.video?.deliveryRules.deliveryType === "NOW") {
+                        return false; // Exclude NOW delivery type
+                    }
+                    return true
+                }) || []);
             } catch (err) {
                 console.error('Error fetching passenger information:', err);
                 setError('Failed to load passenger information');
@@ -80,11 +93,11 @@ export default function PassengerInformation({ stationShortCode }: PassengerInfo
                 </span>
             </div>
             {passengerInfo.map((info) => {
-                const localizedText = getLocalizedText(info.video.text);
+                const localizedText = getLocalizedText(info.video?.text || info.audio?.text || { fi: 'Tapahtui virhe', sv: 'Ett problem dök upp', en: 'Parsing error' });
 
                 return (
                     <div key={info.id} className="panel-block is-block p-5 themebackground"  >
-                        <p style={{ whiteSpace: 'pre-line', marginBottom: '0.5rem' }}>
+                        <p style={{ whiteSpace: 'pre-line' }}>
                             {localizedText}
                         </p>
                     </div>

@@ -615,7 +615,7 @@ nextDate: trainsByDepartureDate(departureDate: "${nextDateStr}", where: {timeTab
             <div className={`${styles['mobile-border']}`} style={hideTop ? { position: 'sticky', top: 0, zIndex: 1 } : { position: 'sticky', top: 0, zIndex: 1, border: 'solid var(--bulma-scheme-main)' }}>
                 <div className={`panel-heading level is-mobile mb-0 py-2 ${styles['tablet-primary-background']} `}>
                     <div className="level-left has-text-left is-block py-2">
-                        <div className={`title is-4 has-text-left m-0  ${styles['tablet-primary-background']} ${isRealtime ? "" : "has-text-primary-70"}`}>
+                        <div className={`title is-4 has-text-left m-0  ${isRealtime ? styles['tablet-primary-background'] : "has-text-primary-70"}`}>
                             {isRealtime ? currentTime.toLocaleTimeString() : selectedDateTime?.toLocaleTimeString("fi-FI", {
                                 hour: '2-digit',
                                 minute: '2-digit'
