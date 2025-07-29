@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl';
 const Footer = () => {
     const t = useTranslations();
     return (
-        <footer className="footer">
+        <footer className="footer themebackground">
             <div className="content">
                 {/* <strong className="has-text-info-45">Verkkokehitys Ankeriasniemi</strong> */}
                 <div className="columns is-desktop has-text-left">

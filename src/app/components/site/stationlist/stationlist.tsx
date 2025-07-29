@@ -36,7 +36,7 @@ const StationList = () => {
     };
 
     return (
-        <article ref={inputRef} className="panel is-primary has-background has-text-left is-shadowless mb-6" style={{ maxWidth: "500px", margin: "0 auto" }}>
+        <article ref={inputRef} className="panel is-primary has-text-left is-shadowless mb-6" style={{ maxWidth: "500px", margin: "0 auto", width: "100%", border: "1px solid var(--bulma-border)", backdropFilter: "blur(30px)" }}>
             <div className="panel-block pt-4">
                 <div className="control has-icons-left">
                     <input

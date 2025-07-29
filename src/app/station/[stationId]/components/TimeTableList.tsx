@@ -611,8 +611,8 @@ nextDate: trainsByDepartureDate(departureDate: "${nextDateStr}", where: {timeTab
     }
 
     return (
-        <article className={"panel themebackground is-primary " + classNames}>
-            <div className={`${styles['mobile-border']}`} style={hideTop ? { position: 'sticky', top: 0, zIndex: 1 } : { position: 'sticky', top: 0, zIndex: 1, border: 'solid var(--bulma-scheme-main)' }}>
+        <article className={"panel is-primary is-shadowless " + classNames} style={{ marginTop: "-2px" }}>
+            <div className={`${styles['mobile-border']}`} style={hideTop ? { position: 'sticky', top: 0, zIndex: 1 } : { position: 'sticky', top: 0, zIndex: 1, border: 'solid var(--bulma-scheme-main' }}>
                 <div className={`panel-heading level is-mobile mb-0 py-2 ${styles['tablet-primary-background']} `}>
                     <div className="level-left has-text-left is-block py-2">
                         <div className={`title is-4 has-text-left m-0  ${isRealtime ? styles['tablet-primary-background'] : "has-text-primary-70"}`}>
@@ -635,7 +635,7 @@ nextDate: trainsByDepartureDate(departureDate: "${nextDateStr}", where: {timeTab
                     )}
                 </div>
             </div>
-            <p className="panel-tabs is-left">
+            <p className="panel-tabs is-left themebackground mb-0">
                 <a
                     className={activeTab === 'all' ? 'is-active' : ''}
                     onClick={() => handleTabChange('all')}
@@ -665,7 +665,7 @@ nextDate: trainsByDepartureDate(departureDate: "${nextDateStr}", where: {timeTab
                 </a>
             </p>
             {isLoading && (
-                <div className="panel-block">
+                <div className="panel-block themebackground ">
                     <span className="panel-icon">
                         <i className="fas fa-spinner fa-spin" aria-hidden="true"></i>
                     </span>
@@ -673,7 +673,7 @@ nextDate: trainsByDepartureDate(departureDate: "${nextDateStr}", where: {timeTab
                 </div>
             )}
             {error && (
-                <div className="panel-block">
+                <div className="panel-block themebackground ">
                     <span className="panel-icon">
                         <i className="fas fa-exclamation-triangle" aria-hidden="true"></i>
                     </span>
@@ -728,9 +728,8 @@ nextDate: trainsByDepartureDate(departureDate: "${nextDateStr}", where: {timeTab
                 );
 
                 const dateHeader = shouldShowDateHeader ? (
-                    <div key={`date-header-${currentStopDateString}`} className="panel-block" style={{
+                    <div key={`date-header-${currentStopDateString}`} className="themebackground has-text-centered" style={{
                         backgroundColor: 'var(--bulma-scheme-main-ter)',
-                        borderTop: '2px solid var(--bulma-primary)',
                         justifyContent: 'center',
                         fontWeight: 'bold',
                         padding: '0.75rem'
@@ -841,7 +840,7 @@ nextDate: trainsByDepartureDate(departureDate: "${nextDateStr}", where: {timeTab
                 const startStation = train.timeTableRows.filter(row => row.stationShortCode === "LEN")[0] || train.timeTableRows[0];
 
                 return (
-                    <div key={trainKey} className="panel-block pt-0 my-0" style={{ display: 'block', marginBottom: '1rem' }}>
+                    <div key={trainKey} className="panel-block themebackground pt-0 my-0" style={{ display: 'block', marginBottom: '1rem' }}>
                         {dateHeader}
                         <div className="columns is-0 pt-4 is-desktop">
                             <div className="column pb-4">

@@ -7,6 +7,9 @@
             "en": "English"
         }
     },
+    "hero": {
+        "description": "Reaaliaikaiset aikataulut sekunnin tarkkuudella ja junassaolon vahvistus. Kaikki mitä tarvitset sujuvaan junamatkaan."
+    },
     "footer": {
         "contact": "Yhteystiedot",
         "additionalInfo": "Lisätiedot",

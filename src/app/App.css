@@ -44,10 +44,10 @@ html {
   }
 }
 
-.home-hero {
-  background: url("../../public/image.png");
-  background-repeat: no-repeat;
+.hero-home {
+  width: 100%;
+  height: 100%;
   background-size: cover;
-  background-position-y: center;
-  ;
+  background-position: center center;
+    background-image: url('/patterns.svg');
 }

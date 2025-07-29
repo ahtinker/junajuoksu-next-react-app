@@ -382,7 +382,7 @@ export default function StationTimetables({ stationId }: StationTimetablesProps)
                             <div className={`${!isSearchActive ? 'is-hidden' : ''} has-text-left`}>
                                 {searchQuery.trim() ? (
                                     <div className="p-4">
-                                        <label className="label has-text-light">{t("stationList.searchResults")}</label>
+                                        <label className="label">{t("stationList.searchResults")}</label>
                                         {searchResults.length > 0 ? (
                                             <div className="buttons">
                                                 {searchResults.map((station) => {
@@ -412,7 +412,7 @@ export default function StationTimetables({ stationId }: StationTimetablesProps)
                                     </div>
                                 ) : (
                                     <div className="p-4">
-                                        <label className="label has-text-light">{t("stationList.suggestions")}</label>
+                                            <label className="label">{t("stationList.suggestions")}</label>
                                         <div className="buttons">
                                             <StationElement icon="fas fa-location-dot" stationUIC="1" shortCode="HKI" popup={false} disabled={stationData && 1 === stationData.uicCode} target="" />
                                             <StationElement icon="fas fa-location-dot" stationUIC="30" shortCode="HY" popup={false} disabled={stationData && 30 === stationData.uicCode} target="" />

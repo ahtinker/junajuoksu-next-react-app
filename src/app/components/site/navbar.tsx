@@ -29,7 +29,7 @@ const NavBar = () => {
         return t(`navbar.language.${currentLocale}`);
     };
     return (
-        <nav className="navbar px-4" style={{ width: "100%" }}>
+        <nav className="navbar has-shadow px-4" style={{ width: "100%" }}>
             <div className="container">
                 <div className="navbar-brand">
                     <Link className="navbar-item" href="/">

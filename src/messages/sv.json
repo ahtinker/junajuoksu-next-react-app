@@ -7,6 +7,9 @@
             "en": "Engelska"
         }
     },
+    "hero": {
+        "description": "Realtidsscheman med sekundnivånoggrannhet och bekräftelse på att vara på tåget. Allt du behöver för en smidig tågresa."
+    },
     "footer": {
         "contact": "Kontaktinformation",
         "additionalInfo": "Ytterligare information",

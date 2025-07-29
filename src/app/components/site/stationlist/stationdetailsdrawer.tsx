@@ -71,6 +71,7 @@ export default function StationDetailsDrawer({ station, isOpen, onClose }: Stati
                         borderRadius: '10px 10px 0 0',
                         zIndex: 10002,
                         backgroundColor: 'var(--bulma-scheme-main)',
+                        border: "1px solid var(--bulma-border)",
                         color: 'var(--bulma-text)',
                         width: '100%',
                         maxWidth: '600px',
