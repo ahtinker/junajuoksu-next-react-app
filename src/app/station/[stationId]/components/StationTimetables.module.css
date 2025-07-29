@@ -31,3 +31,80 @@
         color: var(--bulma-light) !important;
     }
 }
+/* Search Animation Styles */
+.search-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: inherit;
+    display: flex;
+    align-items: center;
+    padding: 0 1.25rem;
+    opacity: 0;
+    transform: scaleX(0);
+    transform-origin: right center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 10;
+    border-radius: inherit;
+    pointer-events: none;
+}
+
+.search-container.search-active {
+    opacity: 1;
+    transform: scaleX(1);
+    pointer-events: auto;
+}
+
+.search-input {
+    flex: 1;
+    background: transparent !important;
+    color: inherit !important;
+    font-size: 1.125rem !important;
+    box-shadow: none !important;
+    outline: none !important;
+    margin-right: 0.75rem;
+    border: 0 !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-user-select: text !important;
+    user-select: text !important;
+    /* Additional iOS focus properties */
+    -webkit-touch-callout: none !important;
+    -webkit-text-size-adjust: none !important;
+    touch-action: manipulation !important;
+    /* Ensure the input is always focusable */
+    pointer-events: auto !important;
+    z-index: 1 !important;
+}
+
+.search-input::placeholder {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.search-input:focus {
+    box-shadow: none !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+}
+
+.search-close-button {
+    transform: scale(0.8);
+    transition: all 0.2s ease;
+    transition-delay: 0.1s;
+}
+
+.search-container.search-active .search-close-button {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.header-content {
+    transition: opacity 0.3s ease;
+}
+
+.header-content.search-active {
+    opacity: 0;
+}

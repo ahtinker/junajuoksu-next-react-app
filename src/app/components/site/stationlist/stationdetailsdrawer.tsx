@@ -38,9 +38,6 @@ export default function StationDetailsDrawer({ station, isOpen, onClose }: Stati
         translatedName: translatedStationName
     }
 
-    // Debug log
-    console.log('StationDetailsDrawer render:', { isOpen, station: station?.properties.stationName });
-
     return (
         <Drawer.Root
             open={isOpen}

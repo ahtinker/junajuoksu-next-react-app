@@ -68,9 +68,9 @@
         "track": "Laituri",
         "arrivesTo": "Saapuu",
         "departsFrom": "Lähtee",
-        "timeToArrival": "Saapuu",
+        "timeToArrival": "Saapumiseen",
         "stopsAt": "Pysähtyy",
-        "timeToDeparture": "Lähtee",
+        "timeToDeparture": "Lähtöön",
         "cancelled": "Peruttu",
         "tomorrow": "Huomenna",
         "all": "Kaikki",
@@ -101,11 +101,11 @@
         },
         "stationTimetables": {
             "timetablesFor": "Aikataulut asemalle",
-            "selectDestination": "Valitse määränpää",
-            "currentStation": "(Nykyinen asema)"
+            "selectDestination": "Valitse määränpää"
         },
         "passengerInformation": {
             "title": "Tiedote"
-        }
+        },
+        "grammarFrom": ""
     }
 }

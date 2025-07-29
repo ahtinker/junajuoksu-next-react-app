@@ -101,11 +101,11 @@
         },
         "stationTimetables": {
             "timetablesFor": "Tidtabeller för station",
-            "selectDestination": "Välj destination",
-            "currentStation": "(Nuvarande station)"
+            "selectDestination": "Välj destination"
         },
         "passengerInformation": {
             "title": "Observera"
-        }
+        },
+        "grammarFrom": "Från"
     }
 }

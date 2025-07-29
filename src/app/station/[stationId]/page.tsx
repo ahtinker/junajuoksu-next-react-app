@@ -4,6 +4,7 @@ import "../../globals.scss";
 import NavBar from '../../components/site/navbar';
 import Footer from '../../components/site/footer';
 import StationTimetables from './components/StationTimetables';
+import StationSkeleton from './components/StationSkeleton';
 import { useEffect, useState } from 'react';
 
 interface StationPageProps {
@@ -23,7 +24,17 @@ function StationPage({ params }: StationPageProps) {
     }, [params]);
 
     if (!stationId) {
-        return <div>Loading...</div>;
+        return (
+            <div className="App">
+                <NavBar />
+                <section className="section is-fullheight" style={{ backgroundColor: 'var(--bulma-scheme-main)' }}>
+                    <div className="content">
+                        <StationSkeleton />
+                    </div>
+                </section>
+                <Footer />
+            </div>
+        );
     }
 
     return (

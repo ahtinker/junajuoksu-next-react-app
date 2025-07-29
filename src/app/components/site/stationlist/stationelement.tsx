@@ -6,9 +6,10 @@ import { getTranslatedStationNameWithFallback } from '../../../../lib/stationUti
 import { useState } from 'react';
 import StationDetailsDrawer from './stationdetailsdrawer';
 
-const StationElement = ({ stationUIC, shortCode, popup = false }: { stationUIC: string, shortCode?: string, popup?: boolean }) => {
+const StationElement = ({ stationUIC, shortCode, popup = false, target = "_blank", disabled = false, icon = "fas fa-arrow-up-right-from-square" }: { stationUIC: string, shortCode?: string, popup?: boolean, target?: string, disabled?: boolean, icon?: string }) => {
     const currentLocale = useLocale();
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const getStationName = (uicCode: string) => {
         const uicNumber = parseInt(uicCode);
@@ -26,6 +27,12 @@ const StationElement = ({ stationUIC, shortCode, popup = false }: { stationUIC: 
     const handleClick = () => {
         if (popup) {
             setIsDrawerOpen(true);
+        }
+    };
+
+    const handleLinkClick = () => {
+        if (target !== "_blank") {
+            setIsLoading(true);
         }
     };
 
@@ -49,7 +56,7 @@ const StationElement = ({ stationUIC, shortCode, popup = false }: { stationUIC: 
     const buttonContent = (
         <>
             <span className="icon mr-2">
-                <i className={`fa-solid ${popup ? 'fa-chevron-up' : 'fa-arrow-up-right-from-square'}`} style={{ opacity: 0.4 }}></i>
+                <i className={`${popup ? 'fas fa-chevron-up' : icon}`} style={{ opacity: 0.4 }}></i>
             </span>
             <span className="station-info">
                 <strong>{getStationName(stationUIC)}</strong>
@@ -64,15 +71,17 @@ const StationElement = ({ stationUIC, shortCode, popup = false }: { stationUIC: 
                     className={`button is-fullwidth`}
                     style={{ justifyContent: "left" }}
                     onClick={handleClick}
+                    disabled={disabled}
                 >
                     {buttonContent}
                 </button>
             ) : (
                     <Link
                         href={`/station/${stationUIC}`}
-                        target="_blank"
-                        className={`button is-fullwidth`}
+                        target={target}
+                        className={`button is-fullwidth ${target !== "_blank" && isLoading ? 'is-loading' : ''} ${disabled ? 'is-static' : ''}`}
                         style={{ justifyContent: "left" }}
+                        onClick={disabled ? undefined : handleLinkClick}
                     >
                     {buttonContent}
                 </Link>

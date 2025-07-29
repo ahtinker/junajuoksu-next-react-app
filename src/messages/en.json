@@ -101,11 +101,11 @@
         },
         "stationTimetables": {
             "timetablesFor": "Timetables for station",
-            "selectDestination": "Select destination",
-            "currentStation": "(Current station)"
+            "selectDestination": "Select destination"
         },
         "passengerInformation": {
             "title": "Notice"
-        }
+        },
+        "grammarFrom": "From"
     }
 }

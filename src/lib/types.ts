@@ -1,4 +1,5 @@
 export interface TimeTableRow {
+    actualTime: string | undefined;
     stationShortCode: string;
     stationUICCode: number;
     countryCode: string;
@@ -11,7 +12,7 @@ export interface TimeTableRow {
     runningCurrently: boolean;
     cancelled: boolean;
     scheduledTime: string;
-    liveEstimateTime?: string;
+    liveEstimateTime?: string | undefined;
     estimateSource?: string;
     differenceInMinutes?: number;
     causes: unknown[];

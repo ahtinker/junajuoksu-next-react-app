@@ -1,14 +1,17 @@
 'use client';
 
 import { useTranslations, useLocale } from 'next-intl';
-import { useState, useEffect, MouseEvent } from 'react';
+import { useState, useEffect, useRef, useMemo, MouseEvent } from 'react';
 import { getTranslatedStationNameWithFallback, Station } from '../../../../lib/stationUtils';
 import stationTranslations from '../../../resources/station_translations.json';
 import TimetableList from './TimeTableList'
 import DateTimeDrawer from './DateTimeDrawer';
 import DestinationDrawer from './DestinationDrawer';
 import PassengerInformation from './PassengerInformation';
+import StationSkeleton from './StationSkeleton';
 import styles from './StationTimetables.module.css';
+import StationElement from '@/app/components/site/stationlist/stationelement';
+import { getSearchResults } from '../../../components/site/stationlist/searchUtils';
 
 interface StationTimetablesProps {
     stationId: string;
@@ -39,17 +42,22 @@ export default function StationTimetables({ stationId }: StationTimetablesProps)
     const [isDateTimeDrawerOpen, setIsDateTimeDrawerOpen] = useState(false);
     const [isDestinationDrawerOpen, setIsDestinationDrawerOpen] = useState(false);
     const [selectedDestination, setSelectedDestination] = useState<DestinationData | null>(null);
+    const [isSearchActive, setIsSearchActive] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
+    const searchInputRef = useRef<HTMLInputElement>(null);
+
+    // Search results using the same logic as DestinationDrawer
+    const resultsPerPage = 3;
+    const searchResults = useMemo(() => getSearchResults(searchQuery, locale, resultsPerPage), [searchQuery, locale]);
 
     const handleDateTimeDrawerOpen = (e: MouseEvent) => {
         const element = e.target as HTMLElement;
-        console.log(element.tagName);
         if (element.tagName === 'I' || element.tagName === 'DIV') return;
         setIsDateTimeDrawerOpen(true);
     };
 
     const handleDestinationDrawerOpen = (e: MouseEvent) => {
         const element = e.target as HTMLElement;
-        console.log(element.tagName);
         if (element.tagName === 'I' || element.tagName === 'DIV') return;
         setIsDestinationDrawerOpen(true);
     };
@@ -62,6 +70,95 @@ export default function StationTimetables({ stationId }: StationTimetablesProps)
     const handleDestinationSelect = (destination: DestinationData) => {
         setSelectedDestination(destination);
     };
+
+    const handleSearchOpen = () => {
+        setIsSearchActive(true);
+        // For iOS compatibility, we need to ensure focus happens directly from user interaction
+        // Try multiple approaches to ensure focus works on iOS
+        const focusInput = () => {
+            if (searchInputRef.current) {
+                // Method 1: Direct focus
+                searchInputRef.current.focus();
+
+                // Method 2: For iOS, also simulate click and set cursor position
+                if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+                    searchInputRef.current.click();
+                    searchInputRef.current.setSelectionRange(0, 0);
+                }
+
+                // Method 3: Force focus by temporarily making it visible and focusable
+                searchInputRef.current.style.opacity = '1';
+                searchInputRef.current.style.pointerEvents = 'auto';
+                searchInputRef.current.focus();
+            }
+        };
+
+        // Try immediate focus
+        focusInput();
+
+        // Also try after animation frame
+        requestAnimationFrame(() => {
+            focusInput();
+        });
+
+        // Final fallback with slight delay for iOS
+        setTimeout(() => {
+            focusInput();
+        }, 50);
+    };
+
+    const handleSearchClose = () => {
+        setIsSearchActive(false);
+        setSearchQuery('');
+    };
+
+    const handleSearchSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        // Here you can implement the search logic
+        // For now, we'll just navigate back to the station list
+        if (searchQuery.trim()) {
+            window.location.href = `/${locale}?search=${encodeURIComponent(searchQuery)}`;
+        }
+    };
+
+    // Handle escape key to close search
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape' && isSearchActive) {
+                handleSearchClose();
+            }
+        };
+
+        if (isSearchActive) {
+            document.addEventListener('keydown', handleKeyDown);
+        }
+
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [isSearchActive]);
+
+    // Additional iOS focus handling
+    useEffect(() => {
+        if (isSearchActive && searchInputRef.current) {
+            const input = searchInputRef.current;
+
+            // Small delay to ensure the element is visible after animation
+            const timer = setTimeout(() => {
+                if (input && document.contains(input)) {
+                    input.focus();
+
+                    // Additional iOS-specific handling
+                    if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+                        input.click();
+                        input.setSelectionRange(0, 0);
+                    }
+                }
+            }, 100);
+
+            return () => clearTimeout(timer);
+        }
+    }, [isSearchActive]);
 
     const getDateTimeLabel = () => {
         if (isRealtime) {
@@ -169,20 +266,7 @@ export default function StationTimetables({ stationId }: StationTimetablesProps)
     }, [stationId, locale]);
 
     if (isLoading) {
-        return (
-            <div className="container">
-                <div className="columns is-centered">
-                    <div className="column is-8">
-                        <div className="box has-text-centered">
-                            <p>
-                                <i className="fas fa-spinner fa-spin"></i>&nbsp;
-                                {t('timetables.loadingStation')}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
+        return <StationSkeleton showFullLayout={true} />;
     }
 
     if (error || !stationData) {
@@ -214,50 +298,131 @@ export default function StationTimetables({ stationId }: StationTimetablesProps)
                 <div className={`column is-4-desktop is-6-tablet ${styles['mobile-full-height']}`}>
                     <div style={{ position: 'sticky', top: 50, marginTop: "50px" }}>
                         <article className="panel is-shadowless is-primary themebackground">
-                        <div className="panel-heading level is-mobile mb-0">
-                            <div className="level-left has-text-left is-block">
+                            <div className="panel-heading level is-mobile mb-0" style={{ position: 'relative' }}>
+                                <div className={`level-left has-text-left is-block ${styles['header-content']} ${isSearchActive ? styles['search-active'] : ''}`}>
                                     <div className="subtitle is-6 has-text-light has-text-left">
                                         {t('timetables.stationTimetables.timetablesFor')}
                                     </div>
-                                <div className="title is-4 has-text-left m-0 has-text-light">
-                                    {stationData.translatedName}
+                                    <div className="title is-4 has-text-left m-0 has-text-light">
+                                        {stationData.translatedName}
+                                    </div>
                                 </div>
-                            </div>
 
-                            <p className="level-right">
-                                <button className="button is-outlined is-light" onClick={() => window.history.back()}>
-                                    <span className="icon">
-                                        <i className="fas fa-search"></i>
+                                <div
+                                    className={`${styles['search-container']} ${isSearchActive ? styles['search-active'] : ''}`}
+                                    onTransitionEnd={(e) => {
+                                        // Focus input when the scale animation completes
+                                        if (e.propertyName === 'transform' && isSearchActive && searchInputRef.current) {
+                                            searchInputRef.current.focus();
+                                            // Additional iOS handling
+                                            if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+                                                searchInputRef.current.click();
+                                            }
+                                        }
+                                    }}
+                                >
+                                    <form onSubmit={handleSearchSubmit} style={{ display: 'flex', width: '100%', alignItems: 'center', border: '1px solid #FFF', borderRadius: '5px' }}>
+                                        <input
+                                            ref={searchInputRef}
+                                            type="text"
+                                            value={searchQuery}
+                                            onChange={(e) => setSearchQuery(e.target.value)}
+                                            placeholder={t('stationList.search')}
+                                            className={`input ${styles['search-input']}`}
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={handleSearchClose}
+                                            className={`button is-primary px-5 is-shadowless has-text-light ${styles['search-close-button']}`}
+                                        >
+                                            <span className="icon">
+                                                <i className="fas fa-times"></i>
+                                            </span>
+                                        </button>
+                                    </form>
+                                </div>
+
+                                <p className={`level-right ${styles['header-content']} ${isSearchActive ? styles['search-active'] : ''}`}>
+                                    <button className="button is-outlined is-light" onClick={handleSearchOpen}>
+                                        <span className="icon">
+                                            <i className="fas fa-search"></i>
+                                        </span>
+                                        <span>{t('stationList.search')}</span>
+                                    </button>
+                                </p>
+
+
+                            </div>
+                            <div className={`${isSearchActive ? 'is-hidden' : ''}`}>
+                                <a className="panel-block is-active" onClick={handleDateTimeDrawerOpen} style={{ cursor: 'pointer' }}>
+                                    <span className="panel-icon">
+                                        <i className="fas fa-calendar-days" aria-hidden="true"></i>
                                     </span>
-                                    <span>{t('stationList.search')}</span>
-                                </button>
-                            </p>
-                        </div>
-                            <a className="panel-block is-active" onClick={handleDateTimeDrawerOpen} style={{ cursor: 'pointer' }}>
-                            <span className="panel-icon">
-                                <i className="fas fa-calendar-days" aria-hidden="true"></i>
-                            </span>
-                                {getDateTimeLabel()}
-                                <div className={`button is-small is-primary is-rounded mr-2 ${!isRealtime ? '' : 'is-hidden'}`} style={{ right: 0, position: 'absolute' }} onClick={() => { setIsRealtime(true); setSelectedDateTime(new Date()); }}>
-                                    <div className="icon">
-                                        <i className="fas fa-rotate-left" aria-hidden="true"></i>
+                                    {getDateTimeLabel()}
+                                    <div className={`button is-small is-primary is-rounded mr-2 ${!isRealtime ? '' : 'is-hidden'}`} style={{ right: 0, position: 'absolute' }} onClick={() => { setIsRealtime(true); setSelectedDateTime(new Date()); }}>
+                                        <div className="icon">
+                                            <i className="fas fa-rotate-left" aria-hidden="true"></i>
+                                        </div>
+                                        <div>{t("timetables.selection.reset")}</div>
                                     </div>
-                                    <div>{t("timetables.selection.reset")}</div>
-                                </div>
-                        </a>
-                            <a className="panel-block is-active" onClick={handleDestinationDrawerOpen} style={{ cursor: 'pointer' }}>
-                                <span className="panel-icon mt-1">
-                                <i className="fas fa-plus" aria-hidden="true"></i>
-                            </span>
-                                {selectedDestination ? selectedDestination.translatedName : t("timetables.stationTimetables.selectDestination")}
-                                <div className={`button is-small is-primary is-rounded mr-2 ${selectedDestination ? '' : 'is-hidden'}`} style={{ right: 0, position: 'absolute' }} onClick={setSelectedDestination.bind(null, null)}>
-                                    <div className="icon">
-                                        <i className="fas fa-rotate-left" aria-hidden="true"></i>
+                                </a>
+                                <a className="panel-block is-active" onClick={handleDestinationDrawerOpen} style={{ cursor: 'pointer' }}>
+                                    <span className="panel-icon">
+                                        <i className="fas fa-route" aria-hidden="true"></i>
+                                    </span>
+                                    {selectedDestination ? selectedDestination.translatedName : t("timetables.stationTimetables.selectDestination")}
+                                    <div className={`button is-small is-primary is-rounded mr-2 ${selectedDestination ? '' : 'is-hidden'}`} style={{ right: 0, position: 'absolute' }} onClick={setSelectedDestination.bind(null, null)}>
+                                        <div className="icon">
+                                            <i className="fas fa-rotate-left" aria-hidden="true"></i>
+                                        </div>
+                                        <div>{t("timetables.selection.reset")}</div>
                                     </div>
-                                    <div>{t("timetables.selection.reset")}</div>
-                                </div>
-                        </a>
-                    </article>
+                                </a>
+                            </div>
+                            <div className={`${!isSearchActive ? 'is-hidden' : ''} has-text-left`}>
+                                {searchQuery.trim() ? (
+                                    <div className="p-4">
+                                        <label className="label has-text-light">{t("stationList.searchResults")}</label>
+                                        {searchResults.length > 0 ? (
+                                            <div className="buttons">
+                                                {searchResults.map((station) => {
+                                                    const isCurrentStation = stationData && station.stationUICCode === stationData.uicCode;
+                                                    return (
+                                                        <div key={station.stationUICCode} style={{ position: 'relative', width: '100%' }}>
+                                                            <StationElement
+                                                                stationUIC={station.stationUICCode.toString()}
+                                                                shortCode={station.stationUICCode.toString()}
+                                                                popup={false}
+                                                                target=""
+                                                                icon="fas fa-location-dot"
+                                                                disabled={isCurrentStation}
+                                                            />
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        ) : (
+                                            <div className="has-text-light" style={{ padding: '1rem' }}>
+                                                <span className="icon">
+                                                    <i className="fas fa-search"></i>
+                                                </span>
+                                                <span className="ml-2">{t('stationList.noResults')}</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                ) : (
+                                    <div className="p-4">
+                                        <label className="label has-text-light">{t("stationList.suggestions")}</label>
+                                        <div className="buttons">
+                                            <StationElement icon="fas fa-location-dot" stationUIC="1" shortCode="HKI" popup={false} disabled={stationData && 1 === stationData.uicCode} target="" />
+                                            <StationElement icon="fas fa-location-dot" stationUIC="30" shortCode="HY" popup={false} disabled={stationData && 30 === stationData.uicCode} target="" />
+                                            <StationElement icon="fas fa-location-dot" stationUIC="18" shortCode="TKL" popup={false} disabled={stationData && 18 === stationData.uicCode} target="" />
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </article>
+
                         <PassengerInformation stationShortCode={stationData.shortCode} />
                     </div>
                 </div>

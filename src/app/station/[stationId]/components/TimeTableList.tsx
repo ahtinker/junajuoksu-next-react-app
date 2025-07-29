@@ -500,10 +500,10 @@ nextDate: trainsByDepartureDate(departureDate: "${nextDateStr}", where: {timeTab
                             // Check if stop is in the future relative to selected time
                             const referenceTime = selectedDateTime || new Date();
                             if (departureRow) {
-                                const departureTime = new Date(departureRow.liveEstimateTime || departureRow.scheduledTime);
+                                const departureTime = new Date(departureRow.actualTime || departureRow.liveEstimateTime || departureRow.scheduledTime);
                                 if (departureTime.getTime() <= referenceTime.getTime()) return false;
                             } else if (arrivalRow && !departureRow) {
-                                const arrivalTime = new Date(arrivalRow.liveEstimateTime || arrivalRow.scheduledTime);
+                                const arrivalTime = new Date(arrivalRow.actualTime || arrivalRow.liveEstimateTime || arrivalRow.scheduledTime);
                                 if (arrivalTime.getTime() <= referenceTime.getTime()) return false;
                             } else {
                                 return false;
@@ -524,13 +524,13 @@ nextDate: trainsByDepartureDate(departureDate: "${nextDateStr}", where: {timeTab
                     const getStopTime = (stop: TrainStop) => {
                         const { arrivalRow, departureRow } = stop;
                         if (arrivalRow && departureRow) {
-                            return new Date(departureRow.liveEstimateTime || departureRow.scheduledTime);
+                            return new Date(departureRow.actualTime || departureRow.liveEstimateTime || departureRow.scheduledTime);
                         }
                         if (departureRow) {
-                            return new Date(departureRow.liveEstimateTime || departureRow.scheduledTime);
+                            return new Date(departureRow.actualTime || departureRow.liveEstimateTime || departureRow.scheduledTime);
                         }
                         if (arrivalRow) {
-                            return new Date(arrivalRow.liveEstimateTime || arrivalRow.scheduledTime);
+                            return new Date(arrivalRow.actualTime || arrivalRow.liveEstimateTime || arrivalRow.scheduledTime);
                         }
                         return new Date(0);
                     };
@@ -692,10 +692,10 @@ nextDate: trainsByDepartureDate(departureDate: "${nextDateStr}", where: {timeTab
                 const getStopDate = (stop: TrainStop) => {
                     const { arrivalRow, departureRow } = stop;
                     if (departureRow) {
-                        return new Date(departureRow.liveEstimateTime || departureRow.scheduledTime);
+                        return new Date(departureRow.actualTime || departureRow.liveEstimateTime || departureRow.scheduledTime);
                     }
                     if (arrivalRow) {
-                        return new Date(arrivalRow.liveEstimateTime || arrivalRow.scheduledTime);
+                        return new Date(arrivalRow.actualTime || arrivalRow.liveEstimateTime || arrivalRow.scheduledTime);
                     }
                     return new Date();
                 };
@@ -716,7 +716,18 @@ nextDate: trainsByDepartureDate(departureDate: "${nextDateStr}", where: {timeTab
                 tomorrow.setDate(today.getDate() + 1);
                 const isTomorrow = currentStopDate.toDateString() === tomorrow.toDateString();
 
-                const dateHeader = isFirstTrainOfDate && !isToday ? (
+                // Show date header for first train of each new date
+                // Include today's header if it's not the very first train or if there are multiple days
+                // But don't show today's header if we're in realtime mode
+                const shouldShowDateHeader = isFirstTrainOfDate && (
+                    !isToday || // Always show for non-today dates
+                    (!isRealtime && ( // Only show today's header if not in realtime mode
+                        index > 0 || // Show today's header if there are previous trains from other days
+                        filteredTimetables.some((_, i) => i > index && getStopDate(filteredTimetables[i]).toDateString() !== currentStopDateString) // Show today's header if there are future trains from other days
+                    ))
+                );
+
+                const dateHeader = shouldShowDateHeader ? (
                     <div key={`date-header-${currentStopDateString}`} className="panel-block" style={{
                         backgroundColor: 'var(--bulma-scheme-main-ter)',
                         borderTop: '2px solid var(--bulma-primary)',
@@ -725,14 +736,16 @@ nextDate: trainsByDepartureDate(departureDate: "${nextDateStr}", where: {timeTab
                         padding: '0.75rem'
                     }}>
                         <span className="has-text-primary">
-                            {isTomorrow ?
-                                t('timetables.tomorrow') :
-                                currentStopDate.toLocaleDateString(locale, {
-                                    weekday: 'long',
-                                    year: 'numeric',
-                                    month: 'long',
-                                    day: 'numeric'
-                                })
+                            {isToday ?
+                                t('timetables.dateTimeDrawer.today') :
+                                isTomorrow ?
+                                    t('timetables.tomorrow') :
+                                    currentStopDate.toLocaleDateString(locale, {
+                                        weekday: 'long',
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric'
+                                    })
                             }
                         </span>
                     </div>
@@ -779,7 +792,9 @@ nextDate: trainsByDepartureDate(departureDate: "${nextDateStr}", where: {timeTab
 
                 const formatRow = (row: TimeTableRow): FormattedTimeInfo => {
                     const scheduledTime = formatTime(row.scheduledTime);
-                    const liveTime = row.liveEstimateTime ? formatTime(row.liveEstimateTime) : null;
+                    // Priority: actualTime (observed) > liveEstimateTime (prognosis) > scheduledTime (original)
+                    const liveTime = row.actualTime ? formatTime(row.actualTime) :
+                        (row.liveEstimateTime ? formatTime(row.liveEstimateTime) : null);
                     const hasScheduleChange = !!(liveTime && liveTime !== scheduledTime);
                     return { scheduledTime, liveTime, hasScheduleChange, track: row.commercialTrack };
                 };
@@ -823,6 +838,8 @@ nextDate: trainsByDepartureDate(departureDate: "${nextDateStr}", where: {timeTab
                     return null;
                 }
 
+                const startStation = train.timeTableRows.filter(row => row.stationShortCode === "LEN")[0] || train.timeTableRows[0];
+
                 return (
                     <div key={trainKey} className="panel-block pt-0 my-0" style={{ display: 'block', marginBottom: '1rem' }}>
                         {dateHeader}
@@ -853,11 +870,13 @@ nextDate: trainsByDepartureDate(departureDate: "${nextDateStr}", where: {timeTab
                                                             <i className="fas fa-plane-departure" aria-hidden="true"></i>
                                                         </span>
                                                     )}
-                                                    {destination}
+                                                    {activeTab === 'arrivals' ? (
+                                                        t("timetables.grammarFrom") + " " + getStationGrammarForms(startStation.stationUICCode, locale)?.elative || stationData.translatedName || stationData.name
+                                                    ) : destination}
                                                 </p>
                                                 <p className="subtitle is-6">
                                                     {train.cancelled ? (
-                                                        <span style={{ color: 'var(--bulma-danger)' }}>
+                                                        <span style={{ color: 'var(--bulma-danger)' }} className="is-size-5 has-text-weight-bold">
                                                             {t('timetables.cancelled')}
                                                         </span>
                                                     ) : (
@@ -883,15 +902,15 @@ nextDate: trainsByDepartureDate(departureDate: "${nextDateStr}", where: {timeTab
                             <div className="column is-narrow">
                                 {/* Bottom part */}
                                 <div className="">
-                                    <div className="columns is-mobile has-text-centered">
-                                        <div className="mr-4">
+                                    <div className="columns is-mobile has-text-left">
+                                        <div className="mr-4 has-text-centered">
                                             <span className="label m-0">{t('timetables.track')}</span>
-                                            <span className="is-size-5 has-text-weight-bold">{(showArrivalInfo && showArrivalInfo.track) || (showDepartureInfo && showDepartureInfo.track) || '-'}</span>
+                                            <span className="is-size-6 has-text-weight-bold">{(showArrivalInfo && showArrivalInfo.track) || (showDepartureInfo && showDepartureInfo.track) || '-'}</span>
                                         </div>
                                         {showArrivalInfo && (
                                             <div className="mr-4">
                                                 <span className="label m-0">{t('timetables.arrivesAt')}</span>
-                                                <div className="is-size-5 has-text-weight-bold" style={{ color: showArrivalInfo.hasScheduleChange ? 'var(--bulma-danger)' : 'inherit' }}>
+                                                <div className="is-size-6" style={{ color: showArrivalInfo.hasScheduleChange ? 'var(--bulma-danger)' : 'inherit' }}>
                                                     {showArrivalInfo.liveTime || showArrivalInfo.scheduledTime}
                                                 </div>
                                                 {showArrivalInfo.liveTime && showArrivalInfo.liveTime !== showArrivalInfo.scheduledTime && (
@@ -904,7 +923,7 @@ nextDate: trainsByDepartureDate(departureDate: "${nextDateStr}", where: {timeTab
                                         {showDepartureInfo && (
                                             <div className="mr-4">
                                                 <span className="label m-0">{t('timetables.departsAt')}</span>
-                                                <div className="is-size-5 has-text-weight-bold" style={{ color: showDepartureInfo.hasScheduleChange ? 'var(--bulma-danger)' : 'inherit' }}>
+                                                <div className="is-size-6" style={{ color: showDepartureInfo.hasScheduleChange ? 'var(--bulma-danger)' : 'inherit' }}>
                                                     {showDepartureInfo.liveTime || showDepartureInfo.scheduledTime}
                                                 </div>
                                                 {showDepartureInfo.liveTime && showDepartureInfo.liveTime !== showDepartureInfo.scheduledTime && (
@@ -918,14 +937,14 @@ nextDate: trainsByDepartureDate(departureDate: "${nextDateStr}", where: {timeTab
                                         {showArrivalInfo && !showDepartureInfo && getEta() && (
                                             <div className="">
                                                 <span className="label m-0">{t('timetables.timeToArrival')}</span>
-                                                <div className="is-size-5 has-text-weight-bold">{getEta()}</div>
+                                                <div className="is-size-6">{getEta()}</div>
                                             </div>
                                         )}
 
                                         {showDepartureInfo && !showArrivalInfo && getEtd() && (
                                             <div className="">
                                                 <span className="label m-0">{t('timetables.timeToDeparture')}</span>
-                                                <div className="is-size-5 has-text-weight-bold">{getEtd()}</div>
+                                                <div className="is-size-6">{getEtd()}</div>
                                             </div>
                                         )}
                                     </div>
