@@ -110,5 +110,19 @@
             "title": "Tiedote"
         },
         "grammarFrom": ""
+    },
+    "blogs": {
+        "blog1": {
+            "title": "Junassaolon vahvistaminen",
+            "description": "Näin vahvistat läsnäolosi junassa ja saat tarkkaa tietoa junien aikatauluista."
+        },
+        "blog2": {
+            "title": "Reaaliaikaiset aikataulut",
+            "description": "Reaaliaikaiset aikataulut sekunnin tarkkuudella ja junassaolon vahvistus."
+        },
+        "blog3": {
+            "title": "Junamatkustuksen tulevaisuus",
+            "description": "Kaikki mitä tarvitset sujuvaan junamatkaan."
+        }
     }
 }

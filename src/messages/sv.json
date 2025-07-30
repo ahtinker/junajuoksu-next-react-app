@@ -110,5 +110,19 @@
             "title": "Observera"
         },
         "grammarFrom": "Från"
+    },
+    "blogs": {
+        "blog1": {
+            "title": "Hur du bekräftar din närvaro på tåget",
+            "description": "Lär dig hur du bekräftar din närvaro på tåget och får exakt information om tågtidtabeller."
+        },
+        "blog2": {
+            "title": "Tågtidtabeller och realtidsinformation",
+            "description": "Upptäck hur du kan använda vår tjänst för att få realtidsinformation om tågtidtabeller och förseningar."
+        },
+        "blog3": {
+            "title": "Planera din tågresa effektivt",
+            "description": "Få tips om hur du planerar din tågresa effektivt med hjälp av vår tjänst."
+        }
     }
 }

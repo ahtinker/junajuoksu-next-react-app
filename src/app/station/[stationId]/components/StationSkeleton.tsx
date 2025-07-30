@@ -1,6 +1,5 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
 import styles from './StationTimetables.module.css';
 
 interface StationSkeletonProps {
@@ -8,7 +7,6 @@ interface StationSkeletonProps {
 }
 
 export default function StationSkeleton({ showFullLayout = true }: StationSkeletonProps) {
-    const t = useTranslations();
 
     if (showFullLayout) {
         return (

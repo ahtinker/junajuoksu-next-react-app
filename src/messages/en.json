@@ -110,5 +110,19 @@
             "title": "Notice"
         },
         "grammarFrom": "From"
+    },
+    "blogs": {
+        "blog1": {
+            "title": "How to confirm your presence on the train",
+            "description": "Learn how to confirm your presence on the train and get accurate information about train schedules."
+        },
+        "blog2": {
+            "title": "Understanding Train Delays",
+            "description": "A guide to understanding train delays and how to check for real-time updates."
+        },
+        "blog3": {
+            "title": "Exploring Finnish Railway Stations",
+            "description": "Discover the history and features of Finnish railway stations."
+        }
     }
 }

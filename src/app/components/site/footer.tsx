@@ -33,8 +33,8 @@ const Footer = () => {
                         <Image className="mt-5" src="/va-logo.svg" alt="Verkkokehitys Ankeriasniemi" width={75} height={30} />
 
                         <div className="my-4">
-                            <a href="/privacy" className="has-text-info-45">{t('footer.privacyPolicy')}</a><br />
-                            <a href="/terms-of-service" className="has-text-info-45">{t('footer.termsOfService')}</a>
+                            <a href="/legal/privacy-policy" className="has-text-info-45">{t('footer.privacyPolicy')}</a><br />
+                            <a href="/legal/terms-of-service" className="has-text-info-45">{t('footer.termsOfService')}</a>
                         </div>
 
                     </div>

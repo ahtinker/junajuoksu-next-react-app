@@ -25,7 +25,7 @@ function StationPage({ params }: StationPageProps) {
 
     if (!stationId) {
         return (
-            <div className="App">
+            <div className="App" style={{ backgroundColor: 'var(--bulma-scheme-main)' }}>
                 <NavBar />
                 <section className="section is-fullheight" style={{ backgroundColor: 'var(--bulma-scheme-main)' }}>
                     <div className="content">
@@ -33,12 +33,12 @@ function StationPage({ params }: StationPageProps) {
                     </div>
                 </section>
                 <Footer />
+
             </div>
         );
     }
-
     return (
-        <div className="App">
+        <div className="App" style={{ backgroundColor: 'var(--bulma-scheme-main)' }}>
             <NavBar />
             <section className="section is-fullheight" style={{ backgroundColor: 'var(--bulma-scheme-main)' }}>
                 <div className="content">

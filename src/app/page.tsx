@@ -5,34 +5,58 @@ import NavBar from './components/site/navbar';
 import Footer from './components/site/footer';
 import StationList from './components/site/stationlist/stationlist';
 import { useTranslations } from 'next-intl';
-import Image from 'next/image';
+import BlogCard from './components/site/blogcard/card';
 
 
 function Home() {
   const t = useTranslations();
   return (
-    <div className="App hero-home " style={{ backgroundColor: 'var(--bulma-scheme-main)' }}>
-      <NavBar />
-      <section className="hero is-fullheight-with-navbar">
-        <div className="hero-body">
-          <div className="columns is-centered is-6-desktop is-0 is-desktop" style={{ width: "100%" }}>
-            <div className="column is-2 is-hidden-mobile"></div>
-            <div className="column" style={{ height: "450px", width: "100%" }}>
-              <StationList />
+    <div className="App" style={{ backgroundColor: 'var(--bulma-scheme-main)' }}>
+      <div className="hero-home">
+        <NavBar />
+        <section className="hero is-fullheight-with-navbar">
+          <div className="hero-body">
+            <div className="columns is-centered is-6-desktop is-0 is-desktop" style={{ width: "100%" }}>
+              <div className="column is-2 is-hidden-mobile"></div>
+              <div className="column" style={{ height: "450px", width: "100%" }}>
+                <StationList />
+              </div>
+              <div className="column has-text-left">
+                <span className="domain is-size-3 m-0">junajuoksu.fi</span>
+                <div className="is-size-5 has-text-weight-bold mt-2 mb-4">
+                  {t('hero.description')}
+                </div>
+              </div>
+              <div className="column is-2 is-hidden-mobile"></div>
             </div>
-            <div className="column has-text-left">
-              <span className="domain is-size-3 m-0">junajuoksu.fi</span>
-              <div className="is-size-5">
-                {t('hero.description')}
+          </div>
+        </section>
+      </div>
+
+      <section className="hero is-medium is-primary">
+        <div className="hero-body has-text-left">
+          <p className="title mb-6">
+            Sujuvamman junamatkan puolesta.
+          </p>
+          <div className="fixed-grid has-text-left has-1-cols-mobile" style={{ maxWidth: "1200px" }}>
+            <div className="grid is-gap-6">
+              <div className="cell">
+                <BlogCard blogId={1} />
+              </div>
+              <div className="cell">
+                <BlogCard blogId={2} />
+              </div>
+              <div className="cell">
+                <BlogCard blogId={3} />
               </div>
             </div>
-            <div className="column is-2 is-hidden-mobile"></div>
           </div>
+
         </div>
       </section>
 
       {/* Wave decoration */}
-      <div>
+      <div className="has-background-primary">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 1440 320"

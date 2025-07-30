@@ -214,11 +214,15 @@ export default function StationTimetables({ stationId }: StationTimetablesProps)
                         break;
                     }
 
+                    if (props.stationName.split(' ').join('+').toLowerCase() === decodeURIComponent(stationId).toLowerCase()) {
+                        foundStation = props;
+                        break;
+                    }
+
                     // Check if it matches translated names
                     const translationEntry = stationTranslations.stations.find(
                         (s: Station) => s.stationUICCode === props.stationUICCode
                     );
-
                     if (translationEntry) {
                         const names = [
                             translationEntry.stationName_fi,
