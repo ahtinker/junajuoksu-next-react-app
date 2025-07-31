@@ -8,7 +8,8 @@
         }
     },
     "hero": {
-        "description": "Real-time schedules with second-level accuracy and confirmation of being on the train. Everything you need for a smooth train journey."
+        "description": "Real-time schedules with second-level accuracy and confirmation of being on the train. Everything you need for a smooth train journey.",
+        "tagline": "For a smoother train journey."
     },
     "footer": {
         "contact": "Contact Information",

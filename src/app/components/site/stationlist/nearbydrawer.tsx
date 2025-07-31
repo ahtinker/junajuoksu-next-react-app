@@ -141,9 +141,11 @@ export default function NearbyDrawer() {
                         display: 'flex',
                         height: 'fit-content',
                         flexDirection: 'column',
+                        minHeight: '40vh',
                         borderRadius: '10px 10px 0 0',
                         zIndex: 10002,
                         backgroundColor: 'var(--bulma-scheme-main)',
+                        border: "1px solid var(--bulma-border)",
                         color: 'var(--bulma-text)',
                         width: '100%',
                         maxWidth: '600px',
@@ -151,7 +153,7 @@ export default function NearbyDrawer() {
                         textAlign: 'left'
                     }}
                 >
-                    <div style={{ padding: '1rem', backgroundColor: 'var(--bulma-background)', borderTopLeftRadius: '10px', borderTopRightRadius: '10px', flex: 1 }}>
+                    <div style={{ padding: '1rem', borderTopLeftRadius: '10px', borderTopRightRadius: '10px', flex: 1 }}>
                         <div
                             aria-hidden
                             style={{

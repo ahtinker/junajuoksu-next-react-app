@@ -12,7 +12,7 @@ function Home() {
   const t = useTranslations();
   return (
     <div className="App" style={{ backgroundColor: 'var(--bulma-scheme-main)' }}>
-      <div className="hero-home">
+      <div>
         <NavBar />
         <section className="hero is-fullheight-with-navbar">
           <div className="hero-body">
@@ -32,11 +32,13 @@ function Home() {
           </div>
         </section>
       </div>
-
+      <div className="" style={{ marginBottom: '-7px', zIndex: 2 }}>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgb(61, 136, 61)" fillOpacity="1" d="M0,160L1440,320L1440,320L0,320Z"></path></svg>
+      </div>
       <section className="hero is-medium is-primary">
         <div className="hero-body has-text-left">
           <p className="title mb-6">
-            Sujuvamman junamatkan puolesta.
+            {t('hero.tagline')}
           </p>
           <div className="fixed-grid has-text-left has-1-cols-mobile" style={{ maxWidth: "1200px" }}>
             <div className="grid is-gap-6">

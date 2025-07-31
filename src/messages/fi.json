@@ -8,7 +8,8 @@
         }
     },
     "hero": {
-        "description": "Reaaliaikaiset aikataulut sekunnin tarkkuudella ja junassaolon vahvistus. Kaikki mitä tarvitset sujuvaan junamatkaan."
+        "description": "Reaaliaikaiset aikataulut sekunnin tarkkuudella ja junassaolon vahvistus. Kaikki mitä tarvitset sujuvaan junamatkaan.",
+        "tagline": "Sujuvamman junamatkan puolesta."
     },
     "footer": {
         "contact": "Yhteystiedot",

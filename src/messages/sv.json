@@ -8,7 +8,8 @@
         }
     },
     "hero": {
-        "description": "Realtidsscheman med sekundnivånoggrannhet och bekräftelse på att vara på tåget. Allt du behöver för en smidig tågresa."
+        "description": "Realtidsscheman med sekundnivånoggrannhet och bekräftelse på att vara på tåget. Allt du behöver för en smidig tågresa.",
+        "tagline": "För en smidigare tågresa."
     },
     "footer": {
         "contact": "Kontaktinformation",
