@@ -11,8 +11,17 @@ export default function BlogCard({ blogId = 1 }: BlogCardProps) {
 
     return (
         <div className="card is-shadowless" style={{ backgroundColor: "var(--bulma-background)" }}>
+            <div className="card-image">
+                <figure className="image is-4by1">
+                    <img
+                        src={t(`blogs.blog${blogId}.image`)}
+                        alt="Blog cover image"
+                        height="200"
+                    />
+                </figure>
+            </div>
             <div className="card-content">
-                <div className="title is-size-5" style={{ color: "var(--bulma-color)" }}>{t(`blogs.blog${blogId}.title`)}</div>
+                <div className="title is-size-5" style={{ color: "var(--bulma-text-strong)" }}>{t(`blogs.blog${blogId}.title`)}</div>
                 <div className="content">
                     {t(`blogs.blog${blogId}.description`)}
                 </div>

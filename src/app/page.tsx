@@ -35,21 +35,18 @@ function Home() {
       <div className="" style={{ marginBottom: '-7px', zIndex: 2 }}>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgb(61, 136, 61)" fillOpacity="1" d="M0,160L1440,320L1440,320L0,320Z"></path></svg>
       </div>
-      <section className="hero is-medium is-primary">
-        <div className="hero-body has-text-left">
+      <section className="section has-background-primary">
+        <div className="container has-text-left">
           <p className="title mb-6">
             {t('hero.tagline')}
           </p>
-          <div className="fixed-grid has-text-left has-1-cols-mobile" style={{ maxWidth: "1200px" }}>
+          <div className="fixed-grid has-text-left has-1-cols-mobile">
             <div className="grid is-gap-6">
               <div className="cell">
                 <BlogCard blogId={1} />
               </div>
               <div className="cell">
                 <BlogCard blogId={2} />
-              </div>
-              <div className="cell">
-                <BlogCard blogId={3} />
               </div>
             </div>
           </div>

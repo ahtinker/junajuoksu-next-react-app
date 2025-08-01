@@ -13,6 +13,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import styles from './StationTimetables.module.css';
 import { Train, TimeTableRow } from '../../../../lib/types';
 import { getStationGrammarForms, getTranslatedStationNameWithFallback } from '../../../../lib/stationUtils';
+import Link from 'next/link';
 
 interface TrainStop {
     arrivalRow?: TimeTableRow;
@@ -608,6 +609,8 @@ nextDate: trainsByDepartureDate(departureDate: "${nextDateStr}", where: {timeTab
 
     if (filteredTimetables.length === 0 && !isLoading && !error) {
         setError(t('timetables.notfound'));
+    } else if (filteredTimetables.length !== 0 && !isLoading && error) {
+        setError(null);
     }
 
     return (
@@ -840,7 +843,7 @@ nextDate: trainsByDepartureDate(departureDate: "${nextDateStr}", where: {timeTab
                 const startStation = train.timeTableRows.filter(row => row.stationShortCode === "LEN")[0] || train.timeTableRows[0];
 
                 return (
-                    <div key={trainKey} className="panel-block themebackground pt-0 my-0" style={{ display: 'block', marginBottom: '1rem' }}>
+                    <Link href={`/train/${train.departureDate}-${train.trainNumber}-${stationData.uicCode}-${stopIndex}${selectedDestination ? "-" + selectedDestination.uicCode : ""}`} key={trainKey} className="panel-block themebackground pt-0 my-0" style={{ display: 'block', marginBottom: '1rem' }}>
                         {dateHeader}
                         <div className="columns is-0 pt-4 is-desktop">
                             <div className="column pb-4">
@@ -950,7 +953,7 @@ nextDate: trainsByDepartureDate(departureDate: "${nextDateStr}", where: {timeTab
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </Link>
                 );
             })}
         </article>

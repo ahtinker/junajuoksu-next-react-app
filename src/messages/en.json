@@ -112,18 +112,19 @@
         },
         "grammarFrom": "From"
     },
+    "blogCommon": {
+        "blog": "Blog"
+    },
     "blogs": {
         "blog1": {
             "title": "How to confirm your presence on the train",
-            "description": "Learn how to confirm your presence on the train and get accurate information about train schedules."
+            "description": "Learn how to confirm your presence on the train. By confirming your presence in a delayed train, you can avoid issues with your employer and receive an electronic proof of your presence.",
+            "image": "/kuvitus/inside-train.jpg"
         },
         "blog2": {
-            "title": "Understanding Train Delays",
-            "description": "A guide to understanding train delays and how to check for real-time updates."
-        },
-        "blog3": {
-            "title": "Exploring Finnish Railway Stations",
-            "description": "Discover the history and features of Finnish railway stations."
+            "title": "Never Miss Your Train Again",
+            "description": "Learn how to check real-time updates for trains and avoid missing your train.",
+            "image": "/kuvitus/passenger.jpg"
         }
     }
 }

@@ -66,9 +66,8 @@ export default function DateTimeDrawer({ isOpen, onClose, selectedDate, onDateTi
 
     const isRealtime = (date: Date) => {
         const now = new Date();
-        // Consider it realtime if it's within 5 minutes of now
         const timeDiff = Math.abs(date.getTime() - now.getTime());
-        return timeDiff < 60 * 1000; // 5 minutes in milliseconds
+        return timeDiff < 60 * 1000;
     };
 
     const isModified = () => {
@@ -215,7 +214,7 @@ export default function DateTimeDrawer({ isOpen, onClose, selectedDate, onDateTi
                                     <input
                                         className="input"
                                         type="date"
-                                        value={formatDateForInput(tempDate)}
+                                        value={isRealtime(tempDate) ? formatDateForInput(new Date()) : formatDateForInput(tempDate)}
                                         onChange={handleDateChange}
                                     />
                                 </div>
@@ -228,7 +227,7 @@ export default function DateTimeDrawer({ isOpen, onClose, selectedDate, onDateTi
                                     <input
                                         className="input"
                                         type="time"
-                                        value={formatTimeForInput(tempDate)}
+                                        value={isRealtime(tempDate) ? formatTimeForInput(new Date()) : formatTimeForInput(tempDate)}
                                         onChange={handleTimeChange}
                                     />
                                 </div>

@@ -112,18 +112,19 @@
         },
         "grammarFrom": ""
     },
+    "blogCommon": {
+        "blog": "Blogi"
+    },
     "blogs": {
         "blog1": {
             "title": "Junassaolon vahvistaminen",
-            "description": "Näin vahvistat läsnäolosi junassa ja saat tarkkaa tietoa junien aikatauluista."
+            "description": "Näin vahvistat läsnäolosi junassa. Vahvistamalla läsnäolosi viivästyneessä junassa voit välttyä ongelmatilanteilta esimerkiksi työnantajasi kanssa ja saat sähköisen todistuksen läsnäolostasi.",
+            "image": "/kuvitus/inside-train.jpg"
         },
         "blog2": {
-            "title": "Reaaliaikaiset aikataulut",
-            "description": "Reaaliaikaiset aikataulut sekunnin tarkkuudella ja junassaolon vahvistus."
-        },
-        "blog3": {
-            "title": "Junamatkustuksen tulevaisuus",
-            "description": "Kaikki mitä tarvitset sujuvaan junamatkaan."
+            "title": "Älä koskaan enää myöhästy junasta",
+            "description": "Näin tarkistat reaaliaikaiset päivitykset junista ja vältät omat myöhästymiset.",
+            "image": "/kuvitus/passenger.jpg"
         }
     }
 }

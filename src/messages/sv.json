@@ -112,18 +112,19 @@
         },
         "grammarFrom": "Från"
     },
+    "blogCommon": {
+        "blog": "Blogg"
+    },
     "blogs": {
         "blog1": {
-            "title": "Hur du bekräftar din närvaro på tåget",
-            "description": "Lär dig hur du bekräftar din närvaro på tåget och får exakt information om tågtidtabeller."
+            "title": "Närvarobekräftning på tåget",
+            "description": "Lär dig hur du bekräftar din närvaro på tåget. Genom att bekräfta din närvaro i en försenad tåg kan du undvika problem med din arbetsgivare och få en elektronisk intyg på din närvaro.",
+            "image": "/kuvitus/inside-train.jpg"
         },
         "blog2": {
-            "title": "Tågtidtabeller och realtidsinformation",
-            "description": "Upptäck hur du kan använda vår tjänst för att få realtidsinformation om tågtidtabeller och förseningar."
-        },
-        "blog3": {
-            "title": "Planera din tågresa effektivt",
-            "description": "Få tips om hur du planerar din tågresa effektivt med hjälp av vår tjänst."
+            "title": "Aldrig mer missa din tågresa",
+            "description": "Lär dig hur du kontrollerar realtidsuppdateringar för tåg och undviker att missa din tågresa.",
+            "image": "/kuvitus/passenger.jpg"
         }
     }
 }

@@ -94,7 +94,7 @@ export default function StationDetailsDrawer({ station, isOpen, onClose }: Stati
                                 margin: '0 auto 1rem',
                             }}
                         />
-                        <Drawer.Title className="title is-4" style={{ color: 'var(--bulma-text)', margin: 0 }}>
+                        <Drawer.Title className="title is-4" style={{ color: 'var(--bulma-text-strong)', margin: 0 }}>
                             {translatedStationName}
                         </Drawer.Title>
                         <p className="my-4">{t('stationList.mapDrawer.openTimetable')}</p>
