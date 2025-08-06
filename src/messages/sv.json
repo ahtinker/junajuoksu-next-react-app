@@ -112,6 +112,29 @@
         },
         "grammarFrom": "Från"
     },
+    "train": {
+        "loading": "Laddar tåginformation...",
+        "error": "Fel",
+        "notFound": "Tåget hittades inte",
+        "notFoundMessage": "Det begärda tåget kunde inte hittas.",
+        "stationStops": "Stationsstopp",
+        "stationsCount": "stationer",
+        "arrives": "Anländer",
+        "departs": "Avgår",
+        "cancelled": "Inställd",
+        "running": "Kör",
+        "origin": "Avgångsstation",
+        "destination": "Destination",
+        "track": "Spår",
+        "delayMinutes": "+{minutes}min",
+        "on_time": "I tid",
+        "delayed": "Försenad",
+        "early": "I förtid",
+        "speed": "Hastighet",
+        "ended": "Avslutad",
+        "timetables": "{station} tidtabeller",
+        "stopindex": "Stopp #{index}"
+    },
     "blogCommon": {
         "blog": "Blogg"
     },

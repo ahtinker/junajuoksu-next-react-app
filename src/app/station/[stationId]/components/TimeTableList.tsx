@@ -246,18 +246,54 @@ export default function TimetableList({ stationData, hideTop = false, classNames
 
     // Helper function to filter timetables based on active tab
     const getFilteredTimetables = useCallback(() => {
+        const currentTime = isRealtime ? new Date() : (selectedDateTime || new Date());
+
+        // First filter by relevance (remove trains that have already passed)
+        const relevantTimetables = timetables.filter(trainStop => {
+            const { arrivalRow, departureRow } = trainStop;
+
+            if (isRealtime) {
+                // For realtime mode, filter out trains that have already completed their stop
+                if (arrivalRow && departureRow) {
+                    // Train stops at this station - check if it has already departed
+                    const departureTime = new Date(departureRow.actualTime || departureRow.liveEstimateTime || departureRow.scheduledTime);
+                    return departureTime.getTime() > currentTime.getTime();
+                } else if (departureRow && !arrivalRow) {
+                    // Train starts from this station - check if it has already departed
+                    const departureTime = new Date(departureRow.actualTime || departureRow.liveEstimateTime || departureRow.scheduledTime);
+                    return departureTime.getTime() > currentTime.getTime();
+                } else if (arrivalRow && !departureRow) {
+                    // Train terminates at this station - check if it has already arrived
+                    const arrivalTime = new Date(arrivalRow.actualTime || arrivalRow.liveEstimateTime || arrivalRow.scheduledTime);
+                    return arrivalTime.getTime() > currentTime.getTime();
+                }
+                return false;
+            } else {
+                // For historical mode, use the original logic
+                if (departureRow) {
+                    const departureTime = new Date(departureRow.actualTime || departureRow.liveEstimateTime || departureRow.scheduledTime);
+                    return departureTime.getTime() > currentTime.getTime();
+                } else if (arrivalRow && !departureRow) {
+                    const arrivalTime = new Date(arrivalRow.actualTime || arrivalRow.liveEstimateTime || arrivalRow.scheduledTime);
+                    return arrivalTime.getTime() > currentTime.getTime();
+                }
+                return false;
+            }
+        });
+
+        // Then filter by tab
         let filtered;
         if (activeTab === 'arrivals') {
-            filtered = timetables.filter(trainStop => trainStop.arrivalRow);
+            filtered = relevantTimetables.filter(trainStop => trainStop.arrivalRow);
         } else if (activeTab === 'departures') {
-            filtered = timetables.filter(trainStop => trainStop.departureRow);
+            filtered = relevantTimetables.filter(trainStop => trainStop.departureRow);
         } else {
-            filtered = timetables; // 'all' tab shows everything
+            filtered = relevantTimetables; // 'all' tab shows everything
         }
 
         // Limit to 50 trains maximum
         return filtered.slice(0, 50);
-    }, [timetables, activeTab]);
+    }, [timetables, activeTab, isRealtime, selectedDateTime]);
 
     const filteredTimetables = getFilteredTimetables();
 
@@ -498,16 +534,37 @@ nextDate: trainsByDepartureDate(departureDate: "${nextDateStr}", where: {timeTab
                                 return false; // Skip deleted trains
                             }
 
-                            // Check if stop is in the future relative to selected time
-                            const referenceTime = selectedDateTime || new Date();
-                            if (departureRow) {
-                                const departureTime = new Date(departureRow.actualTime || departureRow.liveEstimateTime || departureRow.scheduledTime);
-                                if (departureTime.getTime() <= referenceTime.getTime()) return false;
-                            } else if (arrivalRow && !departureRow) {
-                                const arrivalTime = new Date(arrivalRow.actualTime || arrivalRow.liveEstimateTime || arrivalRow.scheduledTime);
-                                if (arrivalTime.getTime() <= referenceTime.getTime()) return false;
+                            // Check if stop is still relevant based on current time (for realtime) or selected time (for historical)
+                            const referenceTime = isRealtime ? new Date() : (selectedDateTime || new Date());
+
+                            // For realtime mode, filter out trains that have already arrived AND departed
+                            if (isRealtime) {
+                                if (arrivalRow && departureRow) {
+                                    // Train stops at this station - check if it has already departed
+                                    const departureTime = new Date(departureRow.actualTime || departureRow.liveEstimateTime || departureRow.scheduledTime);
+                                    if (departureTime.getTime() <= referenceTime.getTime()) return false;
+                                } else if (departureRow && !arrivalRow) {
+                                    // Train starts from this station - check if it has already departed
+                                    const departureTime = new Date(departureRow.actualTime || departureRow.liveEstimateTime || departureRow.scheduledTime);
+                                    if (departureTime.getTime() <= referenceTime.getTime()) return false;
+                                } else if (arrivalRow && !departureRow) {
+                                    // Train terminates at this station - check if it has already arrived
+                                    const arrivalTime = new Date(arrivalRow.actualTime || arrivalRow.liveEstimateTime || arrivalRow.scheduledTime);
+                                    if (arrivalTime.getTime() <= referenceTime.getTime()) return false;
+                                } else {
+                                    return false;
+                                }
                             } else {
-                                return false;
+                                // For historical mode, use the original logic
+                                if (departureRow) {
+                                    const departureTime = new Date(departureRow.actualTime || departureRow.liveEstimateTime || departureRow.scheduledTime);
+                                    if (departureTime.getTime() <= referenceTime.getTime()) return false;
+                                } else if (arrivalRow && !departureRow) {
+                                    const arrivalTime = new Date(arrivalRow.actualTime || arrivalRow.liveEstimateTime || arrivalRow.scheduledTime);
+                                    if (arrivalTime.getTime() <= referenceTime.getTime()) return false;
+                                } else {
+                                    return false;
+                                }
                             }
 
                             // Check if train stops at selected destination after current station

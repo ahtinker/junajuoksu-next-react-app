@@ -1,9 +1,7 @@
-import { useLocale } from 'next-intl';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 
 export default function BlogBreadcrumb({ blogId = "" }: { blogId?: string }) {
-    const locale = useLocale();
     const t = useTranslations();
 
     return (

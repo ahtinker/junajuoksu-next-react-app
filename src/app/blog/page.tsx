@@ -3,12 +3,10 @@ import '../App.css';
 import "../globals.scss";
 import NavBar from '../components/site/navbar';
 import Footer from '../components/site/footer';
-import { useLocale } from 'next-intl';
 import { useTranslations } from 'next-intl';
 import BlogCard from '../components/site/blogcard/card';
 
 function BlogHomePage() {
-    const locale = useLocale();
     const t = useTranslations();
 
     return (

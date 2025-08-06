@@ -112,6 +112,29 @@
         },
         "grammarFrom": ""
     },
+    "train": {
+        "loading": "Ladataan junan tietoja...",
+        "error": "Virhe",
+        "notFound": "Junaa ei löydy",
+        "notFoundMessage": "Pyydettyä junaa ei voitu löytää.",
+        "stationStops": "Asemapysähdykset",
+        "stationsCount": "asemaa",
+        "arrives": "Saapuu",
+        "departs": "Lähtee",
+        "cancelled": "Peruttu",
+        "running": "Liikkeellä",
+        "origin": "Lähtöasema",
+        "destination": "Määränpää",
+        "track": "Raide",
+        "delayMinutes": "+{minutes}min",
+        "on_time": "Ajantasalla",
+        "delayed": "Myöhässä",
+        "early": "Etuajassa",
+        "speed": "Nopeus",
+        "ended": "Päättynyt",
+        "timetables": "{station} aikataulut",
+        "stopindex": "Pysähdys #{index}"
+    },
     "blogCommon": {
         "blog": "Blogi"
     },

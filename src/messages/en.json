@@ -112,6 +112,29 @@
         },
         "grammarFrom": "From"
     },
+    "train": {
+        "loading": "Loading train information...",
+        "error": "Error",
+        "notFound": "Train not found",
+        "notFoundMessage": "The requested train could not be found.",
+        "stationStops": "Station Stops",
+        "stationsCount": "stations",
+        "arrives": "Arrives",
+        "departs": "Departs",
+        "cancelled": "Cancelled",
+        "running": "Running",
+        "origin": "Origin",
+        "destination": "Destination",
+        "track": "Track",
+        "delayMinutes": "+{minutes}min",
+        "on_time": "On time",
+        "delayed": "Delayed",
+        "early": "Early",
+        "speed": "Speed",
+        "ended": "Ended",
+        "timetables": "{station} timetables",
+        "stopindex": "Stop #{index}"
+    },
     "blogCommon": {
         "blog": "Blog"
     },

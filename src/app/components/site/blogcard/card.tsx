@@ -1,5 +1,6 @@
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface BlogCardProps {
     blogId?: number;
@@ -13,10 +14,12 @@ export default function BlogCard({ blogId = 1 }: BlogCardProps) {
         <div className="card is-shadowless" style={{ backgroundColor: "var(--bulma-background)" }}>
             <div className="card-image">
                 <figure className="image is-4by1">
-                    <img
+                    <Image
                         src={t(`blogs.blog${blogId}.image`)}
                         alt="Blog cover image"
-                        height="200"
+                        height={200}
+                        width={800}
+                        style={{ objectFit: 'cover' }}
                     />
                 </figure>
             </div>
@@ -31,8 +34,8 @@ export default function BlogCard({ blogId = 1 }: BlogCardProps) {
                     <span>
                         Lue opas
                     </span>
-                    <span className="icon ml-2">
-                        <i className="fas fa-arrow-up-right-from-square"></i>
+                    <span className="icon">
+                        <i className="fas fa-chevron-right"></i>
                     </span>
                 </Link>
 

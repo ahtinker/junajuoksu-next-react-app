@@ -2,6 +2,7 @@ export interface TimeTableRow {
     actualTime: string | undefined;
     stationShortCode: string;
     stationUICCode: number;
+    stationName: string;
     countryCode: string;
     type: 'DEPARTURE' | 'ARRIVAL';
     trainStopping: boolean;
