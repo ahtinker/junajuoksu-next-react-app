@@ -37,7 +37,7 @@ function Home() {
       </div>
       <section className="section has-background-primary">
         <div className="container has-text-left">
-          <p className="title mb-6">
+          <p className="title mb-6 has-text-white">
             {t('hero.tagline')}
           </p>
           <div className="fixed-grid has-text-left has-1-cols-mobile">
@@ -54,6 +54,25 @@ function Home() {
         </div>
       </section>
 
+      <div style={{ position: "absolute", width: "100%", height: "100vh", overflowX: "hidden", overflowY: "visible"}}>
+        <img
+          style={{
+            position: "absolute",
+            top: 0,
+            left: "-10%",
+            width: "100%",
+            height: "auto",
+            marginTop: "0",
+            transform: "scale(1.2)",
+            transformOrigin: "top left",
+            zIndex: 10, // ensures it overlaps
+            pointerEvents: "none", // optional, so it doesn't block clicks
+          }}
+          src="/trackpattern.svg"
+          alt="track pattern"
+        />
+      </div>
+
       {/* Wave decoration */}
       <div className="has-background-primary">
         <svg
@@ -69,6 +88,8 @@ function Home() {
           />
         </svg>
       </div>
+      {/* Wave decoration */}
+      
 
       <Footer />
     </div>

@@ -86,17 +86,17 @@ const NavBar = () => {
                         </div>
 
                         <div className="navbar-item">
-                            <button className="button is-rounded has-text-primary-60 is-hidden-mobile" >
+                            <Link className="button is-rounded has-text-primary-60 is-hidden-mobile" href="/login">
                                 <span className="icon is-small">
                                     <i className="fas fa-user-large" aria-hidden="true"></i>
                                 </span>
                                 <span>{t('navbar.login')}</span>
-                            </button>
-                            <button className="button is-rounded has-text-primary-60 is-hidden-tablet" >
+                            </Link>
+                            <Link className="button is-rounded has-text-primary-60 is-hidden-tablet" href="/login">
                                 <span className="icon is-small">
                                     <i className="fas fa-user-large" aria-hidden="true"></i>
                                 </span>
-                            </button>
+                            </Link>
                         </div>
 
                     </div>

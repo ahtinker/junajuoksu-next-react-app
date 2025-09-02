@@ -37,7 +37,7 @@ const StationList = () => {
 
     return (
         <article ref={inputRef} className="panel is-primary has-text-left is-shadowless mb-6" style={{ maxWidth: "500px", margin: "0 auto", width: "100%", border: "1px solid var(--bulma-border)", backdropFilter: "blur(30px)" }}>
-            <div className="panel-block pt-4">
+            <div className="p-4">
                 <div className="control has-icons-left">
                     <input
                         className="input is-primary is-medium"
@@ -55,7 +55,7 @@ const StationList = () => {
 
             {/* Show search results if there's a search term */}
             {searchTerm.trim() && (
-                <div className="panel-block pb-4">
+                <div className="px-4 pb-4">
                     <div className="container buttons">
                         <label className="label mb-0">
                             {t('stationList.searchResults')}
@@ -80,7 +80,7 @@ const StationList = () => {
             {/* Show map/nearby buttons and suggestions only when not searching */}
             {!searchTerm.trim() && (
                 <>
-                    <div className="panel-block columns is-1 is-mobile m-0 py-1 px-3">
+                    <div className="columns is-1 is-mobile m-0 py-1 px-3">
                         <p className="column">
                             <MapDrawer />
                         </p>
@@ -91,9 +91,9 @@ const StationList = () => {
                     </div>
                     <div className="buttons panel-block pb-4">
                         <label className="label mb-0">{t('stationList.suggestions')}</label>
-                        <StationElement stationUIC="1" shortCode="HKI" popup={true} />
-                        <StationElement stationUIC="30" shortCode="HY" popup={true} />
-                        <StationElement stationUIC="18" shortCode="TKL" popup={true} />
+                        <StationElement stationUIC="1" shortCode="HKI" />
+                        <StationElement stationUIC="30" shortCode="HY" />
+                        <StationElement stationUIC="18" shortCode="TKL" />
                     </div>
                 </>
             )}
