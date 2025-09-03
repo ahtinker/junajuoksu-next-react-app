@@ -306,9 +306,12 @@ export default function TimetableList({ stationData, hideTop = false, classNames
     useEffect(() => {
         const fetchTimetables = async (isInitialLoad = false) => {
             // Only show loading indicator for initial load
+            if(!isInitialLoad && (document.hidden || !document.hasFocus())) return;
             if (isInitialLoad) {
                 setIsLoading(true);
             }
+            console.log(isRealtime)
+
             setError(null);
             try {
                 let data;
@@ -633,12 +636,17 @@ nextDate: trainsByDepartureDate(departureDate: "${nextDateStr}", where: {timeTab
 
         if (isRealtime) {
             interval = setInterval(fetchTimetables, 10000);
+        } else {
+            interval = setInterval(fetchTimetables, 20000);
         }
+        window.onfocus = () => fetchTimetables(true);
 
+        
         return () => {
             if (interval) {
                 clearInterval(interval);
             }
+            window.onfocus = null;
         };
     }, [stationData.shortCode, updateTimetables, getStationStops, selectedDateTime, isRealtime, selectedDestination, doesTrainStopAtDestinationAfterCurrentStation]); // Add selectedDestination and the callback
 
@@ -951,14 +959,9 @@ nextDate: trainsByDepartureDate(departureDate: "${nextDateStr}", where: {timeTab
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="level-right">
-                                        {train.cancelled && (
-                                            <span className="tag is-danger">{t('timetables.cancelled')}</span>
-                                        )}
-                                    </div>
                                 </div>
                             </div>
-                            <div className="column is-narrow">
+                            <div className="column is-narrow" style={{opacity: `${train.cancelled ? 0.5 : 1}`}}>
                                 {/* Bottom part */}
                                 <div className="">
                                     <div className="columns is-mobile has-text-left">
