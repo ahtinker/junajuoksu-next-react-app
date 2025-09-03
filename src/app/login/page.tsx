@@ -28,7 +28,7 @@ function LoginPage({ params }: StationPageProps) {
 
                     <div className="columns p-0 m-0">
                         <div className="column pt-6 is-5 mr-5">
-                            <div className="mb-5">
+                            <div className="mb-5 mt-6">
                                 <div className="title">
                                     Log in to <span className="has-text-primary">junajuoksu.fi</span>
                                 </div>
@@ -62,12 +62,12 @@ function LoginPage({ params }: StationPageProps) {
                                         
                                     </button>
                                 </p>
-                                <button className="button is-fullwidth is-primary is-ghost">Don't have an account? Create one</button>
+                                <button className="button is-fullwidth is-primary is-ghost">{"Don't have an account? Create one"}</button>
                             </form>
 
                         </div>
                         <div className="column p-0 m-0 is-hidden-mobile ml-5" style={{overflow: "visible"}}>
-                            <img style={{position: "absolute", height: "120vh"}} src="/loginpattern.svg"></img>
+                            <img style={{position: "absolute", height: "120vh"}} src="/loginpattern.svg" alt="Login page"></img>
                         </div>
                     </div>
                     </div>
