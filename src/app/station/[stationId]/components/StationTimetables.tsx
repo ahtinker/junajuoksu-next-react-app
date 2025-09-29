@@ -2,7 +2,7 @@
 
 import { useTranslations, useLocale } from 'next-intl';
 import { useState, useEffect, useRef, useMemo, MouseEvent } from 'react';
-import { getTranslatedStationNameWithFallback, Station } from '../../../../lib/stationUtils';
+import { getStationBackgroundByUicCode, getTranslatedStationNameWithFallback, Station } from '../../../../lib/stationUtils';
 import stationTranslations from '../../../resources/station_translations.json';
 import TimetableList from './TimeTableList'
 import DateTimeDrawer from './DateTimeDrawer';
@@ -22,6 +22,7 @@ interface StationData {
     shortCode: string;
     name: string;
     translatedName: string;
+    stationBackground?: string;
 }
 
 interface DestinationData {
@@ -90,6 +91,8 @@ export default function StationTimetables({ stationId }: StationTimetablesProps)
                 searchInputRef.current.style.opacity = '1';
                 searchInputRef.current.style.pointerEvents = 'auto';
                 searchInputRef.current.focus();
+                searchInputRef.current.parentElement!.parentElement!.style.background = "var(--bulma-primary)";
+
             }
         };
 
@@ -254,7 +257,8 @@ export default function StationTimetables({ stationId }: StationTimetablesProps)
                         uicCode: foundStation.stationUICCode,
                         shortCode: foundStation.stationShortCode,
                         name: foundStation.stationName,
-                        translatedName: translatedName
+                        translatedName: translatedName,
+                        stationBackground: getStationBackgroundByUicCode(foundStation.stationUICCode)
                     });
                 } else {
                     setError('Station not found');
@@ -302,15 +306,21 @@ export default function StationTimetables({ stationId }: StationTimetablesProps)
                 <div className={`column is-4-desktop is-6-tablet ${styles['mobile-full-height']}`}>
                     <div style={{ position: 'sticky', top: 50, marginTop: "50px" }}>
                         <article className="panel is-shadowless is-primary themebackground">
-                            <div className="panel-heading level is-mobile mb-0" style={{ position: 'relative' }}>
-                                <div className={`level-left has-text-left is-block ${styles['header-content']} ${isSearchActive ? styles['search-active'] : ''}`}>
+                            <div className="panel-heading level is-mobile mb-0"
+                                style={{
+                                    position: 'relative',
+                                    backgroundImage: `linear-gradient(to right, var(--bulma-primary) 30%, rgba(0,0,0,0.5)), ${stationData.stationBackground}`,
+                                    backgroundSize: "cover",
+                                    backgroundPosition: "center"
+                                }}>
+                                <h1 className={`m-0 level-left has-text-left is-block ${styles['header-content']} ${isSearchActive ? styles['search-active'] : ''}`}>
                                     <div className="subtitle is-6 has-text-light has-text-left">
                                         {t('timetables.stationTimetables.timetablesFor')}
                                     </div>
                                     <div className="title is-4 has-text-left m-0 has-text-light">
                                         {stationData.translatedName}
                                     </div>
-                                </div>
+                                </h1>
 
                                 <div
                                     className={`${styles['search-container']} ${isSearchActive ? styles['search-active'] : ''}`}

@@ -24,6 +24,7 @@ export interface Station {
     stationName_fi: string;
     stationName_sv: string;
     stationName_en: string;
+    stationBackground?: string;
 }
 
 // Station grammar forms interface
@@ -182,6 +183,18 @@ export function getStationGrammarForms(
         elative: grammarForm.elative,
         inessive: grammarForm.inessive
     };
+}
+
+/**
+ * Get station background image URL by UIC code
+ * @param stationUICCode - The UIC code of the station
+ * @returns The background image URL or undefined if not found
+ */
+export function getStationBackgroundByUicCode(stationUICCode: number): string | undefined {
+    const translation = stationTranslations.stations.find(
+        station => station.stationUICCode === stationUICCode
+    );
+    return translation?.stationBackground || "var(--bulma-primary)";
 }
 
 // Levenshtein distance calculation for search functionality

@@ -53,7 +53,7 @@ const NavBar = () => {
                                 </div>
                                 <div className="dropdown-menu has-text-left" role="menu" style={{ minWidth: "150px" }}>
                                     <div className="dropdown-content">
-                                        <a href="#fi" className={`dropdown-item p-4 ${currentLocale === 'fi' ? 'is-active has-background-primary has-text-white' : ''}`} onClick={() => changeLanguage('fi')} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <a href="" className={`dropdown-item p-4 ${currentLocale === 'fi' ? 'is-active has-background-primary has-text-white' : ''}`} onClick={() => changeLanguage('fi')} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                             <span className="icon-text pr-1">
                                                 <span className="icon">
                                                     <Image src="/flag_fi.svg" alt="Suomi" width={20} height={15} />
@@ -62,7 +62,7 @@ const NavBar = () => {
                                             </span>
                                             {currentLocale === 'fi' && <span className="icon is-small"><i className="fas fa-check"></i></span>}
                                         </a>
-                                        <a href="#sv" className={`dropdown-item p-4 ${currentLocale === 'sv' ? 'is-active has-background-primary has-text-white' : ''}`} onClick={() => changeLanguage('sv')} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <a href="" className={`dropdown-item p-4 ${currentLocale === 'sv' ? 'is-active has-background-primary has-text-white' : ''}`} onClick={() => changeLanguage('sv')} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                             <span className="icon-text pr-1">
                                                 <span className="icon">
                                                     <Image src="/flag_sv.svg" alt="Svenska" width={20} height={15} />
@@ -71,7 +71,7 @@ const NavBar = () => {
                                             </span>
                                             {currentLocale === 'sv' && <span className="icon is-small"><i className="fas fa-check"></i></span>}
                                         </a>
-                                        <a href="#en" className={`dropdown-item p-4 ${currentLocale === 'en' ? 'is-active has-background-primary has-text-white' : ''}`} onClick={() => changeLanguage('en')} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <a href="" className={`dropdown-item p-4 ${currentLocale === 'en' ? 'is-active has-background-primary has-text-white' : ''}`} onClick={() => changeLanguage('en')} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                             <span className="icon-text pr-1">
                                                 <span className="icon">
                                                     <Image src="/flag_en.svg" alt="English" width={20} height={15} />

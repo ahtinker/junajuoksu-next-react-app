@@ -24,7 +24,7 @@ export default function BlogCard({ blogId = 1 }: BlogCardProps) {
                 </figure>
             </div>
             <div className="card-content">
-                <div className="title is-size-5" style={{ color: "var(--bulma-text-strong)" }}>{t(`blogs.blog${blogId}.title`)}</div>
+                <h3 className="title is-size-5" style={{ color: "var(--bulma-text-strong)" }}>{t(`blogs.blog${blogId}.title`)}</h3>
                 <div className="content">
                     {t(`blogs.blog${blogId}.description`)}
                 </div>

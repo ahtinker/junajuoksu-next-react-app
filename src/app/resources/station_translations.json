@@ -90,7 +90,9 @@
             "stationUICCode": 1,
             "stationName_fi": "Helsinki",
             "stationName_sv": "Helsingfors",
-            "stationName_en": ""
+            "stationName_en": "",
+            "stationBackground": "url(\"https://upload.wikimedia.org/wikipedia/commons/b/b0/Aleksanteri_toisen_patsas.jpg\")",
+            "backgroundAttribution": "By Neofelis Nebulosa at fi.wikipedia.org - La bildo estas kopiita de wikipedia:fi., Public Domain, https://commons.wikimedia.org/w/index.php?curid=531408"
         }, {
             "stationUICCode": 1164,
             "stationName_fi": "Henna",
@@ -135,7 +137,9 @@
             "stationUICCode": 30,
             "stationName_fi": "Hyvinkää",
             "stationName_sv": "Hyvinge",
-            "stationName_en": ""
+            "stationName_en": "",
+            "stationBackground": "url(\"https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Hyvink%C3%A4%C3%A4n_rautatieaseman_posti.jpg/960px-Hyvink%C3%A4%C3%A4n_rautatieaseman_posti.jpg?20220823092713\")",
+            "backgroundAttribution": "By Jusala 51 - Own work, CC0, https://commons.wikimedia.org/w/index.php?curid=122245561"
         }, {
             "stationUICCode": 47,
             "stationName_fi": "Hämeenlinna",
@@ -300,7 +304,9 @@
             "stationUICCode": 20,
             "stationName_fi": "Kerava",
             "stationName_sv": "Kervo",
-            "stationName_en": ""
+            "stationName_en": "",
+            "stationBackground": "url(\"https://upload.wikimedia.org/wikipedia/commons/f/f1/Kerava_train_station_1950s.png?20220215014040\")",
+            "backgroundAttribution": "By Originally scanned from a postcard stamped September 1954, this photograph is from http://vaunut.org/kuva/26699, Public Domain, https://commons.wikimedia.org/w/index.php?curid=6494586"
         }, {
             "stationUICCode": 522,
             "stationName_fi": "Kerimäki",

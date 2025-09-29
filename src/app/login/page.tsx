@@ -29,9 +29,9 @@ function LoginPage({ params }: StationPageProps) {
                         <div className="columns p-0 m-0">
                             <div className="column pt-6 is-5 mr-5">
                                 <div className="mb-5 mt-6">
-                                    <div className="title">
+                                    <h1 className="title">
                                         Log in to <Link className="has-text-primary" href="/">junajuoksu.fi</Link>
-                                    </div>
+                                    </h1>
                                 </div>
                                 <form className="mt-6">
                                     <p className="control">

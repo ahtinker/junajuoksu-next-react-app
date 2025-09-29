@@ -14,7 +14,7 @@ const Footer = () => {
                     <div className="column"></div>
 
                     <div className="column">
-                        <h4>{t('footer.contact')}</h4>
+                        <h2>{t('footer.contact')}</h2>
                         <div className="icon-text mb-4">
                             <span className="icon">
                                 <i className="fas fa-envelope"></i>
@@ -28,7 +28,7 @@ const Footer = () => {
                     </div>
                     <hr className="is-hidden-desktop" />
                     <div className="column">
-                        <h4>{t('footer.additionalInfo')}</h4>
+                        <h2>{t('footer.additionalInfo')}</h2>
                         <div>{t('footer.implementedBy')}</div>
                         <Image className="mt-5" src="/va-logo.svg" alt="Verkkokehitys Ankeriasniemi" width={75} height={30} />
 

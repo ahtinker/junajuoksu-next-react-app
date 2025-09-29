@@ -22,10 +22,10 @@ function Home() {
                 <StationList />
               </div>
               <div className="column has-text-left">
-                <span className="domain is-size-3 m-0">junajuoksu.fi</span>
-                <div className="is-size-5 has-text-weight-bold mt-2 mb-4">
+                <h1 className="domain is-size-3 m-0" style={{ width: "100%" }}>Junien aikautaulut</h1>
+                <h4 className="is-size-5 has-text-weight-bold mt-2 mb-4">
                   {t('hero.description')}
-                </div>
+                </h4>
               </div>
               <div className="column is-2 is-hidden-mobile"></div>
             </div>
@@ -37,9 +37,9 @@ function Home() {
       </div>
       <section className="section has-background-primary">
         <div className="container has-text-left">
-          <p className="title mb-6 has-text-white">
+          <h2 className="title mb-6 has-text-white">
             {t('hero.tagline')}
-          </p>
+          </h2>
           <div className="fixed-grid has-text-left has-1-cols-mobile">
             <div className="grid is-gap-6">
               <div className="cell">

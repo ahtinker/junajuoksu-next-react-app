@@ -15,8 +15,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Junajuoksu.fi",
-  description: "Junajuoksu.fi - Junamatkojen ja aikataulujen haku",
+  metadataBase: new URL(`https://junajuoksu.fi/`),
+  title: "Juna-aikataulut reaaliajassa, sekunnin tarkkuudella.",
+  description: "Junajuoksu.fi - Junamatkojen ja aikataulujen haku. Junajuoksu voi todistaa läsnäolosi myöhäisessä junassa puolestasi.",
+  alternates: {
+    canonical: './',
+  }
 };
 
 export default async function RootLayout({
