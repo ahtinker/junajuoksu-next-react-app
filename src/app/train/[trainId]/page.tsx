@@ -62,9 +62,11 @@ export default function TrainPage() {
     useEffect(() => {
         if (!parsedParams) return;
 
-        const fetchTrainData = async () => {
+        const fetchTrainData = async (isInitialFetch = false) => {
             try {
-                setLoading(true);
+                if (isInitialFetch) {
+                    setLoading(true);
+                }
                 setError(null);
 
                 const response = await fetch(
@@ -72,7 +74,12 @@ export default function TrainPage() {
                 );
 
                 if (!response.ok) {
-                    throw new Error(`Failed to fetch train data: ${response.status}`);
+                    if (isInitialFetch) {
+                        throw new Error(`Failed to fetch train data: ${response.status}`);
+                    } else {
+                        console.warn(`Failed to update train data: ${response.status}`);
+                        return;
+                    }
                 }
 
                 const trainData: Train[] = await response.json();
@@ -80,17 +87,27 @@ export default function TrainPage() {
                 if (trainData && trainData.length > 0) {
                     setTrain(trainData[0]);
                 } else {
-                    setError('Train not found');
+                    if (isInitialFetch) {
+                        setError('Train not found');
+                    }
                 }
             } catch (err) {
                 console.error('Error fetching train data:', err);
-                setError(err instanceof Error ? err.message : 'Failed to fetch train data');
+                if (isInitialFetch) {
+                    setError(err instanceof Error ? err.message : 'Failed to fetch train data');
+                }
             } finally {
-                setLoading(false);
+                if (isInitialFetch) {
+                    setLoading(false);
+                }
             }
         };
 
-        fetchTrainData();
+        fetchTrainData(true); // Initial fetch
+
+        const intervalId = setInterval(() => fetchTrainData(), 10000); // Fetch every 10 seconds
+
+        return () => clearInterval(intervalId); // Cleanup on unmount
     }, [parsedParams]);
 
     if (loading) {
@@ -153,12 +170,12 @@ export default function TrainPage() {
             <section className="section is-fullheight has-text-left" style={{ backgroundColor: 'var(--bulma-scheme-main)' }}>
                 <div className="container">
                     {/* Train Header Information */}
-                    <Link className="button is-ghost mb-4 pl-0" href={"/station/" + parsedParams.originStationUic}>
+                    {/* <Link className="button is-ghost mb-4 pl-0" href={"/station/" + parsedParams.originStationUic}>
                         <span className="icon is-small">
                             <i className="fas fa-chevron-left"></i>
                         </span>
                         <span>{t('timetables', { station: getTranslatedStationNameWithFallback(Number(parsedParams.originStationUic), locale, "Unknown Station") })}</span>
-                    </Link>
+                    </Link> */}
                     <div className="columns mt-1">
                         <div className="column">
                             <div className="is-flex is-align-items-center">
