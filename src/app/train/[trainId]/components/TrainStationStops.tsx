@@ -36,6 +36,7 @@ export default function TrainStationStops({
 
     const [TAProgressFullLength, setTAProgressFullLength] = useState<number>(0);
     const [, setForceUpdate] = useState(Date.now());
+    const [showAllStops, setShowAllStops] = useState(false);
 
     useEffect(() => {
         const timer = setInterval(() => setForceUpdate(Date.now()), 500);
@@ -409,10 +410,115 @@ export default function TrainStationStops({
         return 'upcoming';
     };
 
+    const getNextStopIndex = (): number => {
+        const now = new Date().getTime();
+
+        for (let i = 0; i < stationStopsData.length; i++) {
+            const stop = stationStopsData[i];
+            const status = getStopStatus(stop);
+
+            if (status === 'current' || status === 'upcoming') {
+                return i;
+            }
+        }
+
+        // If all stops are passed, return the last stop's index
+        return stationStopsData.length > 0 ? stationStopsData.length - 1 : -1;
+    };
+
+    const getTimeBetweenStations = (stopIndex1: number, stopIndex2: number): string => {
+        if (stopIndex1 < 0 || stopIndex2 >= stationStopsData.length || stopIndex1 >= stopIndex2) {
+            return '';
+        }
+
+        const stop1 = stationStopsData[stopIndex1];
+        const stop2 = stationStopsData[stopIndex2];
+
+        if (!stop1.hasDeparture || !stop2.hasArrival) {
+            return '';
+        }
+
+        const getBestTime = (row: TimeTableRow | undefined): string | null => {
+            if (!row) return null;
+            return row.liveEstimateTime || row.actualTime || row.scheduledTime;
+        };
+
+        const departureTimeStr = getBestTime(stop1.departure.rawRow);
+        const arrivalTimeStr = getBestTime(stop2.arrival.rawRow);
+
+        if (!departureTimeStr || !arrivalTimeStr) {
+            return '';
+        }
+
+        const departureTime = new Date(departureTimeStr).getTime();
+        const arrivalTime = new Date(arrivalTimeStr).getTime();
+
+        const timeDifferenceMs = arrivalTime - departureTime;
+
+        if (timeDifferenceMs < 0) {
+            return '';
+        }
+
+        const totalSeconds = Math.floor(timeDifferenceMs / 1000);
+
+        if (totalSeconds < 60) {
+            return `${totalSeconds} s`;
+        }
+
+        const totalMinutes = Math.floor(totalSeconds / 60);
+
+        if (totalMinutes < 60) {
+            return `${totalMinutes} min`;
+        }
+
+        const hours = Math.floor(totalMinutes / 60);
+        const minutes = totalMinutes % 60;
+
+        return minutes > 0 ? `${hours} h, ${minutes} min` : `${hours} h`;
+    };
+
+    const getStationTrack = (stopIndex: number): string => {
+        if (stopIndex < 0 || stopIndex >= stationStopsData.length) {
+            return '';
+        }
+
+        const stop = stationStopsData[stopIndex];
+
+        // Prefer departure track, fallback to arrival track
+        return stop.departure.track || stop.arrival.track || '';
+    };
+
     return (
         <div>
-            <div className="columns">
-                <div className="column">
+            <div className="columns mt-6">
+                <div className="column" style={{ overflowY: showAllStops ? 'auto' : 'hidden', position: "relative", transition: 'height 0.5s ease-in-out' }}>
+                    <div style={{
+                        height: "100px",
+                        zIndex: 7,
+                        width: "100%",
+                        position: "absolute",
+                        top: "0",
+                        left: "0",
+                        textAlign: "center",
+                        background: "linear-gradient(180deg, var(--bulma-scheme-main) 50%, transparent 100%)",
+                        display: getNextStopIndex() === 0 ? 'none' : 'block',
+                    }}>
+                        <button className="button" onClick={() => setShowAllStops(!showAllStops)}>
+                            {showAllStops ? t('train.centerNextStop') : t('train.showAllStops')}
+                        </button>
+                    </div>
+                    <div style={{
+                        marginTop: showAllStops ? '100px' : getNextStopIndex() === 0 ? "0" : `${-(getDistanceBetweenElements(
+                            document.getElementById("TAmarker0"),
+                            document.getElementById("TAmarker" + (getNextStopIndex() - 1))
+                        ) + getDistanceBetweenElements(
+                            document.getElementById("TAmarker" + (getNextStopIndex() - 1)),
+                            document.getElementById("TAmarker" + (getNextStopIndex()))
+                        ) * calculateProgressBetweenStops(getNextStopIndex() - 1, getNextStopIndex()) - 120)}px`,
+                        overflowX: "hidden",
+                        transition: 'margin-top 0.5s ease-in-out'
+                    }}>
+
                     {stationStopsData.map((stop, index) => {
                         const status = getStopStatus(stop);
                         const statusColor = () => {
@@ -429,51 +535,99 @@ export default function TrainStationStops({
                         };
 
                         return (
-                            <div key={`${stop.uicCode}-${stop.stopIndex}`} className={`box is-shadowless ${styles["station-stop"]} ${stop.isOrigin ? 'is-origin' : ''} ${stop.isDestination ? 'is-destination' : ''}`}>
+                            <div key={`${stop.uicCode}-${stop.stopIndex}`}>
+                                <div className={`box is-shadowless ${styles["station-stop"]} ${stop.isOrigin ? 'is-origin' : ''} ${stop.isDestination ? 'is-destination' : ''}`}>
                                 <div className="columns is-desktop">
                                     <div className="column is-5-tablet is-5-desktop is-6-widescreen">
                                         {index == 0 ?
-                                            <div
-                                                className="themebackground mr-4"
-                                                id={`TAprogress${index}`}
-                                                style={{
-                                                    height: `${TAProgressFullLength}px`,
-
-                                                    width: '40px',
-                                                    marginLeft: '-10px',
-                                                    marginTop: '-10px',
-                                                    zIndex: 0,
-                                                    position: "absolute",
-                                                    borderRadius: "20px"
-                                                }}>
+                                                <div>
+                                                    <div
+                                                        className="mr-4"
+                                                        id={`TAprogressPathBackground${index}`}
+                                                        style={{
+                                                            height: `${TAProgressFullLength}px`,
+                                                            backgroundColor: 'var(--bulma-scheme-main)',
+                                                            width: '10px',
+                                                            left: "37.5px",
+                                                            zIndex: 0,
+                                                            position: "absolute",
+                                                            borderRadius: "20px"
+                                                        }}>
+                                                    </div>
                                             </div>
                                             : null}
 
-                                        <div
-                                            className="has-background-primary mr-4"
-                                            id={`TAprogress${index}`}
-                                            style={{
-                                                height: `${calculateProgressBetweenStops(index, index + 1)
-                                                    * getDistanceBetweenElements(
-                                                        document.getElementById("TAmarker" + index),
-                                                        document.getElementById("TAmarker" + (index + 1))
-                                                    ) + 20}px`,
+                                            {index != stationStopsData.length - 1 ?
+                                                <div>
 
-                                                width: '20px',
-                                                display: status === 'passed' ? 'block' : 'none',
-                                                zIndex: 1,
-                                                position: "absolute",
-                                                borderRadius: "10px"
-                                            }}>
-                                        </div>
+                                                    <div
+                                                        className="has-background-primary mr-4"
+                                                        id={`TAprogress${index}`}
+                                                        style={{
+                                                            height: `${(calculateProgressBetweenStops(index, index + 1))
+                                                                * getDistanceBetweenElements(
+                                                                    document.getElementById("TAmarker" + index),
+                                                                    document.getElementById("TAmarker" + (index + 1))
+                                                                ) + 20}px`,
+                                                            width: '10px',
+                                                            left: '37.5px',
+                                                            display: status === "passed" ? 'block' : 'none',
+                                                            zIndex: 1,
+                                                            position: "absolute",
+                                                            borderRadius: "10px"
+                                                        }}>
+                                                    </div>
 
-                                        <div className="mr-4" id={`TAmarker${index}`} style={{ height: '20px', border: `3px solid ${status === 'passed' || status === 'current' ? 'transparent' : 'var(--bulma-border)'}`, width: '20px', position: "absolute", borderRadius: "50%", zIndex: 2 }}>
-                                            {status === 'current' && <div className={styles['blinking-dot']}></div>}
-                                            {status === 'passed' && <div className={styles['passed-dot']}>
-                                                <span className="icon">
-                                                    <i className="fa-solid fa-chevron-down"></i>
+                                                    <div
+                                                        id={`TAprogressLocation${index}`}
+                                                        style={{
+                                                            marginTop: `${(calculateProgressBetweenStops(index, index + 1))
+                                                                * getDistanceBetweenElements(
+                                                                    document.getElementById("TAmarker" + index),
+                                                                    document.getElementById("TAmarker" + (index + 1))
+                                                                ) - 5}px`,
+                                                            position: "absolute",
+                                                            height: '30px',
+                                                            width: '30px',
+                                                            borderRadius: "50%",
+                                                            marginLeft: '-5px',
+                                                            zIndex: 3,
+                                                            display: calculateProgressBetweenStops(index, index + 1) < 1 && status === "passed" ? 'block' : 'none',
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                background: "linear-gradient(180deg,transparent 0%, var(--bulma-link) 100%)",
+                                                                height: index == 0 ? (50 * (calculateProgressBetweenStops(index, index + 1))) : `50px`,
+                                                                width: '10px',
+                                                                position: "absolute",
+                                                                zIndex: 3,
+                                                                left: "10px",
+                                                                top: index == 0 ? (-40) * (calculateProgressBetweenStops(index, index + 1)) : "-40px",
+                                                                display: calculateProgressBetweenStops(index, index + 1) ? 'block' : 'none',
+                                                            }}
+                                                        >
+                                                        </div>
+                                                        <span className={`icon ${styles['TAbackground-dot']} has-background-link has-text-light`} style={{ zIndex: 4 }}>
+                                                            <i className="fa-solid fa-train"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                : null}
+
+
+
+                                            <div className="mr-4" id={`TAmarkerBackground${index}`} style={{ height: '20px', width: '20px', position: "absolute", borderRadius: "50%", zIndex: 0 }}>
+                                                <div className={styles['TAbackground-dot']}></div>
+                                            </div>
+                                            <div className="mr-4" id={`TAmarker${index}`} style={{ height: '20px', width: '20px', position: "absolute", borderRadius: "50%", zIndex: 2 }}>
+                                                {status === 'current' && <div className={styles['blinking-dot-background']}>
+                                                    <span className={`icon ${(index === stationStopsData.length - 1 || !index) ? '' : styles['blinking-dot']} has-text-white`}>
+                                                        <i className={(index === stationStopsData.length - 1 || !index) ? "fa-solid fa-location-dot" : "fa-solid fa-circle"}></i>
                                                 </span>
                                             </div>}
+                                                {status === 'passed' && <div className={styles['passed-dot']}></div>}
+
 
                                         </div>
                                         <span className="station-name title is-5 mb-1 has-text-weight-bold ml-5 pl-2" style={{ color: statusColor(), zIndex: 2, position: "absolute" }}>
@@ -481,12 +635,20 @@ export default function TrainStationStops({
                                         </span>
                                     </div>
                                     <div className="column">
-                                        <div className="columns is-mobile is-4">
+                                            <div className="columns is-mobile is-4">
                                             <div className={"column is-1"}></div>
 
-                                            <div className={"column is-narrow " + (!stop.hasArrival ? "is-hidden" : "")}>
+                                                <div className={"column is-3 is-narrow "}>
+                                                    <div className="title is-6 mb-1 has-text-weight-semibold">
+                                                        {t('train.track')}
+                                                    </div>
+                                                    <div className="tag is-size-6 is-primary px-4">
+                                                        {getStationTrack(stop.departure.track ? index : index - 1)}
+                                                    </div>
+                                                </div>
+                                                <div className={"column is-narrow " + (!stop.hasArrival ? "is-hidden" : "")}>
                                                 <div className="title is-6 mb-1 has-text-weight-semibold">
-                                                    {t('train.arrives')}
+                                                        {stop.arrival.actualTime ? t('train.arrived') : t('train.arrives')}
                                                 </div>
                                                 {stop.hasArrival && (
                                                     <div>
@@ -494,14 +656,14 @@ export default function TrainStationStops({
                                                             {stop.arrival.time}
                                                         </div>
                                                         <div className={`is-size-7 ${stop.arrival.delaySeconds > 0 || stop.arrival.delaySeconds < 0 ? '' : 'is-hidden'}`}>
-                                                            ({stop.arrival.scheduledTime}) {stop.arrival.delayFormatted}
+                                                                ({stop.arrival.scheduledTime})
                                                         </div>
                                                     </div>
                                                 )}
                                             </div>
                                             <div className={"column " + (!stop.hasDeparture ? "is-hidden" : "")}>
                                                 <div className="title is-6 mb-1 has-text-weight-semibold">
-                                                    {t('train.departs')}
+                                                        {stop.departure.actualTime ? t('train.departed') : t('train.departs')}
                                                 </div>
                                                 {stop.hasDeparture && (
                                                     <div>
@@ -509,7 +671,7 @@ export default function TrainStationStops({
                                                             {stop.departure.time}
                                                         </div>
                                                         <div className={`is-size-7 ${stop.departure.delaySeconds > 0 || stop.departure.delaySeconds < 0 ? '' : 'is-hidden'}`}>
-                                                            ({stop.departure.scheduledTime}) {stop.departure.delayFormatted}
+                                                                ({stop.departure.scheduledTime})
                                                         </div>
                                                     </div>
                                                 )}
@@ -518,8 +680,11 @@ export default function TrainStationStops({
                                     </div>
                                 </div>
                             </div>
+                                <div className="is-size-7" style={{ position: "absolute", marginTop: "-21px", marginLeft: "53px" }}>{getTimeBetweenStations(index, index + 1)}</div>
+                            </div>
                         );
                     })}
+                </div>
                 </div>
                 <div className="column">
                     {/* TODO: Implement frontend using the following data structures */}
@@ -529,6 +694,7 @@ export default function TrainStationStops({
                         <p>Has delays: {hasDelays ? 'Yes' : 'No'}</p>
                         <p>Max delay: {maxDelayFormatted || 'None'}</p>
                         <p>Progress between 1st and 2nd stop: {stationStopsData.length > 1 ? calculateProgressBetweenStops(0, 1).toFixed(2) : 'N/A'}</p>
+                        <p>Next stop index: {getNextStopIndex()}</p>
 
                         {/* Debug info - remove when implementing actual UI */}
                         <details>

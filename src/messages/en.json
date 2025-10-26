@@ -120,9 +120,11 @@
         "stationStops": "Station Stops",
         "stationsCount": "stations",
         "arrives": "Arrives",
+        "arrived": "Arrived",
         "departs": "Departs",
+        "departed": "Departed",
         "cancelled": "Cancelled",
-        "running": "Running",
+        "running": "Status",
         "origin": "Origin",
         "destination": "Destination",
         "track": "Track",
@@ -132,8 +134,10 @@
         "early": "Early",
         "speed": "Speed",
         "ended": "Ended",
-        "timetables": "{station} timetables",
-        "stopindex": "Stop #{index}"
+        "timetables": "Timetables for {station}",
+        "stopindex": "Stop #{index}",
+        "showAllStops": "Show all stops",
+        "centerNextStop": "Follow train"
     },
     "blogCommon": {
         "blog": "Blog"

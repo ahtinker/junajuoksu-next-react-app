@@ -120,12 +120,14 @@
         "stationStops": "Asemapysähdykset",
         "stationsCount": "asemaa",
         "arrives": "Saapuu",
+        "arrived": "Saapui",
         "departs": "Lähtee",
+        "departed": "Lähti",
         "cancelled": "Peruttu",
         "running": "Liikkeellä",
         "origin": "Lähtöasema",
         "destination": "Määränpää",
-        "track": "Raide",
+        "track": "Laituri",
         "delayMinutes": "+{minutes}min",
         "on_time": "Ajantasalla",
         "delayed": "Myöhässä",
@@ -133,7 +135,9 @@
         "speed": "Nopeus",
         "ended": "Päättynyt",
         "timetables": "{station} aikataulut",
-        "stopindex": "Pysähdys #{index}"
+        "stopindex": "Pysähdys #{index}",
+        "showAllStops": "Näytä kaikki pysähdykset",
+        "centerNextStop": "Seuraa junaa"
     },
     "blogCommon": {
         "blog": "Blogi"

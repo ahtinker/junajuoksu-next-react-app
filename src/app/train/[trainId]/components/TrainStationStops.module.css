@@ -6,26 +6,50 @@
         opacity: 0;
     }
 }
-
-.blinking-dot {
-    animation: blink 1s infinite;
-    background-color: var(--bulma-white);
+.TAbackground-dot {
+    background-color: var(--bulma-scheme-main);
     border-radius: 50%;
-    width: 10px;
-    height: 10px;
+    width: 30px;
+    height: 30px;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
 
+.blinking-dot-background {
+    width: 3px;
+    height: 30px;
+    width: 30px;
+    top: 2px;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    text-align: center;
+        padding-top: 3px;
+    transform: translate(-50%, -50%);
+    background-color: var(--bulma-primary);
+    }
+    
+    .blinking-dot {
+        animation: blink 1s infinite;
+}
+    
 
 .passed-dot {
     color: var(--bulma-link);
+    width: 3px;
+        height: 30px;
+        width: 30px;
+        top: 2px;
     border-radius: 50%;
-    width: 10px;
-    height: 10px;
-    top: 2px;
     position: absolute;
+    top: 50%;
+        left: 50%;
+        text-align: center;
+        padding-top: 3px;
     transform: translate(-50%, -50%);
+    background-color: var(--bulma-primary);
 }
+        

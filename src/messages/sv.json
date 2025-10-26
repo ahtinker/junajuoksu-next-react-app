@@ -120,7 +120,9 @@
         "stationStops": "Stationsstopp",
         "stationsCount": "stationer",
         "arrives": "Anländer",
+        "arrived": "Anlände",
         "departs": "Avgår",
+        "departed": "Avgick",
         "cancelled": "Inställd",
         "running": "Kör",
         "origin": "Avgångsstation",
@@ -133,7 +135,9 @@
         "speed": "Hastighet",
         "ended": "Avslutad",
         "timetables": "{station} tidtabeller",
-        "stopindex": "Stopp #{index}"
+        "stopindex": "Stopp #{index}",
+        "showAllStops": "Visa alla stopp",
+        "centerNextStop": "Följ tåget"
     },
     "blogCommon": {
         "blog": "Blogg"
