@@ -105,7 +105,7 @@ export default function TrainPage() {
 
         fetchTrainData(true); // Initial fetch
 
-        const intervalId = setInterval(() => fetchTrainData(), 10000); // Fetch every 10 seconds
+        const intervalId = setInterval(() => fetchTrainData(), 5000); // Fetch every 5 seconds
 
         return () => clearInterval(intervalId); // Cleanup on unmount
     }, [parsedParams]);

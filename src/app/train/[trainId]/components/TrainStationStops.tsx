@@ -609,7 +609,7 @@ export default function TrainStationStops({
                                                         >
                                                         </div>
                                                         <span className={`icon ${styles['TAbackground-dot']} has-background-link has-text-light`} style={{ zIndex: 4 }}>
-                                                            <i className="fa-solid fa-train"></i>
+                                                            <i className="fa-solid fa-arrow-down"></i>
                                                         </span>
                                                     </div>
                                                 </div>
@@ -630,7 +630,7 @@ export default function TrainStationStops({
 
 
                                         </div>
-                                        <span className="station-name title is-5 mb-1 has-text-weight-bold ml-5 pl-2" style={{ color: statusColor(), zIndex: 2, position: "absolute" }}>
+                                            <span className="station-name title is-5 has-text-weight-bold ml-5 pl-2" style={{ color: statusColor(), zIndex: 2, position: "absolute" }}>
                                             {stop.stationName}
                                         </span>
                                             <div className={"ml-5 pl-2 mt-5 pt-2 is-3 is-hidden-touch is-hidden-widescreen"}>
@@ -643,6 +643,7 @@ export default function TrainStationStops({
                                             </div>
                                     </div>
                                     <div className="column">
+                                            <div className="mt-2 is-hidden-desktop"></div>
                                             <div className="columns is-mobile is-4">
                                             <div className={"column is-1"}></div>
 
@@ -656,7 +657,13 @@ export default function TrainStationStops({
                                                 </div>
                                                 <div className={"column " + (!stop.hasArrival ? "is-hidden" : "")}>
                                                 <div className="title is-6 mb-1 has-text-weight-semibold">
-                                                        {stop.arrival.actualTime ? t('train.arrived') : t('train.arrives')}
+                                                        {(() => {
+                                                            if (!stop.arrival.rawRow) return t('train.arrives');
+                                                            const arrivalTimeStr = stop.arrival.rawRow.liveEstimateTime || stop.arrival.rawRow.actualTime || stop.arrival.rawRow.scheduledTime;
+                                                            const arrivalTime = new Date(arrivalTimeStr).getTime();
+                                                            const now = new Date().getTime();
+                                                            return now > arrivalTime ? t('train.arrived') : t('train.arrives');
+                                                        })()}
                                                 </div>
                                                 {stop.hasArrival && (
                                                     <div>
@@ -671,7 +678,13 @@ export default function TrainStationStops({
                                             </div>
                                             <div className={"column " + (!stop.hasDeparture ? "is-hidden" : "")}>
                                                 <div className="title is-6 mb-1 has-text-weight-semibold">
-                                                        {stop.departure.actualTime ? t('train.departed') : t('train.departs')}
+                                                        {(() => {
+                                                            if (!stop.departure.rawRow) return t('train.departs');
+                                                            const departureTimeStr = stop.departure.rawRow.liveEstimateTime || stop.departure.rawRow.actualTime || stop.departure.rawRow.scheduledTime;
+                                                            const departureTime = new Date(departureTimeStr).getTime();
+                                                            const now = new Date().getTime();
+                                                            return now > departureTime ? t('train.departed') : t('train.departs');
+                                                        })()}
                                                 </div>
                                                 {stop.hasDeparture && (
                                                     <div>
