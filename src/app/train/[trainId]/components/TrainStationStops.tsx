@@ -537,8 +537,8 @@ export default function TrainStationStops({
                         return (
                             <div key={`${stop.uicCode}-${stop.stopIndex}`}>
                                 <div className={`box is-shadowless ${styles["station-stop"]} ${stop.isOrigin ? 'is-origin' : ''} ${stop.isDestination ? 'is-destination' : ''}`}>
-                                <div className="columns is-desktop">
-                                    <div className="column is-5-tablet is-5-desktop is-6-widescreen">
+                                    <div className="columns is-desktop">
+                                        <div className="column is-5-tablet is-5-desktop is-5-widescreen">
                                         {index == 0 ?
                                                 <div>
                                                     <div
@@ -633,20 +633,28 @@ export default function TrainStationStops({
                                         <span className="station-name title is-5 mb-1 has-text-weight-bold ml-5 pl-2" style={{ color: statusColor(), zIndex: 2, position: "absolute" }}>
                                             {stop.stationName}
                                         </span>
+                                            <div className={"ml-5 pl-2 mt-5 pt-2 is-3 is-hidden-touch is-hidden-widescreen"}>
+                                                <div className="title is-6 mb-1 has-text-weight-semibold">
+                                                    {t('train.track')}
+                                                </div>
+                                                <div className="tag is-size-6 px-4" style={{ backgroundColor: 'var(--bulma-scheme-main)', color: 'var(--bulma-text-strong)' }}>
+                                                    {getStationTrack(stop.departure.track ? index : index - 1)}
+                                                </div>
+                                            </div>
                                     </div>
                                     <div className="column">
                                             <div className="columns is-mobile is-4">
                                             <div className={"column is-1"}></div>
 
-                                                <div className={"column is-3 is-narrow "}>
+                                                <div className={"column is-3 is-hidden-desktop-only"}>
                                                     <div className="title is-6 mb-1 has-text-weight-semibold">
                                                         {t('train.track')}
                                                     </div>
-                                                    <div className="tag is-size-6 is-primary px-4">
+                                                    <div className="tag is-size-6 px-4" style={{ backgroundColor: 'var(--bulma-scheme-main)', color: 'var(--bulma-text-strong)' }}>
                                                         {getStationTrack(stop.departure.track ? index : index - 1)}
                                                     </div>
                                                 </div>
-                                                <div className={"column is-narrow " + (!stop.hasArrival ? "is-hidden" : "")}>
+                                                <div className={"column " + (!stop.hasArrival ? "is-hidden" : "")}>
                                                 <div className="title is-6 mb-1 has-text-weight-semibold">
                                                         {stop.arrival.actualTime ? t('train.arrived') : t('train.arrives')}
                                                 </div>
