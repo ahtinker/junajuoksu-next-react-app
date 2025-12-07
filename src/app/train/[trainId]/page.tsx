@@ -10,6 +10,7 @@ import NavBar from '@/app/components/site/navbar';
 import Footer from '@/app/components/site/footer';
 import { getTranslatedStationNameWithFallback } from '@/lib/stationUtils';
 import Link from 'next/link';
+import { useTrainPosition } from '@/lib/useTrainPosition';
 
 //path for this page /train/${train.departureDate}-${train.trainNumber}-${(origin station) stationData.uicCode}-${(origin station) stopIndex (e.g. if the train stops twice at one station, the second stop at that station makes this stopIndex = 1 and the first = 0)}${(the user's wanted destination will be highlighted) selectedDestination ? "-" + selectedDestination.uicCode : ""}`
 //api for train data https://rata.digitraffic.fi/api/v1/trains/${train.departureDate}/${train.trainNumber} you can see a sample response with https://rata.digitraffic.fi/api/v1/trains/2017-01-01/1
@@ -35,6 +36,13 @@ export default function TrainPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [parsedParams, setParsedParams] = useState<ParsedTrainId | null>(null);
+
+    // Use train position hook for realtime GPS tracking
+    const trainPosition = useTrainPosition(
+        parsedParams?.trainNumber ?? null,
+        parsedParams?.departureDate ?? null,
+        train?.commuterLineID ?? null
+    );
 
     // Parse the trainId parameter
     useEffect(() => {
@@ -214,7 +222,9 @@ export default function TrainPage() {
                                 <div className="level-item has-text-centered">
                                     <div>
                                         <p className="heading">{t('speed')}</p>
-                                        <p className="title is-size-5 has-text-weight-normal">123 km/h</p>
+                                        <p className="title is-size-5 has-text-weight-normal">
+                                            {trainPosition.speed > 0 ? `${trainPosition.speed} km/h` : '-'}
+                                        </p>
                                     </div>
                                 </div>
                             </nav>
@@ -229,6 +239,68 @@ export default function TrainPage() {
                         originStopIndex={parseInt(parsedParams.originStopIndex)}
                         selectedDestinationUic={parsedParams.selectedDestinationUic ? parseInt(parsedParams.selectedDestinationUic) : undefined}
                     />
+
+                    {/* Debug Section - Realtime Position Data */}
+                    <div className="box mt-6" style={{ backgroundColor: 'var(--bulma-scheme-main-bis)' }}>
+                        <h3 className="title is-5">
+                            <span className="icon-text">
+                                <span className="icon">
+                                    <i className="fas fa-bug"></i>
+                                </span>
+                                <span>Debug - Realtime Position</span>
+                            </span>
+                        </h3>
+                        <div className="content">
+                            <table className="table is-narrow is-fullwidth" style={{ backgroundColor: 'transparent' }}>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Data Source</strong></td>
+                                        <td>
+                                            {trainPosition.source ? (
+                                                <span className={`tag ${trainPosition.source === 'HSL' ? 'is-success' : 'is-info'}`}>
+                                                    {trainPosition.source}
+                                                </span>
+                                            ) : (
+                                                <span className="tag is-warning">Connecting...</span>
+                                            )}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Latitude</strong></td>
+                                        <td>{trainPosition.latitude !== null ? trainPosition.latitude.toFixed(6) : '-'}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Longitude</strong></td>
+                                        <td>{trainPosition.longitude !== null ? trainPosition.longitude.toFixed(6) : '-'}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Speed</strong></td>
+                                        <td>{trainPosition.speed > 0 ? `${trainPosition.speed} km/h` : '-'}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Heading</strong></td>
+                                        <td>{trainPosition.heading !== null ? `${trainPosition.heading}°` : '-'}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Last Update</strong></td>
+                                        <td>
+                                            {trainPosition.timestamp ? (
+                                                new Date(trainPosition.timestamp).toLocaleTimeString()
+                                            ) : '-'}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Train Number</strong></td>
+                                        <td>{parsedParams.trainNumber}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Commuter Line</strong></td>
+                                        <td>{train.commuterLineID || 'N/A (Long-distance)'}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
 
             </section>

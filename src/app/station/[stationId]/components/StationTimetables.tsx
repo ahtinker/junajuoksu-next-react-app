@@ -117,11 +117,6 @@ export default function StationTimetables({ stationId }: StationTimetablesProps)
 
     const handleSearchSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // Here you can implement the search logic
-        // For now, we'll just navigate back to the station list
-        if (searchQuery.trim()) {
-            window.location.href = `/${locale}?search=${encodeURIComponent(searchQuery)}`;
-        }
     };
 
     // Handle escape key to close search
