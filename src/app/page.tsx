@@ -18,7 +18,9 @@ function Home() {
           <div className="hero-body">
             <div className="columns is-centered is-6-desktop is-0 is-desktop" style={{ width: "100%" }}>
               <div className="column is-2 is-hidden-mobile"></div>
-              <div className="column" style={{ height: "450px", width: "100%" }}>
+              <div className="is-hidden-tablet" style={{ height: "70px" }}></div>
+
+              <div className="column" style={{ width: "100%" }}>
                 <StationList />
               </div>
               <div className="column has-text-left">

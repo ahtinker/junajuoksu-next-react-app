@@ -79,7 +79,7 @@ const StationElement = ({ stationUIC, shortCode, popup = false, target = "_blank
                     <Link
                         href={`/station/${stationUIC}`}
                         target={target}
-                        className={`button is-fullwidth ${target !== "_blank" && isLoading ? 'is-loading' : ''} ${disabled ? 'is-static' : ''}`}
+                        className={`button is-fullwidth py-3 is-size-6 ${target !== "_blank" && isLoading ? 'is-loading' : ''} ${disabled ? 'is-static' : ''}`}
                         style={{ justifyContent: "left" }}
                         onClick={disabled ? undefined : handleLinkClick}
                     >

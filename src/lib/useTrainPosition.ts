@@ -8,7 +8,7 @@ import mqtt, { MqttClient } from 'mqtt';
 export interface TrainPosition {
     latitude: number | null;
     longitude: number | null;
-    speed: number; // km/h
+    speed: number | null; // km/h
     timestamp: string | null;
     source: 'HSL' | 'VR' | null;
     heading?: number | null;
@@ -87,7 +87,7 @@ export function useTrainPosition(
     const [position, setPosition] = useState<TrainPosition>({
         latitude: null,
         longitude: null,
-        speed: 0,
+        speed: null,
         timestamp: null,
         source: null,
         heading: null,
@@ -293,7 +293,7 @@ export function useTrainPosition(
         setPosition({
             latitude: null,
             longitude: null,
-            speed: 0,
+            speed: null,
             timestamp: null,
             source: null,
             heading: null,

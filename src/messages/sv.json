@@ -24,6 +24,10 @@
         "map": "Karta",
         "nearestStation": "Nära mig",
         "suggestions": "Förslag",
+        "savedStations": "Sparade stationer",
+        "showAll": "Visa alla",
+        "saved": "Sparad!",
+        "removed": "Borttagen",
         "searchResults": "Sökresultat",
         "noResults": "Inga stationer hittades som matchar din sökning",
         "nearbyDrawer": {
@@ -101,7 +105,8 @@
             "tomorrowAt": "Imorgon, {time}",
             "dateAt": "{date}, {time}",
             "reset": "Återställ",
-            "selectDestination": "Välj destination"
+            "selectDestination": "Välj destination",
+            "save": "Spara till hemsidan"
         },
         "stationTimetables": {
             "timetablesFor": "Tidtabeller för ",
@@ -125,6 +130,7 @@
         "departed": "Avgick",
         "cancelled": "Inställd",
         "running": "Kör",
+        "not_active": "Ej startat",
         "origin": "Avgångsstation",
         "destination": "Destination",
         "track": "Spår",
@@ -137,7 +143,18 @@
         "timetables": "{station} tidtabeller",
         "stopindex": "Stopp #{index}",
         "showAllStops": "Visa alla stopp",
-        "centerNextStop": "Följ tåget"
+        "centerNextStop": "Följ tåget",
+        "composition": "Tågsammansättning",
+        "noComposition": "Inga sammansättningsuppgifter tillgängliga",
+        "compositionFrom": "Från",
+        "wagons": "vagnar",
+        "active": "Aktiv",
+        "wagonFeatures": {
+            "playground": "Lekplats",
+            "pet": "Husdjursvagn",
+            "catering": "Restaurangvagn",
+            "disabled": "Tillgänglig"
+        }
     },
     "blogCommon": {
         "blog": "Blogg"

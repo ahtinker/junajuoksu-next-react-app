@@ -1,9 +1,10 @@
 'use client';
 import '../../App.css';
 import "../../globals.scss";
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
+import mqtt, { MqttClient } from 'mqtt';
 import { Train } from '../../../lib/types';
 import TrainStationStops from './components/TrainStationStops';
 import NavBar from '@/app/components/site/navbar';
@@ -11,6 +12,11 @@ import Footer from '@/app/components/site/footer';
 import { getTranslatedStationNameWithFallback } from '@/lib/stationUtils';
 import Link from 'next/link';
 import { useTrainPosition } from '@/lib/useTrainPosition';
+
+/**
+ * Digitraffic MQTT WebSocket endpoint for train data
+ */
+const DIGITRAFFIC_MQTT_URL = 'wss://rata.digitraffic.fi:443/mqtt';
 
 //path for this page /train/${train.departureDate}-${train.trainNumber}-${(origin station) stationData.uicCode}-${(origin station) stopIndex (e.g. if the train stops twice at one station, the second stop at that station makes this stopIndex = 1 and the first = 0)}${(the user's wanted destination will be highlighted) selectedDestination ? "-" + selectedDestination.uicCode : ""}`
 //api for train data https://rata.digitraffic.fi/api/v1/trains/${train.departureDate}/${train.trainNumber} you can see a sample response with https://rata.digitraffic.fi/api/v1/trains/2017-01-01/1
@@ -36,6 +42,8 @@ export default function TrainPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [parsedParams, setParsedParams] = useState<ParsedTrainId | null>(null);
+    const [hasSm2Wagon, setHasSm2Wagon] = useState(false);
+    const mqttClientRef = useRef<MqttClient | null>(null);
 
     // Use train position hook for realtime GPS tracking
     const trainPosition = useTrainPosition(
@@ -43,6 +51,76 @@ export default function TrainPage() {
         parsedParams?.departureDate ?? null,
         train?.commuterLineID ?? null
     );
+
+    /**
+     * Connect to Digitraffic MQTT broker for train data updates
+     * Topic format: trains/<departure_date>/<train_number>/<train-category>/<train-type>/<operator>/<commuter-line>/<running-currently>/<timetable-type>
+     */
+    const connectMqtt = useCallback(() => {
+        if (!parsedParams || mqttClientRef.current) return;
+
+        try {
+            const client = mqtt.connect(DIGITRAFFIC_MQTT_URL, {
+                protocolVersion: 4,
+                clean: true,
+                connectTimeout: 10000,
+                reconnectPeriod: 5000,
+            });
+
+            mqttClientRef.current = client;
+
+            client.on('connect', () => {
+                console.log('[Train MQTT] Connected to Digitraffic');
+
+                // Subscribe to train data updates
+                // Using wildcards for optional fields to catch all updates for this train
+                // Topic: trains/<departure_date>/<train_number>/#
+                const topic = `trains/${parsedParams.departureDate}/${parsedParams.trainNumber}/#`;
+
+                client.subscribe(topic, { qos: 0 }, (err) => {
+                    if (err) {
+                        console.error('[Train MQTT] Subscribe error:', err);
+                    } else {
+                        console.log('[Train MQTT] Subscribed to:', topic);
+                    }
+                });
+            });
+
+            client.on('message', (topic, message) => {
+                try {
+                    const trainData: Train = JSON.parse(message.toString());
+
+                    if (trainData && trainData.trainNumber) {
+                        console.log('[Train MQTT] Received train update');
+                        setTrain(trainData);
+                    }
+                } catch (err) {
+                    console.error('[Train MQTT] Message parse error:', err);
+                }
+            });
+
+            client.on('error', (err) => {
+                console.error('[Train MQTT] Error:', err);
+            });
+
+            client.on('close', () => {
+                console.log('[Train MQTT] Connection closed');
+            });
+
+        } catch (err) {
+            console.error('[Train MQTT] Connection error:', err);
+        }
+    }, [parsedParams]);
+
+    /**
+     * Cleanup function to disconnect MQTT client
+     */
+    const cleanupMqtt = useCallback(() => {
+        if (mqttClientRef.current) {
+            mqttClientRef.current.end(true);
+            mqttClientRef.current = null;
+        }
+    }, []);
 
     // Parse the trainId parameter
     useEffect(() => {
@@ -66,15 +144,13 @@ export default function TrainPage() {
         }
     }, [params?.trainId]);
 
-    // Fetch train data
+    // Fetch train data once on initial load, then use WebSocket for updates
     useEffect(() => {
         if (!parsedParams) return;
 
-        const fetchTrainData = async (isInitialFetch = false) => {
+        const fetchTrainData = async () => {
             try {
-                if (isInitialFetch) {
-                    setLoading(true);
-                }
+                setLoading(true);
                 setError(null);
 
                 const response = await fetch(
@@ -82,12 +158,7 @@ export default function TrainPage() {
                 );
 
                 if (!response.ok) {
-                    if (isInitialFetch) {
-                        throw new Error(`Failed to fetch train data: ${response.status}`);
-                    } else {
-                        console.warn(`Failed to update train data: ${response.status}`);
-                        return;
-                    }
+                    throw new Error(`Failed to fetch train data: ${response.status}`);
                 }
 
                 const trainData: Train[] = await response.json();
@@ -95,28 +166,53 @@ export default function TrainPage() {
                 if (trainData && trainData.length > 0) {
                     setTrain(trainData[0]);
                 } else {
-                    if (isInitialFetch) {
-                        setError('Train not found');
-                    }
+                    setError('Train not found');
                 }
             } catch (err) {
                 console.error('Error fetching train data:', err);
-                if (isInitialFetch) {
-                    setError(err instanceof Error ? err.message : 'Failed to fetch train data');
-                }
+                setError(err instanceof Error ? err.message : 'Failed to fetch train data');
             } finally {
-                if (isInitialFetch) {
-                    setLoading(false);
-                }
+                setLoading(false);
             }
         };
 
-        fetchTrainData(true); // Initial fetch
-
-        const intervalId = setInterval(() => fetchTrainData(), 5000); // Fetch every 5 seconds
-
-        return () => clearInterval(intervalId); // Cleanup on unmount
+        fetchTrainData();
     }, [parsedParams]);
+
+    // Fetch composition data to check for Sm2 wagons
+    useEffect(() => {
+        if (!parsedParams) return;
+
+        const fetchComposition = async () => {
+            try {
+                const response = await fetch(
+                    `https://rata.digitraffic.fi/api/v1/compositions/${parsedParams.departureDate}/${parsedParams.trainNumber}`
+                );
+
+                if (response.ok) {
+                    const data = await response.json();
+                    // Check if any journey section has a wagon with wagonType "Sm2"
+                    const hasSm2 = data.journeySections?.some((section: { wagons?: { wagonType: string }[] }) =>
+                        section.wagons?.some((wagon: { wagonType: string }) => wagon.wagonType === 'Sm2')
+                    );
+                    setHasSm2Wagon(hasSm2);
+                }
+            } catch (err) {
+                console.error('Error fetching composition:', err);
+            }
+        };
+
+        fetchComposition();
+    }, [parsedParams]);
+
+    // Connect to WebSocket for real-time train data updates after initial data is loaded
+    useEffect(() => {
+        if (!parsedParams || !train) return;
+
+        connectMqtt();
+
+        return cleanupMqtt;
+    }, [parsedParams, train, connectMqtt, cleanupMqtt]);
 
     if (loading) {
         return (
@@ -171,6 +267,7 @@ export default function TrainPage() {
     }
     const delayed = train?.timeTableRows?.filter(row => !row.actualTime && row.type == "ARRIVAL" && !row.cancelled && row.trainStopping)[0]?.differenceInMinutes || train?.timeTableRows[train.timeTableRows.length - 1]?.differenceInMinutes || 0;
     const journeyEnded = !!train?.timeTableRows[train.timeTableRows.length - 1].actualTime;
+    const journeyStarted = train.runningCurrently || !!train.timeTableRows[0].actualTime;
     return (
 
         <div className="App" style={{ backgroundColor: 'var(--bulma-scheme-main)' }}>
@@ -196,6 +293,7 @@ export default function TrainPage() {
                                         <span className="tag is-primary is-large has-text-weight-bold" style={{ marginRight: '0.5rem', width: "40px" }}>
                                             {train.commuterLineID}
                                         </span>
+
                                     :
                                     <span className="tag is-primary is-large p-2" style={{ marginRight: '0.5rem' }}>
                                         {train.trainType} {train.trainNumber}
@@ -203,6 +301,16 @@ export default function TrainPage() {
                                 }
                                 <span className="title is-3">
                                     {getTranslatedStationNameWithFallback(train.timeTableRows[train.timeTableRows.length - 1].stationUICCode, locale, train.timeTableRows[train.timeTableRows.length - 1].stationName)}
+                                    {hasSm2Wagon && (
+                                        <>
+                                            <span className="icon ml-3 is-size-6">
+                                                <i className="fa-solid fa-stairs"></i>
+                                            </span>
+                                            <span className="icon ml-1 is-size-4">
+                                                <i className="fa-solid fa-train"></i>
+                                            </span>
+                                        </>
+                                    )}
                                 </span>
 
                             </div>
@@ -215,18 +323,20 @@ export default function TrainPage() {
                             <nav className="level is-mobile">
                                 <div className="level-item has-text-centered">
                                     <div>
-                                        <p className="heading">{journeyEnded ? t('ended') : t('running')}</p>
+                                        <p className="heading">{journeyEnded ? t('ended') : (!journeyStarted ? t('not_active') : t('running'))}</p>
                                         <p className="title is-size-5 has-text-weight-normal">{train.cancelled ? <span>{t('cancelled')}</span> : delayed > 0 ? <span>{t('delayed')} {delayed} min</span> : <span>{t('on_time')}</span>}</p>
                                     </div>
                                 </div>
-                                <div className="level-item has-text-centered">
-                                    <div>
-                                        <p className="heading">{t('speed')}</p>
-                                        <p className="title is-size-5 has-text-weight-normal">
-                                            {trainPosition.speed > 0 ? `${trainPosition.speed} km/h` : '-'}
-                                        </p>
+                                {(journeyStarted && !journeyEnded) && (
+                                    <div className="level-item has-text-centered">
+                                        <div>
+                                            <p className="heading">{t('speed')}</p>
+                                            <p className="title is-size-5 has-text-weight-normal">
+                                                {trainPosition.speed !== null ? `${trainPosition.speed} km/h` : '-'}
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
+                                )}
                             </nav>
                             <hr className="is-hidden-tablet is-invisible" />
                         </div>
@@ -275,7 +385,7 @@ export default function TrainPage() {
                                     </tr>
                                     <tr>
                                         <td><strong>Speed</strong></td>
-                                        <td>{trainPosition.speed > 0 ? `${trainPosition.speed} km/h` : '-'}</td>
+                                        <td>{trainPosition.speed !== null ? `${trainPosition.speed} km/h` : '-'}</td>
                                     </tr>
                                     <tr>
                                         <td><strong>Heading</strong></td>

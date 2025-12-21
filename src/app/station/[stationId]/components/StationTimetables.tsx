@@ -3,6 +3,7 @@
 import { useTranslations, useLocale } from 'next-intl';
 import { useState, useEffect, useRef, useMemo, MouseEvent } from 'react';
 import { getStationBackgroundByUicCode, getTranslatedStationNameWithFallback, Station } from '../../../../lib/stationUtils';
+import { isStationSaved, toggleStation, getSavedStations, SavedStation } from '../../../../lib/savedStations';
 import stationTranslations from '../../../resources/station_translations.json';
 import TimetableList from './TimeTableList'
 import DateTimeDrawer from './DateTimeDrawer';
@@ -46,6 +47,9 @@ export default function StationTimetables({ stationId }: StationTimetablesProps)
     const [isSearchActive, setIsSearchActive] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const searchInputRef = useRef<HTMLInputElement>(null);
+    const [isSaved, setIsSaved] = useState(false);
+    const [saveMessage, setSaveMessage] = useState<string | null>(null);
+    const [savedStations, setSavedStations] = useState<SavedStation[]>([]);
 
     // Search results using the same logic as DestinationDrawer
     const resultsPerPage = 3;
@@ -177,6 +181,36 @@ export default function StationTimetables({ stationId }: StationTimetablesProps)
             return `${selectedDateTime.toLocaleDateString(locale, { day: 'numeric', month: 'short' })}, ${selectedDateTime.toLocaleTimeString("fi-FI", { hour: '2-digit', minute: '2-digit' })}`;
         }
     };
+
+    const handleSaveStation = () => {
+        if (!stationData) return;
+
+        const result = toggleStation({
+            uicCode: stationData.uicCode,
+            shortCode: stationData.shortCode,
+            name: stationData.name
+        });
+
+        setIsSaved(result.isSaved);
+        setSaveMessage(result.isSaved ? t('stationList.saved') : t('timetables.selection.save'));
+
+        // Clear message after 2 seconds
+        setTimeout(() => {
+            setSaveMessage(null);
+        }, 2000);
+    };
+
+    // Check if station is saved on mount and when stationData changes
+    useEffect(() => {
+        if (stationData) {
+            setIsSaved(isStationSaved(stationData.uicCode));
+        }
+    }, [stationData]);
+
+    // Load saved stations for suggestions
+    useEffect(() => {
+        setSavedStations(getSavedStations());
+    }, []);
 
     useEffect(() => {
         const findStation = async () => {
@@ -363,6 +397,14 @@ export default function StationTimetables({ stationId }: StationTimetablesProps)
 
                             </div>
                             <div className={`${isSearchActive ? 'is-hidden' : ''}`}>
+                                <a className="panel-block is-active has-background-primary is-clickable" style={{ cursor: 'pointer' }} onClick={handleSaveStation}>
+                                    <span className="panel-icon has-text-white">
+                                        <i className={`${isSaved ? 'fas' : 'far'} fa-star`} aria-hidden="true"></i>
+                                    </span>
+                                    <span className="has-text-white">
+                                        <div>{saveMessage || t("timetables.selection.save")}</div>
+                                    </span>
+                                </a>
                                 <a className="panel-block is-active" onClick={handleDateTimeDrawerOpen} style={{ cursor: 'pointer' }}>
                                     <span className="panel-icon">
                                         <i className="fas fa-calendar-days" aria-hidden="true"></i>
@@ -421,11 +463,29 @@ export default function StationTimetables({ stationId }: StationTimetablesProps)
                                     </div>
                                 ) : (
                                     <div className="p-4">
-                                            <label className="label">{t("stationList.suggestions")}</label>
+                                            <label className="label">
+                                                {savedStations.length > 0 ? t("stationList.savedStations") : t("stationList.suggestions")}
+                                            </label>
                                         <div className="buttons">
-                                            <StationElement icon="fas fa-location-dot" stationUIC="1" shortCode="HKI" popup={false} disabled={stationData && 1 === stationData.uicCode} target="" />
-                                            <StationElement icon="fas fa-location-dot" stationUIC="30" shortCode="HY" popup={false} disabled={stationData && 30 === stationData.uicCode} target="" />
-                                            <StationElement icon="fas fa-location-dot" stationUIC="18" shortCode="TKL" popup={false} disabled={stationData && 18 === stationData.uicCode} target="" />
+                                                {savedStations.length > 0 ? (
+                                                    savedStations.slice(0, 3).map((station) => (
+                                                        <StationElement
+                                                            key={station.uicCode}
+                                                            icon="fas fa-location-dot"
+                                                            stationUIC={station.uicCode.toString()}
+                                                            shortCode={station.shortCode}
+                                                            popup={false}
+                                                            disabled={stationData && station.uicCode === stationData.uicCode}
+                                                            target=""
+                                                        />
+                                                    ))
+                                                ) : (
+                                                    <>
+                                                            <StationElement icon="fas fa-location-dot" stationUIC="1" shortCode="HKI" popup={false} disabled={stationData && 1 === stationData.uicCode} target="" />
+                                                            <StationElement icon="fas fa-location-dot" stationUIC="30" shortCode="HY" popup={false} disabled={stationData && 30 === stationData.uicCode} target="" />
+                                                            <StationElement icon="fas fa-location-dot" stationUIC="18" shortCode="TKL" popup={false} disabled={stationData && 18 === stationData.uicCode} target="" />
+                                                    </>
+                                                )}
                                         </div>
                                     </div>
                                 )}

@@ -24,6 +24,10 @@
         "map": "Map",
         "nearestStation": "Near me",
         "suggestions": "Suggestions",
+        "savedStations": "Saved stations",
+        "showAll": "Show all",
+        "saved": "Saved!",
+        "removed": "Removed",
         "searchResults": "Search results",
         "noResults": "No stations found matching your search",
         "nearbyDrawer": {
@@ -101,7 +105,8 @@
             "tomorrowAt": "Tomorrow, {time}",
             "dateAt": "{date}, {time}",
             "reset": "Reset",
-            "selectDestination": "Select destination"
+            "selectDestination": "Select destination",
+            "save": "Add to homepage"
         },
         "stationTimetables": {
             "timetablesFor": "Timetables for ",
@@ -125,6 +130,7 @@
         "departed": "Departed",
         "cancelled": "Cancelled",
         "running": "Status",
+        "not_active": "Not started",
         "origin": "Origin",
         "destination": "Destination",
         "track": "Track",
@@ -137,7 +143,18 @@
         "timetables": "Timetables for {station}",
         "stopindex": "Stop #{index}",
         "showAllStops": "Show all stops",
-        "centerNextStop": "Follow train"
+        "centerNextStop": "Follow train",
+        "composition": "Train Composition",
+        "noComposition": "No composition data available",
+        "compositionFrom": "From",
+        "wagons": "wagons",
+        "active": "Active",
+        "wagonFeatures": {
+            "playground": "Playground",
+            "pet": "Pet friendly",
+            "catering": "Restaurant",
+            "disabled": "Accessible"
+        }
     },
     "blogCommon": {
         "blog": "Blog"
