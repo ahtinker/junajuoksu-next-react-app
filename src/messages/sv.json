@@ -126,6 +126,8 @@
         "stationsCount": "stationer",
         "arrives": "Anländer",
         "arrived": "Anlände",
+        "boarding": "Ombordstigning",
+        "boardingNote": "~från föreg. resa",
         "departs": "Avgår",
         "departed": "Avgick",
         "cancelled": "Inställd",

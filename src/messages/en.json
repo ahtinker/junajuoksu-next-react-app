@@ -126,6 +126,8 @@
         "stationsCount": "stations",
         "arrives": "Arrives",
         "arrived": "Arrived",
+        "boarding": "Boarding",
+        "boardingNote": "~from prev. train",
         "departs": "Departs",
         "departed": "Departed",
         "cancelled": "Cancelled",

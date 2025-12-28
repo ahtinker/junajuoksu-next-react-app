@@ -89,6 +89,8 @@ export default function TrainStationStops({
     const [composition, setComposition] = useState<TrainComposition | null>(null);
     const [compositionLoading, setCompositionLoading] = useState(true);
     const [expandedSections, setExpandedSections] = useState<{ [key: number]: boolean }>({});
+    const [boardingTime, setBoardingTime] = useState<string | null>(null);
+    const [boardingTimeLoading, setBoardingTimeLoading] = useState(true);
 
     useEffect(() => {
         const timer = setInterval(() => setForceUpdate(Date.now()), 500);
@@ -141,6 +143,171 @@ export default function TrainStationStops({
             fetchComposition();
         }
     }, [train.departureDate, train.trainNumber]);
+
+    // Fetch boarding time at first station
+    useEffect(() => {
+        const fetchBoardingTime = async () => {
+            try {
+                setBoardingTimeLoading(true);
+
+                // Find first departure row from train data
+                const firstDepartureRow = train.timeTableRows.find(
+                    row => row.type === 'DEPARTURE' && row.trainStopping
+                );
+
+                if (!firstDepartureRow || !firstDepartureRow.commercialTrack) {
+                    console.log('No first departure or track available');
+                    setBoardingTimeLoading(false);
+                    return;
+                }
+
+                const firstStationShortCode = firstDepartureRow.stationShortCode;
+                const departureTrack = firstDepartureRow.commercialTrack;
+                const departureTimeStr = firstDepartureRow.scheduledTime;
+
+                if (!departureTrack || !departureTimeStr) {
+                    console.log('No departure track or time available');
+                    setBoardingTimeLoading(false);
+                    return;
+                }
+
+                // Parse departure time to get search date range
+                const departureDate = new Date(departureTimeStr);
+                const searchDate = new Date(departureDate);
+                searchDate.setHours(0, 0, 0, 0); // Start of day
+                const formattedSearchDate = searchDate.toISOString().split('T')[0];
+
+                // Also search previous day to find closer arrivals
+                const previousDate = new Date(searchDate);
+                previousDate.setDate(previousDate.getDate() + 1);
+                const formattedPreviousDate = previousDate.toISOString().split('T')[0];
+
+                console.log('Searching for trains at station:', firstStationShortCode, 'track:', departureTrack, 'before:', departureDate);
+                console.log('Search dates:', formattedPreviousDate, 'and', formattedSearchDate);
+
+                // GraphQL query to find trains arriving at this station on current and previous date
+                const graphqlQuery = {
+                    query: `{
+                        currentDay: trainsByDepartureDate(departureDate: "${formattedSearchDate}") {
+                            trainNumber
+                            departureDate
+                            timeTableRows(where: {
+                                and: [
+                                    { station: { shortCode: { equals: "${firstStationShortCode}" } } },
+                                    { type: { equals: "ARRIVAL" } },
+                                    { commercialTrack: { equals: "${departureTrack}" } }
+                                ]
+                            }) {
+                                type
+                                scheduledTime
+                                commercialTrack
+                                trainStopping
+                            }
+                        }
+                        previousDay: trainsByDepartureDate(departureDate: "${formattedPreviousDate}") {
+                            trainNumber
+                            departureDate
+                            timeTableRows(where: {
+                                and: [
+                                    { station: { shortCode: { equals: "${firstStationShortCode}" } } },
+                                    { type: { equals: "ARRIVAL" } },
+                                    { commercialTrack: { equals: "${departureTrack}" } }
+                                ]
+                            }) {
+                                type
+                                scheduledTime
+                                commercialTrack
+                                trainStopping
+                            }
+                        }
+                    }`
+                };
+
+                const response = await fetch('https://rata.digitraffic.fi/api/v2/graphql/graphql', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept-Encoding': 'gzip'
+                    },
+                    body: JSON.stringify(graphqlQuery)
+                });
+
+                if (!response.ok) {
+                    console.error('GraphQL query failed:', response.status);
+                    setBoardingTimeLoading(false);
+                    return;
+                }
+
+                const data = await response.json();
+                console.log('GraphQL response:', data);
+
+                if (data.errors) {
+                    console.error('GraphQL errors:', data.errors);
+                    setBoardingTimeLoading(false);
+                    return;
+                }
+
+                // Combine trains from both days
+                const currentDayTrains = data.data?.currentDay || [];
+                const previousDayTrains = data.data?.previousDay || [];
+                const trains = [...currentDayTrains, ...previousDayTrains];
+                console.log('Found trains:', trains.length, '(current day:', currentDayTrains.length, ', previous day:', previousDayTrains.length, ')');
+
+                // Find the closest arrival time before departure
+                let closestArrivalTime: Date | null = null;
+                const departureDateTime = departureDate.getTime();
+
+                for (const trainData of trains) {
+                    // Skip the current train
+                    if (trainData.trainNumber === train.trainNumber &&
+                        trainData.departureDate === train.departureDate) {
+                        continue;
+                    }
+
+                    for (const row of trainData.timeTableRows) {
+                        if (row.type === 'ARRIVAL' && row.commercialTrack === departureTrack) {
+                            const arrivalTime = new Date(row.scheduledTime);
+                            const arrivalDateTime = arrivalTime.getTime();
+
+                            // Only consider arrivals before the departure
+                            if (arrivalDateTime < departureDateTime) {
+                                // Find the closest arrival to departure
+                                if (!closestArrivalTime ||
+                                    (departureDateTime - arrivalDateTime) < (departureDateTime - closestArrivalTime.getTime())) {
+                                    closestArrivalTime = arrivalTime;
+                                    const minutesBefore = Math.floor((departureDateTime - arrivalDateTime) / 60000);
+                                    console.log(`Found arrival from train ${trainData.trainNumber} at ${arrivalTime.toISOString()}, ${minutesBefore} minutes before departure`);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (closestArrivalTime) {
+                    // Only set boarding time if it's within 30 minutes of departure
+                    const minutesBefore = Math.floor((departureDateTime - closestArrivalTime.getTime()) / 60000);
+                    if (minutesBefore <= 30) {
+                        setBoardingTime(closestArrivalTime.toISOString());
+                        console.log('Boarding time set to:', closestArrivalTime.toISOString(), `(${minutesBefore} minutes before departure)`);
+                    } else {
+                        console.log(`Closest arrival is ${minutesBefore} minutes before departure - too far, not showing boarding time`);
+                    }
+                } else {
+                    console.log('No previous train arrival found on this track');
+                }
+
+                setBoardingTimeLoading(false);
+            } catch (error) {
+                console.error('Error fetching boarding time:', error);
+                setBoardingTimeLoading(false);
+            }
+        };
+
+        // Fetch when train data is available
+        if (train.departureDate && train.trainNumber && train.timeTableRows.length > 0) {
+            fetchBoardingTime();
+        }
+    }, [train.trainNumber, train.departureDate, train.timeTableRows]);
 
     // Process timetable rows to create station stops
     const processStationStops = (): StationStop[] => {
@@ -590,7 +757,7 @@ export default function TrainStationStops({
     return (
         <div>
             <div className="columns mt-6">
-                <div className="column" style={{ overflowY: showAllStops ? 'auto' : 'hidden', position: "relative", transition: 'height 0.5s ease-in-out' }}>
+                <div className="column" style={{ overflowY: showAllStops ? 'auto' : 'hidden', position: "relative", transition: 'height 0.5s ease' }}>
                     <div style={{
                         height: "100px",
                         zIndex: 7,
@@ -615,7 +782,7 @@ export default function TrainStationStops({
                             document.getElementById("TAmarker" + (getNextStopIndex()))
                         ) * calculateProgressBetweenStops(getNextStopIndex() - 1, getNextStopIndex()) - 120)}px`,
                         overflowX: "hidden",
-                        transition: 'margin-top 0.5s ease-in-out'
+                        transition: 'margin-top 0.5s ease'
                     }}>
 
                     {stationStopsData.map((stop, index) => {
@@ -754,9 +921,13 @@ export default function TrainStationStops({
                                                         {getStationTrack(stop.departure.track ? index : index - 1)}
                                                     </div>
                                                 </div>
-                                                <div className={"column " + (!stop.hasArrival ? "is-hidden" : "")}>
+                                                <div className={"column " + (!stop.hasArrival && !(index === 0 && boardingTime) ? "is-hidden" : "")}>
                                                 <div className="title is-6 mb-1 has-text-weight-semibold">
                                                         {(() => {
+                                                            // First station with boarding time
+                                                            if (index === 0 && !stop.hasArrival && boardingTime) {
+                                                                return t('train.boarding');
+                                                            }
                                                             if (!stop.arrival.rawRow) return t('train.arrives');
                                                             const arrivalTimeStr = stop.arrival.rawRow.liveEstimateTime || stop.arrival.rawRow.actualTime || stop.arrival.rawRow.scheduledTime;
                                                             const arrivalTime = new Date(arrivalTimeStr).getTime();
@@ -774,6 +945,17 @@ export default function TrainStationStops({
                                                         </div>
                                                     </div>
                                                 )}
+                                                    {/* Show boarding time at first station */}
+                                                    {index === 0 && !stop.hasArrival && boardingTime && !boardingTimeLoading && (
+                                                        <div>
+                                                            <div className="has-text-info">
+                                                                {formatTime(boardingTime)}
+                                                            </div>
+                                                            <div className="is-size-7 has-text-grey">
+                                                                {t('train.boardingNote')}
+                                                            </div>
+                                                        </div>
+                                                    )}
                                             </div>
                                             <div className={"column " + (!stop.hasDeparture ? "is-hidden" : "")}>
                                                 <div className="title is-6 mb-1 has-text-weight-semibold">
@@ -856,7 +1038,7 @@ export default function TrainStationStops({
                                                     {wagon.salesNumber > 0 ? wagon.salesNumber : wagon.location}
                                                 </div>
                                                 <div className="is-size-7 has-text-grey">
-                                                    {wagon.wagonType}
+                                                    {wagon.wagonType} {wagon.vehicleNumber}
                                                 </div>
                                                 <div className="is-flex is-justify-content-center" style={{ gap: '2px', marginTop: '2px' }}>
                                                     {wagon.playground && (

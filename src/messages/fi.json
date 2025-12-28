@@ -126,6 +126,8 @@
         "stationsCount": "asemaa",
         "arrives": "Saapuu",
         "arrived": "Saapui",
+        "boarding": "Boarding",
+        "boardingNote": "~edell. vuorolta",
         "departs": "Lähtee",
         "departed": "Lähti",
         "cancelled": "Peruttu",
