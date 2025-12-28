@@ -4,6 +4,7 @@ import "../globals.scss";
 import Footer from '../components/site/footer';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface StationPageProps {
     params: Promise<{
@@ -67,7 +68,7 @@ function LoginPage({ params }: StationPageProps) {
 
                             </div>
                             <div className="column p-0 m-0 is-hidden-mobile ml-5" style={{overflow: "visible"}}>
-                                <img style={{position: "absolute", height: "120vh"}} src="/loginpattern.svg" alt="Login page"></img>
+                                <Image style={{position: "absolute", height: "120vh"}} src="/loginpattern.svg" alt="Login page" width={500} height={800} priority />
                             </div>
                         </div>
                     </div>

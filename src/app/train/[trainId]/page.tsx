@@ -10,7 +10,6 @@ import TrainStationStops from './components/TrainStationStops';
 import NavBar from '@/app/components/site/navbar';
 import Footer from '@/app/components/site/footer';
 import { getTranslatedStationNameWithFallback } from '@/lib/stationUtils';
-import Link from 'next/link';
 import { useTrainPosition } from '@/lib/useTrainPosition';
 
 /**

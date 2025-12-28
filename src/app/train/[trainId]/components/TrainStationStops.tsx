@@ -4,7 +4,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { Train, TimeTableRow } from '../../../../lib/types';
 import { getTranslatedStationNameWithFallback } from '../../../../lib/stationUtils';
 import styles from './TrainStationStops.module.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 
 interface TrainStationStopsProps {
     train: Train;
@@ -113,7 +113,7 @@ export default function TrainStationStops({
                     // Auto-expand the currently active section
                     if (data.journeySections.length > 1) {
                         const now = new Date().getTime();
-                        const activeIndex = data.journeySections.findIndex((section, index) => {
+                        const activeIndex = data.journeySections.findIndex((section) => {
                             const beginTime = new Date(section.beginTimeTableRow.scheduledTime).getTime();
                             const endTime = new Date(section.endTimeTableRow.scheduledTime).getTime();
                             return now >= beginTime && now <= endTime;
@@ -571,7 +571,7 @@ export default function TrainStationStops({
         };
     }
 
-    function getDistanceBetweenElements(a: HTMLElement | null, b: HTMLElement | null) {
+    const getDistanceBetweenElements = useCallback((a: HTMLElement | null, b: HTMLElement | null) => {
         const aPosition = getPositionAtCenter(a);
         const bPosition = getPositionAtCenter(b);
 
@@ -579,7 +579,7 @@ export default function TrainStationStops({
             Math.pow(aPosition.x - bPosition.x, 2) +
             Math.pow(aPosition.y - bPosition.y, 2)
         );
-    }
+    }, []);
 
     // const distance = getDistanceBetweenElements(
     //     document.getElementById("x"),
@@ -593,7 +593,7 @@ export default function TrainStationStops({
                 document.getElementById("TAmarker" + (stationStopsData.length - 1))
             ) + 20);
         }
-    }, [stationStopsData]);
+    }, [stationStopsData, getDistanceBetweenElements]);
 
     const calculateProgressBetweenStops = (stopIndex1: number, stopIndex2: number): number => {
         if (stopIndex1 < 0 || stopIndex2 >= stationStopsData.length || stopIndex1 >= stopIndex2) {
@@ -677,8 +677,6 @@ export default function TrainStationStops({
     };
 
     const getNextStopIndex = (): number => {
-        const now = new Date().getTime();
-
         for (let i = 0; i < stationStopsData.length; i++) {
             const stop = stationStopsData[i];
             const status = getStopStatus(stop);
@@ -1078,7 +1076,6 @@ export default function TrainStationStops({
                                     const beginTime = new Date(section.beginTimeTableRow.scheduledTime).getTime();
                                     const endTime = new Date(section.endTimeTableRow.scheduledTime).getTime();
                                     const isActive = now >= beginTime && now <= endTime;
-                                    const isPast = now > endTime;
 
                                     const startStationName = getTranslatedStationNameWithFallback(
                                         section.beginTimeTableRow.stationUICCode,

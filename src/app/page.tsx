@@ -6,6 +6,7 @@ import Footer from './components/site/footer';
 import StationList from './components/site/stationlist/stationlist';
 import { useTranslations } from 'next-intl';
 import BlogCard from './components/site/blogcard/card';
+import Image from 'next/image';
 
 
 function Home() {
@@ -57,7 +58,7 @@ function Home() {
       </section>
 
       <div style={{ position: "absolute", width: "100%", height: "100vh", overflowX: "hidden", overflowY: "visible"}}>
-        <img
+        <Image
           style={{
             position: "absolute",
             top: 0,
@@ -72,6 +73,9 @@ function Home() {
           }}
           src="/trackpattern.svg"
           alt="track pattern"
+          width={1440}
+          height={800}
+          priority
         />
       </div>
 
