@@ -5,6 +5,7 @@ import { Train, TimeTableRow } from '../../../../lib/types';
 import { getTranslatedStationNameWithFallback } from '../../../../lib/stationUtils';
 import styles from './TrainStationStops.module.css';
 import { useEffect, useState, useCallback } from 'react';
+import TrainCompositionView from './TrainCompositionView';
 
 interface TrainStationStopsProps {
     train: Train;
@@ -91,6 +92,7 @@ export default function TrainStationStops({
     const [expandedSections, setExpandedSections] = useState<{ [key: number]: boolean }>({});
     const [boardingTime, setBoardingTime] = useState<string | null>(null);
     const [boardingTimeLoading, setBoardingTimeLoading] = useState(true);
+    const [expandedCompositions, setExpandedCompositions] = useState<{ [key: number]: boolean }>({});
 
     useEffect(() => {
         const timer = setInterval(() => setForceUpdate(Date.now()), 500);
@@ -216,6 +218,8 @@ export default function TrainStationStops({
                             }) {
                                 type
                                 scheduledTime
+                                actualTime
+                                liveEstimateTime
                                 commercialTrack
                                 trainStopping
                             }
@@ -266,7 +270,9 @@ export default function TrainStationStops({
 
                     for (const row of trainData.timeTableRows) {
                         if (row.type === 'ARRIVAL' && row.commercialTrack === departureTrack) {
-                            const arrivalTime = new Date(row.scheduledTime);
+                            // Prioritize actualTime > liveEstimateTime > scheduledTime
+                            const bestTime = row.actualTime || row.liveEstimateTime || row.scheduledTime;
+                            const arrivalTime = new Date(bestTime);
                             const arrivalDateTime = arrivalTime.getTime();
 
                             // Only consider arrivals before the departure
@@ -752,10 +758,43 @@ export default function TrainStationStops({
         return stop.departure.track || stop.arrival.track || '';
     };
 
+    // Helper function to check if composition changes at a specific station
+    const getCompositionAtStop = (stopIndex: number): JourneySection | null => {
+        if (!composition || stopIndex < 0 || stopIndex >= stationStopsData.length) {
+            return null;
+        }
+
+        const stop = stationStopsData[stopIndex];
+        const now = new Date().getTime();
+
+        // For the first stop, always show the composition
+        if (stopIndex === 0) {
+            // Find the first journey section
+            return composition.journeySections[0] || null;
+        }
+
+        // For other stops, check if composition changes here
+        for (const section of composition.journeySections) {
+            const beginStation = section.beginTimeTableRow.stationShortCode;
+            const endStation = section.endTimeTableRow.stationShortCode;
+
+            // Check if this stop matches the beginning of a journey section (composition change)
+            if (stop.shortCode === beginStation) {
+                return section;
+            }
+        }
+
+        return null;
+    };
+
+    // Check if composition changes at a stop
+    const hasCompositionChange = (stopIndex: number): boolean => {
+        return getCompositionAtStop(stopIndex) !== null;
+    };
+
     return (
         <div>
-            <div className="columns mt-6">
-                <div className="column" style={{ overflowY: showAllStops ? 'auto' : 'hidden', position: "relative", transition: 'height 0.5s ease' }}>
+            <div style={{ overflowY: showAllStops ? 'auto' : 'hidden', position: "relative", transition: 'height 0.5s ease' }}>
                     <div style={{
                         height: "100px",
                         zIndex: 7,
@@ -812,7 +851,7 @@ export default function TrainStationStops({
                                                             height: `${TAProgressFullLength}px`,
                                                             backgroundColor: 'var(--bulma-scheme-main)',
                                                             width: '10px',
-                                                            left: "37.5px",
+                                                            left: "25px",
                                                             zIndex: 0,
                                                             position: "absolute",
                                                             borderRadius: "20px"
@@ -834,7 +873,7 @@ export default function TrainStationStops({
                                                                     document.getElementById("TAmarker" + (index + 1))
                                                                 ) + 20}px`,
                                                             width: '10px',
-                                                            left: '37.5px',
+                                                            left: '25px',
                                                             display: status === "passed" ? 'block' : 'none',
                                                             zIndex: 1,
                                                             position: "absolute",
@@ -977,241 +1016,53 @@ export default function TrainStationStops({
                                                 )}
                                             </div>
                                         </div>
-                                    </div>
-
+                                        </div>
                                 </div>
 
-                            </div>
+                                    {/* Show train composition at this stop if it changes here or at first stop */}
+                                    {hasCompositionChange(index) && (
+                                        <div className="px-4 pb-3 ml-4">
+                                            <hr className="my-3" style={{ backgroundColor: 'var(--bulma-border-weak)' }} />
+                                            <h4
+                                                className="title is-6 mb-3 has-text-weight-semibold is-clickable"
+                                                onClick={() => setExpandedCompositions(prev => ({ ...prev, [index]: !prev[index] }))}
+                                                style={{ cursor: 'pointer' }}
+                                            >
+                                                <span className="icon-text">
+                                                    <span className="icon has-text-primary">
+                                                        <i className={`fas fa-chevron-${expandedCompositions[index] ? 'down' : 'right'}`}></i>
+                                                    </span>
+                                                    <span>{index === 0 ? t('train.startingComposition') : t('train.compositionChange')}</span>
+                                                </span>
+                                            </h4>
+                                            {expandedCompositions[index] && (() => {
+                                                const section = getCompositionAtStop(index);
+                                                if (!section) return null;
+
+                                                return (
+                                                    <TrainCompositionView
+                                                        section={section}
+                                                        translations={{
+                                                            playground: t('train.wagonFeatures.playground'),
+                                                            pet: t('train.wagonFeatures.pet'),
+                                                            catering: t('train.wagonFeatures.catering'),
+                                                            disabled: t('train.wagonFeatures.disabled'),
+                                                            wagons: t('train.wagons'),
+                                                            maxSpeed: t('train.maxSpeed')
+                                                        }}
+                                                    />
+                                                );
+                                            })()}
+                                        </div>
+                                    )}
+
+                                </div>
                                 <div className="is-size-7" style={{ position: "absolute", marginTop: "-21px", marginLeft: "53px" }}>{getTimeBetweenStations(index, index + 1)}</div>
                             </div>
                         );
                     })}
                 </div>
-                </div>
-                <div className="column">
-                    {/* Train Composition */}
-                    <div className="box is-shadowless" style={{ backgroundColor: 'var(--bulma-scheme-main-bis)' }}>
-                        <h3 className="title is-6 mb-4 has-text-weight-semibold">
-                            <span className="icon-text">
-                                <span className="icon">
-                                    <i className="fas fa-train"></i>
-                                </span>
-                                <span>{t('train.composition')}</span>
-                            </span>
-                        </h3>
-
-                        {compositionLoading ? (
-                            <div className="has-text-centered py-4">
-                                <span className="icon is-large">
-                                    <i className="fas fa-spinner fa-pulse"></i>
-                                </span>
-                            </div>
-                        ) : !composition || composition.journeySections.length === 0 ? (
-                            <p className="has-text-grey">{t('train.noComposition')}</p>
-                        ) : composition.journeySections.length === 1 ? (
-                            // Single composition - no dropdowns needed
-                            <div className="wagon-list">
-                                <div className="is-flex is-flex-wrap-wrap" style={{ gap: '0.5rem' }}>
-                                    {composition.journeySections[0].wagons
-                                        .sort((a, b) => (a.salesNumber + b.salesNumber > 0) ? (a.salesNumber - b.salesNumber) : (a.location - b.location))
-                                        .map((wagon, idx) => (
-                                            <div
-                                                key={idx}
-                                                className="box p-2 mb-0 is-shadowless"
-                                                style={{
-                                                    backgroundColor: 'var(--bulma-scheme-main)',
-                                                    minWidth: '60px',
-                                                    textAlign: 'center'
-                                                }}
-                                                title={[
-                                                    wagon.wagonType,
-                                                    wagon.salesNumber > 0 ? `#${wagon.salesNumber}` : null,
-                                                    wagon.playground ? t('train.wagonFeatures.playground') : null,
-                                                    wagon.pet ? t('train.wagonFeatures.pet') : null,
-                                                    wagon.catering ? t('train.wagonFeatures.catering') : null,
-                                                    wagon.disabled ? t('train.wagonFeatures.disabled') : null,
-                                                ].filter(Boolean).join(' • ')}
-                                            >
-                                                <div className="is-size-7 has-text-weight-bold">
-                                                    {wagon.salesNumber > 0 ? wagon.salesNumber : wagon.location}
-                                                </div>
-                                                <div className="is-size-7 has-text-grey">
-                                                    {wagon.wagonType} {wagon.vehicleNumber}
-                                                </div>
-                                                <div className="is-flex is-justify-content-center" style={{ gap: '2px', marginTop: '2px' }}>
-                                                    {wagon.playground && (
-                                                        <span className="icon is-small has-text-info" title={t('train.wagonFeatures.playground')}>
-                                                            <i className="fas fa-child fa-xs"></i>
-                                                        </span>
-                                                    )}
-                                                    {wagon.pet && (
-                                                        <span className="icon is-small has-text-warning" title={t('train.wagonFeatures.pet')}>
-                                                            <i className="fas fa-paw fa-xs"></i>
-                                                        </span>
-                                                    )}
-                                                    {wagon.catering && (
-                                                        <span className="icon is-small has-text-danger" title={t('train.wagonFeatures.catering')}>
-                                                            <i className="fas fa-utensils fa-xs"></i>
-                                                        </span>
-                                                    )}
-                                                    {wagon.disabled && (
-                                                        <span className="icon is-small has-text-link" title={t('train.wagonFeatures.disabled')}>
-                                                            <i className="fas fa-wheelchair fa-xs"></i>
-                                                        </span>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        ))}
-                                </div>
-                                <p className="is-size-7 has-text-grey mt-2">
-                                    {composition.journeySections[0].wagons.length} {t('train.wagons')} • {composition.journeySections[0].totalLength} m
-                                </p>
-                            </div>
-                        ) : (
-                            // Multiple compositions - use dropdowns
-                            <div className="composition-sections">
-                                {composition.journeySections.map((section, sectionIndex) => {
-                                    const isExpanded = expandedSections[sectionIndex] ?? false;
-                                    const now = new Date().getTime();
-                                    const beginTime = new Date(section.beginTimeTableRow.scheduledTime).getTime();
-                                    const endTime = new Date(section.endTimeTableRow.scheduledTime).getTime();
-                                    const isActive = now >= beginTime && now <= endTime;
-
-                                    const startStationName = getTranslatedStationNameWithFallback(
-                                        section.beginTimeTableRow.stationUICCode,
-                                        locale,
-                                        section.beginTimeTableRow.stationShortCode
-                                    );
-                                    const endStationName = getTranslatedStationNameWithFallback(
-                                        section.endTimeTableRow.stationUICCode,
-                                        locale,
-                                        section.endTimeTableRow.stationShortCode
-                                    );
-
-                                    return (
-                                        <div key={sectionIndex} className="mb-3">
-                                            <button
-                                                className={`button is-fullwidth is-justify-content-space-between`}
-                                                onClick={() => setExpandedSections(prev => ({
-                                                    ...prev,
-                                                    [sectionIndex]: !prev[sectionIndex]
-                                                }))}
-                                                style={{ height: 'auto', padding: '0.75rem 1rem' }}
-                                            >
-                                                <span className="is-flex is-align-items-center" style={{ gap: '0.5rem' }}>
-                                                    <span>
-                                                        {startStationName} - {endStationName}
-                                                    </span>
-                                                    {isActive && (
-                                                        <span className="tag is-success is-light ml-2">{t('train.active')}</span>
-                                                    )}
-                                                </span>
-                                                <span className="icon is-small">
-                                                    <i className={`fas fa-chevron-${isExpanded ? 'up' : 'down'}`}></i>
-                                                </span>
-                                            </button>
-
-                                            {isExpanded && (
-                                                <div className="box mt-2 p-3 is-shadowless" style={{ backgroundColor: 'var(--bulma-scheme-main)' }}>
-                                                    <div className="is-flex is-flex-wrap-wrap" style={{ gap: '0.5rem' }}>
-                                                        {section.wagons
-                                                            .sort((a, b) => a.location - b.location)
-                                                            .map((wagon, idx) => (
-                                                                <div
-                                                                    key={idx}
-                                                                    className="box p-2 mb-0 is-shadowless"
-                                                                    style={{
-                                                                        backgroundColor: 'var(--bulma-scheme-main-bis)',
-                                                                        minWidth: '60px',
-                                                                        textAlign: 'center'
-                                                                    }}
-                                                                    title={[
-                                                                        wagon.wagonType,
-                                                                        wagon.salesNumber > 0 ? `#${wagon.salesNumber}` : null,
-                                                                        wagon.playground ? t('train.wagonFeatures.playground') : null,
-                                                                        wagon.pet ? t('train.wagonFeatures.pet') : null,
-                                                                        wagon.catering ? t('train.wagonFeatures.catering') : null,
-                                                                        wagon.disabled ? t('train.wagonFeatures.disabled') : null,
-                                                                    ].filter(Boolean).join(' • ')}
-                                                                >
-                                                                    <div className="is-size-7 has-text-weight-bold">
-                                                                        {wagon.salesNumber > 0 ? wagon.salesNumber : wagon.location}
-                                                                    </div>
-                                                                    <div className="is-size-7 has-text-grey">
-                                                                        {wagon.wagonType}
-                                                                    </div>
-                                                                    <div className="is-flex is-justify-content-center" style={{ gap: '2px', marginTop: '2px' }}>
-                                                                        {wagon.playground && (
-                                                                            <span className="icon is-small has-text-info" title={t('train.wagonFeatures.playground')}>
-                                                                                <i className="fas fa-child fa-xs"></i>
-                                                                            </span>
-                                                                        )}
-                                                                        {wagon.pet && (
-                                                                            <span className="icon is-small has-text-warning" title={t('train.wagonFeatures.pet')}>
-                                                                                <i className="fas fa-paw fa-xs"></i>
-                                                                            </span>
-                                                                        )}
-                                                                        {wagon.catering && (
-                                                                            <span className="icon is-small has-text-danger" title={t('train.wagonFeatures.catering')}>
-                                                                                <i className="fas fa-utensils fa-xs"></i>
-                                                                            </span>
-                                                                        )}
-                                                                        {wagon.disabled && (
-                                                                            <span className="icon is-small has-text-link" title={t('train.wagonFeatures.disabled')}>
-                                                                                <i className="fas fa-wheelchair fa-xs"></i>
-                                                                            </span>
-                                                                        )}
-                                                                    </div>
-                                                                </div>
-                                                            ))}
-                                                    </div>
-                                                    <p className="is-size-7 has-text-grey mt-2">
-                                                        {section.wagons.length} {t('train.wagons')} • {section.totalLength} m
-                                                    </p>
-                                                </div>
-                                            )}
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        )}
-                    </div>
-
-                    {/* TODO: Implement frontend using the following data structures */}
-
-                    <div className="notification is-warning">
-                        <div className='title is-5'>Debugger</div >
-                        <p>Total stations: {totalStations}</p>
-                        <p>Has delays: {hasDelays ? 'Yes' : 'No'}</p>
-                        <p>Max delay: {maxDelayFormatted || 'None'}</p>
-                        <p>Progress between 1st and 2nd stop: {stationStopsData.length > 1 ? calculateProgressBetweenStops(0, 1).toFixed(2) : 'N/A'}</p>
-                        <p>Next stop index: {getNextStopIndex()}</p>
-
-                        {/* Debug info - remove when implementing actual UI */}
-                        <details>
-                            <summary>Debug: Available data structures</summary>
-                            <pre style={{ fontSize: '12px', maxHeight: '300px', overflow: 'auto' }}>
-                                {JSON.stringify({
-                                    stationStopsData: stationStopsData,
-                                    summary: {
-                                        totalStations,
-                                        originStation: originStation ? `${originStation.stationName} (${originStation.shortCode})` : null,
-                                        destinationStation: destinationStation ? `${destinationStation.stationName} (${destinationStation.shortCode})` : null,
-                                        journeyStartTime,
-                                        journeyEndTime,
-                                        hasDelays,
-                                        hasCancellations,
-                                        maxDelay,
-                                        passedStationsCount: passedStations.length,
-                                        upcomingStationsCount: upcomingStations.length
-                                    }
-                                }, null, 2)}
-                            </pre>
-                        </details>
-                    </div>
-                </div>
             </div>
-
         </div>
     );
 }

@@ -127,7 +127,7 @@
         "arrives": "Arrives",
         "arrived": "Arrived",
         "boarding": "Boarding",
-        "boardingNote": "~from prev. train",
+        "boardingNote": "~from prev. journey",
         "departs": "Departs",
         "departed": "Departed",
         "cancelled": "Cancelled",
@@ -151,12 +151,25 @@
         "compositionFrom": "From",
         "wagons": "wagons",
         "active": "Active",
+        "startingComposition": "Train's wagons",
+        "compositionChange": "Wagon Change",
+        "compositionChangesHere": "Wagons change at this station",
+        "maxSpeed": "max",
         "wagonFeatures": {
             "playground": "Playground",
             "pet": "Pet friendly",
             "catering": "Restaurant",
             "disabled": "Accessible"
-        }
+        },
+        "station_info": "Station Info",
+        "station_not_found": "Station information not available",
+        "station_passed": "Passed",
+        "station_upcoming": "Upcoming",
+        "departure_station": "Departure station",
+        "arrival_station": "Final stop",
+        "arrival": "Arrival",
+        "departure": "Departure",
+        "stop_duration": "Stop duration"
     },
     "blogCommon": {
         "blog": "Blog"

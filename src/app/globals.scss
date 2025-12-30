@@ -7,3 +7,20 @@ $green: rgb(61, 136, 61);
 @use 'bulma/sass' with ($link: $lightgreen,
     $primary: $green,
     $navbar-breakpoint: 0);
+
+// CSS variables for dark mode wagon SVGs
+:root {
+    --wagon-svg-filter: none;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --wagon-svg-filter: brightness(50) invert(0.7);
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --wagon-svg-filter: brightness(50) invert(0.3);
+    }
+}

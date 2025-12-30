@@ -126,7 +126,7 @@
         "stationsCount": "stationer",
         "arrives": "Anländer",
         "arrived": "Anlände",
-        "boarding": "Ombordstigning",
+        "boarding": "Boarding",
         "boardingNote": "~från föreg. resa",
         "departs": "Avgår",
         "departed": "Avgick",
@@ -146,17 +146,30 @@
         "stopindex": "Stopp #{index}",
         "showAllStops": "Visa alla stopp",
         "centerNextStop": "Följ tåget",
-        "composition": "Tågsammansättning",
+        "composition": "Tågvagnar",
         "noComposition": "Inga sammansättningsuppgifter tillgängliga",
         "compositionFrom": "Från",
         "wagons": "vagnar",
         "active": "Aktiv",
+        "startingComposition": "Tågets vagnar",
+        "compositionChange": "Ändring i vagnarna",
+        "compositionChangesHere": "Vagnarna ändras vid denna station",
+        "maxSpeed": "max",
         "wagonFeatures": {
             "playground": "Lekplats",
             "pet": "Husdjursvagn",
             "catering": "Restaurangvagn",
             "disabled": "Tillgänglig"
-        }
+        },
+        "station_info": "Stationsinformation",
+        "station_not_found": "Stationsinformation ej tillgänglig",
+        "station_passed": "Passerad",
+        "station_upcoming": "Kommande",
+        "departure_station": "Avgångsstation",
+        "arrival_station": "Slutstation",
+        "arrival": "Ankomst",
+        "departure": "Avgång",
+        "stop_duration": "Uppehållstid"
     },
     "blogCommon": {
         "blog": "Blogg"

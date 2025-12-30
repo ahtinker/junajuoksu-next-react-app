@@ -7,6 +7,7 @@ import { useTranslations, useLocale } from 'next-intl';
 import mqtt, { MqttClient } from 'mqtt';
 import { Train } from '../../../lib/types';
 import TrainStationStops from './components/TrainStationStops';
+import HighlightedStationPanel from './components/HighlightedStationPanel';
 import NavBar from '@/app/components/site/navbar';
 import Footer from '@/app/components/site/footer';
 import { getTranslatedStationNameWithFallback } from '@/lib/stationUtils';
@@ -342,12 +343,24 @@ export default function TrainPage() {
                     </div>
 
                     {/* Train Station Stops */}
-                    <TrainStationStops
-                        train={train}
-                        originStationUic={parseInt(parsedParams.originStationUic)}
-                        originStopIndex={parseInt(parsedParams.originStopIndex)}
-                        selectedDestinationUic={parsedParams.selectedDestinationUic ? parseInt(parsedParams.selectedDestinationUic) : undefined}
-                    />
+                    <div className="columns mt-6">
+                        <div className="column">
+                            <TrainStationStops
+                                train={train}
+                                originStationUic={parseInt(parsedParams.originStationUic)}
+                                originStopIndex={parseInt(parsedParams.originStopIndex)}
+                                selectedDestinationUic={parsedParams.selectedDestinationUic ? parseInt(parsedParams.selectedDestinationUic) : undefined}
+                            />
+                        </div>
+                        <div className="column">
+                            <HighlightedStationPanel
+                                train={train}
+                                highlightedStationUic={parseInt(parsedParams.originStationUic)}
+                                stopIndex={parseInt(parsedParams.originStopIndex)}
+                            />
+                        </div>
+                    </div>
+
 
                     {/* Debug Section - Realtime Position Data */}
                     <div className="box mt-6" style={{ backgroundColor: 'var(--bulma-scheme-main-bis)' }}>

@@ -146,17 +146,30 @@
         "stopindex": "Pysähdys #{index}",
         "showAllStops": "Näytä kaikki pysähdykset",
         "centerNextStop": "Seuraa junaa",
-        "composition": "Junan kokoonpano",
+        "composition": "Junan vaunut",
         "noComposition": "Kokoonpanotietoja ei saatavilla",
         "compositionFrom": "Alkaen",
         "wagons": "vaunua",
         "active": "Aktiivinen",
+        "startingComposition": "Junan vaunut",
+        "compositionChange": "Vaunumuutos",
+        "compositionChangesHere": "Vaunut muuttuvat tällä asemalla",
+        "maxSpeed": "maks",
         "wagonFeatures": {
             "playground": "Leikkipaikka",
             "pet": "Lemmikkivaunu",
             "catering": "Ravintolavaunu",
             "disabled": "Esteetön"
-        }
+        },
+        "station_info": "Aseman tiedot",
+        "station_not_found": "Aseman tietoja ei saatavilla",
+        "station_passed": "Ohitettu",
+        "station_upcoming": "Tulossa",
+        "departure_station": "Lähtöasema",
+        "arrival_station": "Pääteasema",
+        "arrival": "Saapuminen",
+        "departure": "Lähtö",
+        "stop_duration": "Pysähdyksen kesto"
     },
     "blogCommon": {
         "blog": "Blogi"
