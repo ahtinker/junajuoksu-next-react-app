@@ -57,6 +57,27 @@ export default function HighlightedStationPanel({
     const locale = useLocale();
     const t = useTranslations('train');
 
+    // Count total stops at this station
+    const getTotalStopsAtStation = (): number => {
+        let count = 0;
+        for (const row of train.timeTableRows) {
+            if (row.stationUICCode === highlightedStationUic && row.trainStopping && row.type === 'DEPARTURE') {
+                count++;
+            }
+        }
+        // If no departures found, check for arrival-only (last station)
+        if (count === 0) {
+            for (const row of train.timeTableRows) {
+                if (row.stationUICCode === highlightedStationUic && row.trainStopping && row.type === 'ARRIVAL') {
+                    count++;
+                }
+            }
+        }
+        return count;
+    };
+
+    const totalStops = getTotalStopsAtStation();
+
     // Find the station stop data for the highlighted station
     const stationData = findStationStopData(train, highlightedStationUic, stopIndex);
 
@@ -97,6 +118,11 @@ export default function HighlightedStationPanel({
                 <span className="icon-text is-justify-content-center">
                     <span className="title is-4">{stationName}</span>
                 </span>
+                {totalStops > 1 && (
+                    <p className="is-size-7 has-text-grey mt-1">
+                        {t('stop_number', { current: stopIndex + 1, total: totalStops })}
+                    </p>
+                )}
                 <p className="is-size-7 has-text-grey mt-1">
                     {isPassed ? t('station_passed') : (isFirstStation ? t('departure_station') : (isLastStation ? t('arrival_station') : t('station_upcoming')))}
                 </p>

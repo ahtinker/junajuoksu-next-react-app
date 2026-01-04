@@ -1,3 +1,12 @@
+export interface Cause {
+    categoryCodeId: number;
+    categoryCode?: string;
+    detailedCategoryCodeId?: number;
+    detailedCategoryCode?: string;
+    thirdCategoryCodeId?: number;
+    thirdCategoryCode?: string;
+}
+
 export interface TimeTableRow {
     actualTime: string | undefined;
     stationShortCode: string;
@@ -16,7 +25,7 @@ export interface TimeTableRow {
     liveEstimateTime?: string | undefined;
     estimateSource?: string;
     differenceInMinutes?: number;
-    causes: unknown[];
+    causes: Cause[];
     relations: unknown[];
     commercialTrack?: string;
 }

@@ -1,0 +1,17 @@
+﻿[
+  {"categoryCode":"A","categoryName":{"fi":"Aikataulu ja liikennöinti","en":"Schedule and operations","sv":"Tidtabell och trafik"},"validFrom":"2017-01-01","id":318834762},
+  {"categoryCode":"E","categoryName":{"fi":"Etuajassakulku","en":"Running ahead of schedule","sv":"Före tidtabell"},"validFrom":"2017-01-01","id":335611978},
+  {"categoryCode":"H","categoryName":{"fi":"Henkilökunta","en":"Staff","sv":"Personal"},"validFrom":"2017-01-01","id":251725898},
+  {"categoryCode":"I","categoryName":{"fi":"Muut syyt","en":"Other causes","sv":"Övriga orsaker"},"validFrom":"2017-01-01","id":469829706},
+  {"categoryCode":"J","categoryName":{"fi":"Junan muodostamisen viivästyminen","en":"Train formation delay","sv":"Försening vid tågbildning"},"validFrom":"2019-09-01","id":268503114},
+  {"categoryCode":"K","categoryName":{"fi":"Kalusto, moottorijunat ja vaunut","en":"Rolling stock, railcars and wagons","sv":"Rullande materiel, motorvagnar och vagnar"},"validFrom":"2017-01-01","id":285280330},
+  {"categoryCode":"L","categoryName":{"fi":"Liikenteenhoito","en":"Traffic management","sv":"Trafikledning"},"validFrom":"2017-01-01","id":352389194},
+  {"categoryCode":"M","categoryName":{"fi":"Matkustajapalvelu","en":"Passenger service","sv":"Passagerartjänst"},"validFrom":"2017-01-01","id":453052490},
+  {"categoryCode":"O","categoryName":{"fi":"Onnettomuus","en":"Accident","sv":"Olycka"},"validFrom":"2017-01-01","id":436275274},
+  {"categoryCode":"P","categoryName":{"fi":"Liikenteenhoitojärjestelmät","en":"Traffic management systems","sv":"Trafikledningssystem"},"validFrom":"2017-01-01","id":369166410},
+  {"categoryCode":"R","categoryName":{"fi":"Ratatyö","en":"Track work","sv":"Banarbete"},"validFrom":"2017-01-01","id":419498058},
+  {"categoryCode":"S","categoryName":{"fi":"Sähkörata","en":"Electric railway","sv":"Elektrisk järnväg"},"validFrom":"2017-01-01","id":385943626},
+  {"categoryCode":"T","categoryName":{"fi":"Rata (ratarakenne)","en":"Track (infrastructure)","sv":"Bana (banstruktur)"},"validFrom":"2017-01-01","id":402720842},
+  {"categoryCode":"V","categoryName":{"fi":"Vetokalusto","en":"Traction","sv":"Dragfordon"},"validFrom":"2017-01-01","id":302057546},
+  {"categoryCode":"X","categoryName":{"fi":"Rataliikennekeskukselle ilmoitettavat syyt","en":"Causes to be reported to traffic control center","sv":"Orsaker som ska rapporteras till trafikledningscentralen"},"validFrom":"2017-07-01","id":486606922}
+]

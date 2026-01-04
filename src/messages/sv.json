@@ -169,7 +169,10 @@
         "arrival_station": "Slutstation",
         "arrival": "Ankomst",
         "departure": "Avgång",
-        "stop_duration": "Uppehållstid"
+        "stop_duration": "Uppehållstid",
+        "stop_number": "{current}/{total} stopp",
+        "exceptionCause": "Förseningsorsak",
+        "causeFromStation": "Inträffade vid {station} (tåget stannar inte)"
     },
     "blogCommon": {
         "blog": "Blogg"

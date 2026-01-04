@@ -1,9 +1,11 @@
 .station-stop {
     background-color: var(--bulma-background);
 }
-.station-stop:hover {
+/* .station-stop:hover {
     background-color: var(--bulma-scheme-main-bis);
 }
+
+*/
 @keyframes blink {
     50% {
         opacity: 0;

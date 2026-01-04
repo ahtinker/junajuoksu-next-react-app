@@ -343,7 +343,7 @@ export default function TrainPage() {
                     </div>
 
                     {/* Train Station Stops */}
-                    <div className="columns mt-6">
+                    <div className="columns mt-6 is-reversed-on-mobile">
                         <div className="column">
                             <TrainStationStops
                                 train={train}

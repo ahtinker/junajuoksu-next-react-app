@@ -24,3 +24,11 @@ $green: rgb(61, 136, 61);
         --wagon-svg-filter: brightness(50) invert(0.3);
     }
 }
+
+// Reverse column order on mobile
+.is-reversed-on-mobile {
+    @media screen and (max-width: 768px) {
+        display: flex;
+        flex-direction: column-reverse;
+    }
+}

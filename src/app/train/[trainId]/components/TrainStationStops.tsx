@@ -1,11 +1,39 @@
 'use client';
 
 import { useLocale, useTranslations } from 'next-intl';
-import { Train, TimeTableRow } from '../../../../lib/types';
+import { Train, TimeTableRow, Cause } from '../../../../lib/types';
 import { getTranslatedStationNameWithFallback } from '../../../../lib/stationUtils';
 import styles from './TrainStationStops.module.css';
 import { useEffect, useState, useCallback } from 'react';
 import TrainCompositionView from './TrainCompositionView';
+
+// Cause code types - names are localized
+interface LocalizedName {
+    fi: string;
+    en: string;
+    sv: string;
+}
+
+interface CauseCategory {
+    id: number;
+    categoryCode: string;
+    categoryName: LocalizedName;
+    validFrom: string;
+}
+
+interface DetailedCauseCategory {
+    id: number;
+    detailedCategoryCode: string;
+    detailedCategoryName: LocalizedName;
+    validFrom: string;
+}
+
+interface ThirdCauseCategory {
+    id: number;
+    thirdCategoryCode: string;
+    thirdCategoryName: LocalizedName;
+    validFrom: string;
+}
 
 interface TrainStationStopsProps {
     train: Train;
@@ -94,9 +122,45 @@ export default function TrainStationStops({
     const [boardingTimeLoading, setBoardingTimeLoading] = useState(true);
     const [expandedCompositions, setExpandedCompositions] = useState<{ [key: number]: boolean }>({});
 
+    // Cause codes state
+    const [causeCategories, setCauseCategories] = useState<CauseCategory[]>([]);
+    const [detailedCauseCategories, setDetailedCauseCategories] = useState<DetailedCauseCategory[]>([]);
+    const [thirdCauseCategories, setThirdCauseCategories] = useState<ThirdCauseCategory[]>([]);
+    const [expandedCauses, setExpandedCauses] = useState<{ [key: number]: boolean }>({});
+
     useEffect(() => {
         const timer = setInterval(() => setForceUpdate(Date.now()), 500);
         return () => clearInterval(timer);
+    }, []);
+
+    // Fetch cause codes from static JSON files
+    useEffect(() => {
+        const fetchCauseCodes = async () => {
+            try {
+                const [categoriesRes, detailedRes, thirdRes] = await Promise.all([
+                    fetch('/cause-codes/cause-category-codes.json'),
+                    fetch('/cause-codes/detailed-cause-category-codes.json'),
+                    fetch('/cause-codes/third-cause-category-codes.json')
+                ]);
+
+                if (categoriesRes.ok) {
+                    const data = await categoriesRes.json();
+                    setCauseCategories(data);
+                }
+                if (detailedRes.ok) {
+                    const data = await detailedRes.json();
+                    setDetailedCauseCategories(data);
+                }
+                if (thirdRes.ok) {
+                    const data = await thirdRes.json();
+                    setThirdCauseCategories(data);
+                }
+            } catch (err) {
+                console.error('Error fetching cause codes:', err);
+            }
+        };
+
+        fetchCauseCodes();
     }, []);
 
     // Fetch train composition data
@@ -159,6 +223,13 @@ export default function TrainStationStops({
 
                 if (!firstDepartureRow || !firstDepartureRow.commercialTrack) {
                     console.log('No first departure or track available');
+                    setBoardingTimeLoading(false);
+                    return;
+                }
+
+                // Skip fetching if train has already left the first station
+                if (firstDepartureRow.actualTime) {
+                    console.log('Train has already left the first station, skipping boarding time fetch');
                     setBoardingTimeLoading(false);
                     return;
                 }
@@ -792,6 +863,112 @@ export default function TrainStationStops({
         return getCompositionAtStop(stopIndex) !== null;
     };
 
+    // Helper function to get localized name from a localized name object
+    const getLocalizedName = (name: LocalizedName): string => {
+        const localeKey = locale as keyof LocalizedName;
+        return name[localeKey] || name.fi; // Fallback to Finnish if locale not found
+    };
+
+    // Helper function to get cause description by ID - prioritizes most detailed available
+    const getCauseDescription = (cause: Cause): string => {
+        // Try third level (most detailed) first
+        if (cause.thirdCategoryCodeId) {
+            const thirdCategory = thirdCauseCategories.find(c => c.id === cause.thirdCategoryCodeId);
+            if (thirdCategory) {
+                return getLocalizedName(thirdCategory.thirdCategoryName);
+            }
+        }
+
+        // Try detailed level second
+        if (cause.detailedCategoryCodeId) {
+            const detailedCategory = detailedCauseCategories.find(c => c.id === cause.detailedCategoryCodeId);
+            if (detailedCategory) {
+                return getLocalizedName(detailedCategory.detailedCategoryName);
+            }
+        }
+
+        // Fall back to category level (always available)
+        const category = causeCategories.find(c => c.id === cause.categoryCodeId);
+        if (category) {
+            return getLocalizedName(category.categoryName);
+        }
+
+        return cause.categoryCode || 'Unknown cause';
+    };
+
+    // Helper function to get cause code for display
+    const getCauseCode = (cause: Cause): string => {
+        if (cause.thirdCategoryCode) return cause.thirdCategoryCode;
+        if (cause.detailedCategoryCode) return cause.detailedCategoryCode;
+        return cause.categoryCode || '';
+    };
+
+    // Get all causes for a stop, including causes from non-stopping stations that should be shown here
+    const getCausesForStop = (stopIndex: number): { causes: Cause[], fromNonStoppingStation?: string }[] => {
+        if (stopIndex < 0 || stopIndex >= stationStopsData.length) {
+            return [];
+        }
+
+        const stop = stationStopsData[stopIndex];
+        const result: { causes: Cause[], fromNonStoppingStation?: string }[] = [];
+
+        // Get direct causes from this stop's arrival and departure rows
+        const directCauses: Cause[] = [];
+        if (stop.arrival.rawRow?.causes && stop.arrival.rawRow.causes.length > 0) {
+            directCauses.push(...stop.arrival.rawRow.causes);
+        }
+        if (stop.departure.rawRow?.causes && stop.departure.rawRow.causes.length > 0) {
+            directCauses.push(...stop.departure.rawRow.causes);
+        }
+
+        if (directCauses.length > 0) {
+            result.push({ causes: directCauses });
+        }
+
+        // Check for causes from non-stopping stations between this stop and the previous stopping station
+        // These should be shown at the first stopping station after the non-stopping station
+        if (stopIndex > 0) {
+            // Find all timetable rows between the previous stop and this stop
+            const prevStop = stationStopsData[stopIndex - 1];
+            const prevDepartureTime = prevStop.departure.rawRow?.scheduledTime;
+            const thisArrivalTime = stop.arrival.rawRow?.scheduledTime;
+
+            if (prevDepartureTime && thisArrivalTime) {
+                // Find non-stopping rows between these times
+                const nonStoppingCauses: { causes: Cause[], stationName: string }[] = [];
+
+                train.timeTableRows.forEach((row) => {
+                    if (!row.trainStopping && row.causes && row.causes.length > 0) {
+                        const rowTime = row.scheduledTime;
+                        if (rowTime > prevDepartureTime && rowTime <= thisArrivalTime) {
+                            const stationName = getTranslatedStationNameWithFallback(
+                                row.stationUICCode,
+                                locale,
+                                row.stationShortCode
+                            );
+                            nonStoppingCauses.push({
+                                causes: row.causes as Cause[],
+                                stationName
+                            });
+                        }
+                    }
+                });
+
+                nonStoppingCauses.forEach(({ causes, stationName }) => {
+                    result.push({ causes, fromNonStoppingStation: stationName });
+                });
+            }
+        }
+
+        return result;
+    };
+
+    // Check if a stop has any causes (including from non-stopping stations)
+    const hasCauses = (stopIndex: number): boolean => {
+        const causesForStop = getCausesForStop(stopIndex);
+        return causesForStop.some(c => c.causes.length > 0);
+    };
+
     return (
         <div>
             <div style={{ overflowY: showAllStops ? 'auto' : 'hidden', position: "relative", transition: 'height 0.5s ease' }}>
@@ -839,7 +1016,7 @@ export default function TrainStationStops({
 
                         return (
                             <div key={`${stop.uicCode}-${stop.stopIndex}`}>
-                                <div className={`box is-shadowless is-clickable ${styles["station-stop"]} ${stop.isOrigin ? 'is-origin' : ''} ${stop.isDestination ? 'is-destination' : ''}`}>
+                                <div className={`box is-shadowless ${styles["station-stop"]} ${stop.isOrigin ? 'is-origin' : ''} ${stop.isDestination ? 'is-destination' : ''}`}>
                                     <div className="columns is-desktop">
                                         <div className="column is-5-tablet is-5-desktop is-5-widescreen">
                                         {index == 0 ?
@@ -1020,7 +1197,7 @@ export default function TrainStationStops({
                                 </div>
 
                                     {/* Show train composition at this stop if it changes here or at first stop */}
-                                    {hasCompositionChange(index) && (
+                                    {hasCompositionChange(index) && index !== stationStopsData.length - 1 && (
                                         <div className="px-4 pb-3 ml-4">
                                             <hr className="my-3" style={{ backgroundColor: 'var(--bulma-border-weak)' }} />
                                             <h4
@@ -1053,6 +1230,50 @@ export default function TrainStationStops({
                                                     />
                                                 );
                                             })()}
+                                        </div>
+                                    )}
+
+                                    {/* Show exception causes at this stop */}
+                                    {hasCauses(index) && (
+                                        <div className="px-4 pb-3 ml-4">
+                                            <hr className="my-3" style={{ backgroundColor: 'var(--bulma-border-weak)' }} />
+                                            <h4
+                                                className="title is-6 mb-3 has-text-weight-semibold is-clickable"
+                                                onClick={() => setExpandedCauses(prev => ({ ...prev, [index]: !prev[index] }))}
+                                                style={{ cursor: 'pointer' }}
+                                            >
+                                                <span className="icon-text">
+                                                    <span className="icon has-text-warning">
+                                                        <i className={`fas fa-chevron-${expandedCauses[index] ? 'down' : 'right'}`}></i>
+                                                    </span>
+                                                    <span>{t('train.exceptionCause')}</span>
+                                                </span>
+                                            </h4>
+                                            {expandedCauses[index] && (
+                                                <div className="content">
+                                                    {getCausesForStop(index).map((causeGroup, groupIndex) => (
+                                                        <div key={groupIndex} className="mb-3">
+                                                            {causeGroup.fromNonStoppingStation && (
+                                                                <p className="is-size-7 has-text-grey mb-1">
+                                                                    <span className="icon is-small">
+                                                                        <i className="fas fa-map-marker-alt"></i>
+                                                                    </span>
+                                                                    {' '}{t('train.causeFromStation', { station: causeGroup.fromNonStoppingStation })}
+                                                                </p>
+                                                            )}
+                                                            {causeGroup.causes.map((cause, causeIndex) => (
+                                                                <div key={causeIndex} className="box is-shadowless py-2 px-3 mb-2" style={{ backgroundColor: 'var(--bulma-scheme-main-bis)' }}>
+                                                                    <div className="is-flex is-align-items-center">
+                                                                        <span className="is-size-6">
+                                                                            {getCauseDescription(cause)}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
                                         </div>
                                     )}
 

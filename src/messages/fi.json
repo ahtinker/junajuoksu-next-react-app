@@ -169,7 +169,10 @@
         "arrival_station": "Pääteasema",
         "arrival": "Saapuminen",
         "departure": "Lähtö",
-        "stop_duration": "Pysähdyksen kesto"
+        "stop_duration": "Pysähdyksen kesto",
+        "stop_number": "{current}/{total} pysähdys",
+        "exceptionCause": "Myöhästymisen syy",
+        "causeFromStation": "Tapahtui asemalla {station} (juna ei pysähdy)"
     },
     "blogCommon": {
         "blog": "Blogi"

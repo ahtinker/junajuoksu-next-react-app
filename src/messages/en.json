@@ -169,7 +169,10 @@
         "arrival_station": "Final stop",
         "arrival": "Arrival",
         "departure": "Departure",
-        "stop_duration": "Stop duration"
+        "stop_duration": "Stop duration",
+        "stop_number": "{current}/{total} stop",
+        "exceptionCause": "Delay Cause",
+        "causeFromStation": "Occurred at {station} (train does not stop)"
     },
     "blogCommon": {
         "blog": "Blog"
