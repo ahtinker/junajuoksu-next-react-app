@@ -404,7 +404,7 @@ export default function TrainStationStops({
         }
 
         train.timeTableRows.forEach((row) => {
-            if (!row.trainStopping) return;
+            if (!row.commercialStop && row.stationUICCode !== 1034) return;
 
             // Initialize or increment the sequence counter for this station
             if (!stationSequence[row.stationUICCode]) {
@@ -1017,7 +1017,7 @@ export default function TrainStationStops({
                         return (
                             <div key={`${stop.uicCode}-${stop.stopIndex}`}>
                                 <div className={`box is-shadowless ${styles["station-stop"]} ${stop.isOrigin ? 'is-origin' : ''} ${stop.isDestination ? 'is-destination' : ''}`}>
-                                    <div className="columns is-desktop">
+                                    <div className="columns is-desktop" style={{ position: "relative" }}>
                                         <div className="column is-5-tablet is-5-desktop is-5-widescreen">
                                         {index == 0 ?
                                                 <div>
@@ -1028,7 +1028,7 @@ export default function TrainStationStops({
                                                             height: `${TAProgressFullLength}px`,
                                                             backgroundColor: 'var(--bulma-scheme-main)',
                                                             width: '10px',
-                                                            left: "25px",
+                                                            left: "17.5px",
                                                             zIndex: 0,
                                                             position: "absolute",
                                                             borderRadius: "20px"
@@ -1050,7 +1050,7 @@ export default function TrainStationStops({
                                                                     document.getElementById("TAmarker" + (index + 1))
                                                                 ) + 20}px`,
                                                             width: '10px',
-                                                            left: '25px',
+                                                            left: '17.5px',
                                                             display: status === "passed" ? 'block' : 'none',
                                                             zIndex: 1,
                                                             position: "absolute",

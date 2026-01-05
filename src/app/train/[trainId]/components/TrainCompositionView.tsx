@@ -62,9 +62,7 @@ export default function TrainCompositionView({ section, translations }: TrainCom
     const [needsScaling, setNeedsScaling] = useState(false);
 
     const sortedWagons = section.wagons
-        .sort((a, b) => (a.salesNumber + b.salesNumber > 0)
-            ? (a.salesNumber - b.salesNumber)
-            : (a.location - b.location));
+        .sort((a, b) => (a.location - b.location));
 
     // Check if all wagons are Sm or Dm trains (commuter trains that should fit on screen)
     const isCommuterTrain = sortedWagons.every(wagon =>
@@ -126,7 +124,8 @@ export default function TrainCompositionView({ section, translations }: TrainCom
                 className="is-flex"
                 style={{
                     gap: '1px',
-                    width: '100%'
+                    width: '100%',
+                    flexWrap: isCommuterTrain ? 'nowrap' : 'wrap'
                 }}
             >
                 {sortedWagons.map((wagon, idx) => (

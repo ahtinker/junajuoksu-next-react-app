@@ -28,6 +28,7 @@ export interface TimeTableRow {
     causes: Cause[];
     relations: unknown[];
     commercialTrack?: string;
+    commercialStop: boolean;
 }
 
 export interface Train {
