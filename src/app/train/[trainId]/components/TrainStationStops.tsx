@@ -6,6 +6,7 @@ import { getTranslatedStationNameWithFallback } from '../../../../lib/stationUti
 import styles from './TrainStationStops.module.css';
 import { useEffect, useState, useCallback } from 'react';
 import TrainCompositionView from './TrainCompositionView';
+import StationStopDrawer from './StationStopDrawer';
 
 // Cause code types - names are localized
 interface LocalizedName {
@@ -127,6 +128,17 @@ export default function TrainStationStops({
     const [detailedCauseCategories, setDetailedCauseCategories] = useState<DetailedCauseCategory[]>([]);
     const [thirdCauseCategories, setThirdCauseCategories] = useState<ThirdCauseCategory[]>([]);
     const [expandedCauses, setExpandedCauses] = useState<{ [key: number]: boolean }>({});
+
+    // Station drawer state
+    const [selectedStationForDrawer, setSelectedStationForDrawer] = useState<{
+        uicCode: number;
+        shortCode: string;
+        stationName: string;
+        stopIndex: number;
+        arrivalRow?: TimeTableRow;
+        departureRow?: TimeTableRow;
+    } | null>(null);
+    const [isStationDrawerOpen, setIsStationDrawerOpen] = useState(false);
 
     useEffect(() => {
         const timer = setInterval(() => setForceUpdate(Date.now()), 500);
@@ -1004,13 +1016,13 @@ export default function TrainStationStops({
                         const statusColor = () => {
                             switch (status) {
                                 case 'passed':
-                                    return "var(--bulma-text-weak)";
+                                    return "var(--bulma-primary)";
                                 case 'current':
-                                    return "var(--bulma-text-strong)";
+                                    return "var(--bulma-primary-60)";
                                 case 'upcoming':
-                                    return "var(--bulma-text-strong)";
+                                    return "var(--bulma-primary-60)";
                                 default:
-                                    return "var(--bulma-text-strong)";
+                                    return "var(--bulma-primary-60)";
                             }
                         };
 
@@ -1110,7 +1122,21 @@ export default function TrainStationStops({
 
 
                                         </div>
-                                            <span className="station-name title is-5 has-text-weight-bold ml-5 pl-2" style={{ color: statusColor(), zIndex: 2, position: "absolute" }}>
+                                            <span
+                                                className={`station-name title is-5 has-text-weight-bold ml-5 pl-2 ${styles['clickable-station-name']}`}
+                                                style={{ color: statusColor(), zIndex: 2, position: "absolute" }}
+                                                onClick={() => {
+                                                    setSelectedStationForDrawer({
+                                                        uicCode: stop.uicCode,
+                                                        shortCode: stop.shortCode,
+                                                        stationName: stop.stationName,
+                                                        stopIndex: stop.stopIndex,
+                                                        arrivalRow: stop.arrival.rawRow,
+                                                        departureRow: stop.departure.rawRow
+                                                    });
+                                                    setIsStationDrawerOpen(true);
+                                                }}
+                                            >
                                             {stop.stationName}
                                         </span>
                                             <div className={"ml-5 pl-2 mt-5 pt-2 is-3 is-hidden-touch is-hidden-widescreen"}>
@@ -1284,6 +1310,20 @@ export default function TrainStationStops({
                     })}
                 </div>
             </div>
+
+            {/* Station Details Drawer */}
+            <StationStopDrawer
+                station={selectedStationForDrawer}
+                isOpen={isStationDrawerOpen}
+                onClose={() => {
+                    setIsStationDrawerOpen(false);
+                    setSelectedStationForDrawer(null);
+                }}
+                trainInfo={{
+                    departureDate: train.departureDate,
+                    trainNumber: train.trainNumber
+                }}
+            />
         </div>
     );
 }

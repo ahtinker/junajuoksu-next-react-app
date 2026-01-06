@@ -172,7 +172,16 @@
         "stop_duration": "Pysähdyksen kesto",
         "stop_number": "{current}/{total} pysähdys",
         "exceptionCause": "Myöhästymisen syy",
-        "causeFromStation": "Tapahtui asemalla {station} (juna ei pysähdy)"
+        "causeFromStation": "Tapahtui asemalla {station} (juna ei pysähdy)",
+        "stationDrawer": {
+            "openStationPage": "Avaa aseman sivu",
+            "setAsHighlighted": "Aseta korostetuksi",
+            "connectingTrains": "Jatkoyhteydet",
+            "allTrains": "Kaikki aseman junat",
+            "showAllTrains": "Näytä kaikki",
+            "showConnectingOnly": "Vain jatkoyhteydet",
+            "trainsAfter": "Junat klo {time} jälkeen"
+        }
     },
     "blogCommon": {
         "blog": "Blogi"

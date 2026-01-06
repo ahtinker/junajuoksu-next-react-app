@@ -172,7 +172,16 @@
         "stop_duration": "Uppehållstid",
         "stop_number": "{current}/{total} stopp",
         "exceptionCause": "Förseningsorsak",
-        "causeFromStation": "Inträffade vid {station} (tåget stannar inte)"
+        "causeFromStation": "Inträffade vid {station} (tåget stannar inte)",
+        "stationDrawer": {
+            "openStationPage": "Öppna stationssida",
+            "setAsHighlighted": "Ange som markerad",
+            "connectingTrains": "Anslutande tåg",
+            "allTrains": "Alla tåg vid stationen",
+            "showAllTrains": "Visa alla",
+            "showConnectingOnly": "Endast anslutande",
+            "trainsAfter": "Tåg efter {time}"
+        }
     },
     "blogCommon": {
         "blog": "Blogg"

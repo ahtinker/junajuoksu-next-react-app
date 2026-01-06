@@ -172,7 +172,16 @@
         "stop_duration": "Stop duration",
         "stop_number": "{current}/{total} stop",
         "exceptionCause": "Delay Cause",
-        "causeFromStation": "Occurred at {station} (train does not stop)"
+        "causeFromStation": "Occurred at {station} (train does not stop)",
+        "stationDrawer": {
+            "openStationPage": "Open Station Page",
+            "setAsHighlighted": "Set as Highlighted",
+            "connectingTrains": "Connecting Trains",
+            "allTrains": "All Trains at Station",
+            "showAllTrains": "Show All",
+            "showConnectingOnly": "Connecting Only",
+            "trainsAfter": "Trains after {time}"
+        }
     },
     "blogCommon": {
         "blog": "Blog"
