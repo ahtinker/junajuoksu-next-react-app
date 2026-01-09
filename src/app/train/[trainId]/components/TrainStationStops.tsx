@@ -4,7 +4,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { Train, TimeTableRow, Cause } from '../../../../lib/types';
 import { getTranslatedStationNameWithFallback } from '../../../../lib/stationUtils';
 import styles from './TrainStationStops.module.css';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import TrainCompositionView from './TrainCompositionView';
 import StationStopDrawer from './StationStopDrawer';
 
@@ -139,6 +139,18 @@ export default function TrainStationStops({
         departureRow?: TimeTableRow;
     } | null>(null);
     const [isStationDrawerOpen, setIsStationDrawerOpen] = useState(false);
+
+    // Memoize trainInfo for the drawer to prevent unnecessary re-renders
+    const trainInfoForDrawer = useMemo(() => ({
+        departureDate: train.departureDate,
+        trainNumber: train.trainNumber
+    }), [train.departureDate, train.trainNumber]);
+
+    // Memoize drawer close handler
+    const handleDrawerClose = useCallback(() => {
+        setIsStationDrawerOpen(false);
+        setSelectedStationForDrawer(null);
+    }, []);
 
     useEffect(() => {
         const timer = setInterval(() => setForceUpdate(Date.now()), 500);
@@ -1315,14 +1327,8 @@ export default function TrainStationStops({
             <StationStopDrawer
                 station={selectedStationForDrawer}
                 isOpen={isStationDrawerOpen}
-                onClose={() => {
-                    setIsStationDrawerOpen(false);
-                    setSelectedStationForDrawer(null);
-                }}
-                trainInfo={{
-                    departureDate: train.departureDate,
-                    trainNumber: train.trainNumber
-                }}
+                onClose={handleDrawerClose}
+                trainInfo={trainInfoForDrawer}
             />
         </div>
     );

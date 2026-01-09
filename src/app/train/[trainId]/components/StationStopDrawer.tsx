@@ -2,7 +2,7 @@
 
 import { Drawer } from 'vaul';
 import { useTranslations, useLocale } from 'next-intl';
-import { useState, memo } from 'react';
+import { useState, memo, useMemo } from 'react';
 import Link from 'next/link';
 import TimetableList from '@/app/station/[stationId]/components/TimeTableList';
 import { TimeTableRow } from '../../../../lib/types';
@@ -46,28 +46,30 @@ const StationStopDrawer = memo(function StationStopDrawer({
     // State for showing only connecting trains or all trains
     const [showOnlyConnecting, setShowOnlyConnecting] = useState(true);
 
-    if (!station) return null;
-
-    const stationData = {
-        uicCode: station.uicCode,
-        shortCode: station.shortCode,
-        name: station.stationName,
-        translatedName: station.stationName
-    };
+    // Memoize stationData to prevent TimetableList from refetching on every render
+    const stationData = useMemo(() => {
+        if (!station) return null;
+        return {
+            uicCode: station.uicCode,
+            shortCode: station.shortCode,
+            name: station.stationName,
+            translatedName: station.stationName
+        };
+    }, [station?.uicCode, station?.shortCode, station?.stationName]);
 
     // Calculate the arrival time at this station for the current train
     // Use the best available time (actual > liveEstimate > scheduled)
-    const getArrivalDateTime = (): Date | undefined => {
-        if (!station.arrivalRow && !station.departureRow) return undefined;
+    const arrivalDateTime = useMemo(() => {
+        if (!station?.arrivalRow && !station?.departureRow) return undefined;
 
-        const row = station.arrivalRow || station.departureRow;
+        const row = station?.arrivalRow || station?.departureRow;
         if (!row) return undefined;
 
         const timeStr = row.actualTime || row.liveEstimateTime || row.scheduledTime;
         return timeStr ? new Date(timeStr) : undefined;
-    };
+    }, [station?.arrivalRow, station?.departureRow]);
 
-    const arrivalDateTime = getArrivalDateTime();
+    if (!station || !stationData) return null;
 
     // Build the URL for the train page with this station as the highlighted stop
     const buildHighlightedStationUrl = () => {
