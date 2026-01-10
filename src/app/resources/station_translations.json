@@ -694,9 +694,9 @@
             "stationName_en": ""
         }, {
             "stationUICCode": 1034,
-            "stationName_fi": "Pasilan autojuna-asema",
-            "stationName_sv": "Böle biltågsstation",
-            "stationName_en": "Pasila car-carrier station"
+            "stationName_fi": "Pasilan AJ-asema",
+            "stationName_sv": "Böle bilstation",
+            "stationName_en": "Pasila car station"
         }, {
             "stationUICCode": 356,
             "stationName_fi": "Pello",

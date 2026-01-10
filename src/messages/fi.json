@@ -163,6 +163,7 @@
         },
         "station_info": "Aseman tiedot",
         "station_not_found": "Aseman tietoja ei saatavilla",
+        "highlighted_stop": "Korostettu pysähdys",
         "station_passed": "Ohitettu",
         "station_upcoming": "Tulossa",
         "departure_station": "Lähtöasema",
@@ -180,7 +181,8 @@
             "allTrains": "Kaikki aseman junat",
             "showAllTrains": "Näytä kaikki",
             "showConnectingOnly": "Vain jatkoyhteydet",
-            "trainsAfter": "Junat klo {time} jälkeen"
+            "trainsAfter": "Junat klo {time} jälkeen",
+            "scheduled": "Aikataulun mukaan"
         }
     },
     "blogCommon": {

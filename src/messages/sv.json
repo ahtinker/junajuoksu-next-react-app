@@ -163,6 +163,7 @@
         },
         "station_info": "Stationsinformation",
         "station_not_found": "Stationsinformation ej tillgänglig",
+        "highlighted_stop": "Markerat stopp",
         "station_passed": "Passerad",
         "station_upcoming": "Kommande",
         "departure_station": "Avgångsstation",
@@ -180,7 +181,8 @@
             "allTrains": "Alla tåg vid stationen",
             "showAllTrains": "Visa alla",
             "showConnectingOnly": "Endast anslutande",
-            "trainsAfter": "Tåg efter {time}"
+            "trainsAfter": "Tåg efter {time}",
+            "scheduled": "Planerad"
         }
     },
     "blogCommon": {

@@ -958,10 +958,10 @@
         },
         {
             "stationUICCode": 1034,
-            "stationName_fi": "Pasilan autojuna-asema",
-            "elative": "Pasilan autojuna-asemalta",
-            "illative": "Pasilan autojuna-asemalle",
-            "inessive": "Pasilan autojuna-asemalla"
+            "stationName_fi": "Pasilan AJ-asema",
+            "elative": "Pasilan AJ:lta",
+            "illative": "Pasilan AJ:lle",
+            "inessive": "Pasilan AJ:lla"
         },
         {
             "stationUICCode": 356,

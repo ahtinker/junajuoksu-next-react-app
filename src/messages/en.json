@@ -163,6 +163,7 @@
         },
         "station_info": "Station Info",
         "station_not_found": "Station information not available",
+        "highlighted_stop": "Highlighted stop",
         "station_passed": "Passed",
         "station_upcoming": "Upcoming",
         "departure_station": "Departure station",
@@ -180,7 +181,8 @@
             "allTrains": "All Trains at Station",
             "showAllTrains": "Show All",
             "showConnectingOnly": "Connecting Only",
-            "trainsAfter": "Trains after {time}"
+            "trainsAfter": "Trains after {time}",
+            "scheduled": "Scheduled"
         }
     },
     "blogCommon": {

@@ -115,6 +115,7 @@ export default function HighlightedStationPanel({
         <div className="box is-shadowless" style={{ backgroundColor: 'var(--bulma-scheme-main-bis)' }}>
             {/* Station Name Header */}
             <div className="has-text-centered mb-4">
+                <p className="is-size-7 has-text-grey mb-1">{t('highlighted_stop')}</p>
                 <span className="icon-text is-justify-content-center">
                     <span className="title is-4">{stationName}</span>
                 </span>
