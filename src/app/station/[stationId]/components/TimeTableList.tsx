@@ -691,16 +691,26 @@ nextDate: trainsByDepartureDate(departureDate: "${nextDateStr}", where: {timeTab
                         </div>
                     </div>
 
-                    {showScrollButton && (
-                        <p className="level-right">
+                    <p className="level-right">
+                        {showScrollButton ? (
                             <button className={`button is-primary ${styles['tablet-primary-background']}`} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                                 <span className="icon">
                                     <i className="fas fa-chevron-up"></i>
                                 </span>
                                 <span>{t("timetables.up")}</span>
                             </button>
-                        </p>
-                    )}
+                        ) : (
+                            <button
+                                className={`button is-primary ${styles['tablet-primary-background']} ${styles['tv-button']}`}
+                                onClick={() => window.open(`/station/tv/${stationData.shortCode}?language=${locale}`, '_blank', 'noopener,noreferrer')}
+                                title={t('timetables.stationTimetables.openTVDisplay')}
+                            >
+                                <span className="icon">
+                                    <i className="fas fa-expand"></i>
+                                </span>
+                            </button>
+                        )}
+                    </p>
                 </div>
             </div>
             <p className="panel-tabs is-left themebackground mb-0">

@@ -7,7 +7,13 @@ import StationList from './components/site/stationlist/stationlist';
 import { useTranslations } from 'next-intl';
 import BlogCard from './components/site/blogcard/card';
 import Image from 'next/image';
+import type { Metadata } from 'next';
 
+export const metadata: Metadata = {
+  alternates: {
+    canonical: '/',
+  },
+};
 
 function Home() {
   const t = useTranslations();

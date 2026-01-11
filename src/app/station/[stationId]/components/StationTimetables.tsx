@@ -24,6 +24,7 @@ interface StationData {
     name: string;
     translatedName: string;
     stationBackground?: string;
+    backgroundAttribution?: string;
 }
 
 interface DestinationData {
@@ -287,7 +288,8 @@ export default function StationTimetables({ stationId }: StationTimetablesProps)
                         shortCode: foundStation.stationShortCode,
                         name: foundStation.stationName,
                         translatedName: translatedName,
-                        stationBackground: getStationBackgroundByUicCode(foundStation.stationUICCode)
+                        stationBackground: getStationBackgroundByUicCode(foundStation.stationUICCode),
+                        backgroundAttribution: translationEntry?.backgroundAttribution
                     });
                 } else {
                     setError('Station not found');
@@ -506,7 +508,6 @@ export default function StationTimetables({ stationId }: StationTimetablesProps)
                 </div>
 
             </div>
-
             <DateTimeDrawer
                 isOpen={isDateTimeDrawerOpen}
                 onClose={() => setIsDateTimeDrawerOpen(false)}

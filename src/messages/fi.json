@@ -110,7 +110,8 @@
         },
         "stationTimetables": {
             "timetablesFor": "Aikataulut asemalle ",
-            "selectDestination": "Valitse määränpää"
+            "selectDestination": "Valitse määränpää",
+            "openTVDisplay": "Avaa TV-näyttö"
         },
         "passengerInformation": {
             "title": "Tiedote"

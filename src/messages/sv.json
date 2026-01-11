@@ -110,7 +110,8 @@
         },
         "stationTimetables": {
             "timetablesFor": "Tidtabeller för ",
-            "selectDestination": "Välj destination"
+            "selectDestination": "Välj destination",
+            "openTVDisplay": "Öppna TV-visning"
         },
         "passengerInformation": {
             "title": "Observera"

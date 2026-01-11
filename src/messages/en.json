@@ -110,7 +110,8 @@
         },
         "stationTimetables": {
             "timetablesFor": "Timetables for ",
-            "selectDestination": "Select destination"
+            "selectDestination": "Select destination",
+            "openTVDisplay": "Open TV display"
         },
         "passengerInformation": {
             "title": "Notice"

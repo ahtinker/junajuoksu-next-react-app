@@ -108,3 +108,13 @@
 .header-content.search-active {
     opacity: 0;
 }
+/* TV fullscreen button - only visible on desktop */
+.tv-button {
+    display: none;
+}
+
+@media (min-width: 1024px) {
+    .tv-button {
+        display: inline-flex;
+    }
+}

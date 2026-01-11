@@ -18,9 +18,6 @@ export const metadata: Metadata = {
   metadataBase: new URL(`https://junajuoksu.fi/`),
   title: "Juna-aikataulut reaaliajassa, sekunnin tarkkuudella.",
   description: "Junajuoksu.fi - Junamatkojen ja aikataulujen haku. Junajuoksu voi todistaa läsnäolosi myöhäisessä junassa puolestasi.",
-  alternates: {
-    canonical: './',
-  }
 };
 
 export default async function RootLayout({
@@ -32,7 +29,7 @@ export default async function RootLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale}>
+    <html lang="{locale}">
       <head>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
       </head>
