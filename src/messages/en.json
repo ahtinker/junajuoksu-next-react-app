@@ -1,10 +1,23 @@
 {
     "navbar": {
         "login": "Login",
+        "signout": "Sign out",
         "language": {
             "fi": "Finnish",
             "sv": "Swedish",
             "en": "English"
+        }
+    },
+    "auth": {
+        "termsModal": {
+            "title": "Welcome to Junajuoksu",
+            "welcome": "Welcome, {name}!",
+            "description": "Before creating your account, please review and accept our terms:",
+            "termsOfService": "Terms of Service",
+            "privacyPolicy": "Privacy Policy",
+            "disclaimer": "By clicking Accept, you agree to our Terms of Service and acknowledge that you have read our Privacy Policy.",
+            "accept": "Accept & Create Account",
+            "decline": "Decline"
         }
     },
     "hero": {

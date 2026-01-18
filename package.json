@@ -4,33 +4,43 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "dev:ws": "ts-node --project tsconfig.server.json server.ts",
     "build": "next build",
     "start": "next start",
+    "start:ws": "node dist/server.js",
     "lint": "next lint",
     "generate-sitemap": "node scripts/generate-sitemap.js"
   },
   "dependencies": {
     "@types/leaflet": "^1.9.20",
     "bulma": "^1.0.4",
+    "google-auth-library": "^10.5.0",
+    "jsonwebtoken": "^9.0.3",
     "leaflet": "^1.9.4",
     "mqtt": "^5.14.1",
     "next": "^15.4.10",
     "next-intl": "^4.3.4",
+    "pg": "^8.16.3",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-leaflet": "^5.0.0",
     "react-markdown": "^10.1.0",
     "remark-gfm": "^4.0.1",
     "sass": "^1.89.2",
-    "vaul": "^1.1.2"
+    "vaul": "^1.1.2",
+    "ws": "^8.19.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20",
+    "@types/pg": "^8.16.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/ws": "^8.18.1",
     "eslint": "^9",
     "eslint-config-next": "15.4.2",
+    "ts-node": "^10.9.2",
     "typescript": "^5"
   }
 }

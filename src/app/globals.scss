@@ -32,3 +32,15 @@ $green: rgb(61, 136, 61);
         flex-direction: column-reverse;
     }
 }
+// Google Sign-In button transparent background fix
+#google-signin-desktop,
+#google-signin-mobile {
+    iframe {
+        color-scheme: auto;
+    }
+
+    // Target the Google button container
+    >div {
+        background: transparent !important;
+    }
+}

@@ -1,10 +1,23 @@
 {
     "navbar": {
         "login": "Kirjaudu",
+        "signout": "Kirjaudu ulos",
         "language": {
             "fi": "Suomi",
             "sv": "Svenska",
             "en": "English"
+        }
+    },
+    "auth": {
+        "termsModal": {
+            "title": "Tervetuloa Junajuoksuun",
+            "welcome": "Tervetuloa, {name}!",
+            "description": "Ennen tilin luomista, lue ja hyväksy ehdot:",
+            "termsOfService": "Käyttöehdot",
+            "privacyPolicy": "Yksityisyysseloste",
+            "disclaimer": "Klikkaamalla Hyväksy hyväksyt käyttöehtomme ja vahvistat lukeneesi yksityisyysselosteemme.",
+            "accept": "Hyväksy ja luo tili",
+            "decline": "Hylkää"
         }
     },
     "hero": {
