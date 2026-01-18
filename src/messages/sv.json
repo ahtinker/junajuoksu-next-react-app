@@ -20,7 +20,7 @@
             "decline": "Avvisa"
         },
         "updatedTermsModal": {
-            "title": "Uppdaterade villkor och integritetspolicy",
+            "title": "Uppdaterade villkor",
             "notice": "Våra användarvillkor och/eller integritetspolicy har uppdaterats.",
             "description": "Vänligen granska de uppdaterade dokumenten för att fortsätta använda tjänsten:",
             "termsOfService": "Användarvillkor",

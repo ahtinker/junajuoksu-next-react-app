@@ -20,7 +20,7 @@
             "decline": "Decline"
         },
         "updatedTermsModal": {
-            "title": "Updated Terms & Privacy Policy",
+            "title": "Updated Terms",
             "notice": "Our Terms of Service and/or Privacy Policy have been updated.",
             "description": "Please review the updated documents to continue using the service:",
             "termsOfService": "Terms of Service",
