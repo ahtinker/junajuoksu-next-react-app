@@ -3,7 +3,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import TVTimetableDisplay from './components/TVTimetableDisplay';
 import TVSettingsModal from './components/TVSettingsModal';
-import { getTranslatedStationNameWithFallback } from '../../../../lib/stationUtils';
 import './tv.css';
 
 interface StationTVPageProps {
@@ -146,12 +145,6 @@ function StationTVPage({ params }: StationTVPageProps) {
     const handleSettingsUpdate = useCallback((newParams: Partial<TVDisplayParams>) => {
         updateParams(newParams);
     }, [updateParams]);
-
-    // Get translated station name
-    const getStationDisplayName = useCallback(() => {
-        if (!stationData) return '';
-        return getTranslatedStationNameWithFallback(stationData.uicCode, currentLanguage, stationData.shortCode);
-    }, [stationData, currentLanguage]);
 
     if (isLoading) {
         return (

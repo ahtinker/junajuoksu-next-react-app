@@ -3,94 +3,84 @@
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 
-interface PendingUser {
-    email: string;
-    name: string;
-    picture: string;
-}
-
-interface TermsAcceptanceModalProps {
+interface UpdatedTermsModalProps {
     isOpen: boolean;
-    pendingUser: PendingUser | null;
+    contactEmail: string;
     onAccept: () => void;
-    onDecline: () => void;
+    onLogout: () => void;
     isLoading?: boolean;
 }
 
-const TermsAcceptanceModal = ({
+const UpdatedTermsModal = ({
     isOpen,
-    pendingUser,
+    contactEmail,
     onAccept,
-    onDecline,
+    onLogout,
     isLoading = false,
-}: TermsAcceptanceModalProps) => {
+}: UpdatedTermsModalProps) => {
     const t = useTranslations();
 
-    if (!isOpen || !pendingUser) return null;
+    if (!isOpen) return null;
 
     return (
         <div className={`modal ${isOpen ? 'is-active' : ''}`}>
-            <div className="modal-background" onClick={onDecline}></div>
+            <div className="modal-background"></div>
             <div className="modal-card" style={{ maxWidth: '500px' }}>
                 <header className="modal-card-head is-shadowless">
                     <p className="modal-card-title">
-                        {t('auth.termsModal.title')}
+                        {t('auth.updatedTermsModal.title')}
                     </p>
                 </header>
                 <section className="modal-card-body pt-0">
-                    <div className="has-text-centered mb-4">
-                        {pendingUser.picture && (
-                            <figure className="image is-96x96 is-inline-block mb-3">
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img
-                                    src={pendingUser.picture}
-                                    alt={pendingUser.name}
-                                    className="is-rounded"
-                                    referrerPolicy="no-referrer"
-                                />
-                            </figure>
-                        )}
-                        <p className="has-text-weight-semibold is-size-5">
-                            {pendingUser.name}
-                        </p>
-                        <p className="has-text-grey is-size-7">
-                            {pendingUser.email}
-                        </p>
-                    </div>
-
                     <div className="content has-text-left">
-                        <p>{t('auth.termsModal.description')}</p>
+                        <div className="notification">
+
+                            <span>{t('auth.updatedTermsModal.notice')}</span>
+                        </div>
+
+                        <p>{t('auth.updatedTermsModal.description')}</p>
+
                         <ul>
                             <li>
                                 <Link href="/legal/terms-of-service" target="_blank" className="has-text-link">
-                                    {t('auth.termsModal.termsOfService')}
+                                    {t('auth.updatedTermsModal.termsOfService')}
                                 </Link>
                             </li>
                             <li>
                                 <Link href="/legal/privacy-policy" target="_blank" className="has-text-link">
-                                    {t('auth.termsModal.privacyPolicy')}
+                                    {t('auth.updatedTermsModal.privacyPolicy')}
                                 </Link>
                             </li>
                         </ul>
+
                         <p className="is-size-7 has-text-grey">
-                            {t('auth.termsModal.disclaimer')}
+                            {t('auth.updatedTermsModal.disclaimer')}
+                        </p>
+
+                        <hr />
+
+                        <p className="is-size-7">
+                            {t('auth.updatedTermsModal.dataRequest')}{' '}
+                            <a href={`mailto:${contactEmail}`} className="has-text-link">
+                                {contactEmail}
+                            </a>
                         </p>
                     </div>
                 </section>
                 <footer className="modal-card-foot buttons" style={{ justifyContent: 'flex-end' }}>
                     <button
                         className="button"
-                        onClick={onDecline}
+                        onClick={onLogout}
                         disabled={isLoading}
                     >
-                        {t('auth.termsModal.decline')}
+                        {t('auth.updatedTermsModal.logout')}
                     </button>
                     <button
                         className={`button is-primary ${isLoading ? 'is-loading' : ''}`}
                         onClick={onAccept}
                         disabled={isLoading}
                     >
-                        {t('auth.termsModal.accept')}
+                        {t('auth.updatedTermsModal.accept')}
                     </button>
                 </footer>
             </div>
@@ -98,4 +88,4 @@ const TermsAcceptanceModal = ({
     );
 };
 
-export default TermsAcceptanceModal;
+export default UpdatedTermsModal;

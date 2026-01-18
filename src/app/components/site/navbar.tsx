@@ -9,6 +9,7 @@ import { setLocale } from '../../../lib/locale';
 import { useEffect, useState, useCallback } from 'react';
 import { usePathname } from 'next/navigation';
 import TermsAcceptanceModal from './TermsAcceptanceModal';
+import UpdatedTermsModal from './UpdatedTermsModal';
 
 // Constants for localStorage keys
 const PENDING_CREDENTIAL_KEY = 'pending_google_credential';
@@ -94,11 +95,16 @@ const NavBar = () => {
     // Check if we're on a legal page (don't show auth UI on these pages)
     const isLegalPage = pathname?.startsWith('/legal');
 
-    // Terms acceptance modal state
+    // Terms acceptance modal state (for new users)
     const [showTermsModal, setShowTermsModal] = useState(false);
     const [pendingUser, setPendingUser] = useState<PendingUser | null>(null);
     const [pendingCredential, setPendingCredential] = useState<string | null>(null);
     const [isTermsLoading, setIsTermsLoading] = useState(false);
+
+    // Updated terms modal state (for existing users when terms are updated)
+    const [showUpdatedTermsModal, setShowUpdatedTermsModal] = useState(false);
+    const [contactEmail, setContactEmail] = useState('');
+    const [isUpdatedTermsLoading, setIsUpdatedTermsLoading] = useState(false);
 
     // Check for pending terms acceptance on mount (persists across refresh)
     // Don't show on legal pages so user can read terms/privacy
@@ -135,6 +141,12 @@ const NavBar = () => {
                     // Clear any pending terms data if user is authenticated
                     localStorage.removeItem(PENDING_CREDENTIAL_KEY);
                     localStorage.removeItem(PENDING_USER_KEY);
+
+                    // Check if user needs to re-accept updated terms (only on non-legal pages)
+                    if (!isLegalPage && data.needsTermsAcceptance) {
+                        setContactEmail(data.legalConfig?.contactEmail || '');
+                        setShowUpdatedTermsModal(true);
+                    }
                 } else {
                     // Check localStorage as fallback (for when DB is not available)
                     const storedUser = localStorage.getItem('google_user');
@@ -146,7 +158,7 @@ const NavBar = () => {
                         }
                     }
                 }
-            } catch (error) {
+            } catch {
                 // Fallback to localStorage if API fails
                 const storedUser = localStorage.getItem('google_user');
                 if (storedUser) {
@@ -161,7 +173,7 @@ const NavBar = () => {
             }
         };
         checkSession();
-    }, []);
+    }, [isLegalPage]);
 
     const handleTermsAccept = async () => {
         if (!pendingCredential) return;
@@ -228,6 +240,49 @@ const NavBar = () => {
         setPendingCredential(null);
 
         // Reload to reset Google button state
+        window.location.reload();
+    };
+
+    // Handle updated terms acceptance (for existing users)
+    const handleUpdatedTermsAccept = async () => {
+        setIsUpdatedTermsLoading(true);
+        try {
+            const response = await fetch('/api/auth/google', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'accept-terms' }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                setShowUpdatedTermsModal(false);
+            } else {
+                console.error('Failed to accept updated terms:', data.error);
+            }
+        } catch (error) {
+            console.error('Error accepting updated terms:', error);
+        } finally {
+            setIsUpdatedTermsLoading(false);
+        }
+    };
+
+    // Handle logout when user declines updated terms
+    const handleUpdatedTermsLogout = async () => {
+        // Clear all data and sign out
+        localStorage.removeItem('google_user');
+
+        try {
+            await fetch('/api/auth/google', { method: 'DELETE' });
+        } catch {
+            // Ignore errors
+        }
+
+        if (window.google) {
+            window.google.accounts.id.disableAutoSelect();
+        }
+
+        setShowUpdatedTermsModal(false);
         window.location.reload();
     };
 
@@ -467,10 +522,11 @@ const NavBar = () => {
                                                 <button className="button is-rounded" aria-haspopup="true">
                                                     <span className="icon">
                                                         {!avatarError && user.picture ? (
+                                                            // eslint-disable-next-line @next/next/no-img-element
                                                             <img
                                                                 src={user.picture}
                                                                 alt={user.name}
-                                                                style={{ borderRadius: '50%', width: '24px', height: '24px' }}
+                                                                    style={{ borderRadius: '50%', width: '24px', height: '24px', marginLeft: "-5px" }}
                                                                 referrerPolicy="no-referrer"
                                                                 onError={() => setAvatarError(true)}
                                                             />
@@ -503,10 +559,13 @@ const NavBar = () => {
                                             <div className="dropdown-trigger">
                                                 <button className="button is-rounded" aria-haspopup="true" style={{ padding: '0', width: '40px', height: '40px' }}>
                                                     {!avatarError && user.picture ? (
+                                                        // eslint-disable-next-line @next/next/no-img-element
                                                         <img
                                                             src={user.picture}
                                                             alt={user.name}
-                                                            style={{ borderRadius: '50%', width: '32px', height: '32px' }}
+                                                                style={{
+                                                                    borderRadius: '50%', width: '28px', height: '28px'
+                                                                }}
                                                             referrerPolicy="no-referrer"
                                                             onError={() => setAvatarError(true)}
                                                         />
@@ -553,6 +612,17 @@ const NavBar = () => {
                     onAccept={handleTermsAccept}
                     onDecline={handleTermsDecline}
                     isLoading={isTermsLoading}
+                />
+            )}
+
+            {/* Updated Terms Modal - For existing users when terms are updated */}
+            {!isLegalPage && (
+                <UpdatedTermsModal
+                    isOpen={showUpdatedTermsModal}
+                    contactEmail={contactEmail}
+                    onAccept={handleUpdatedTermsAccept}
+                    onLogout={handleUpdatedTermsLogout}
+                    isLoading={isUpdatedTermsLoading}
                 />
             )}
         </>

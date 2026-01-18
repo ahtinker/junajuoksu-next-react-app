@@ -18,6 +18,17 @@
             "disclaimer": "Klikkaamalla Hyväksy hyväksyt käyttöehtomme ja vahvistat lukeneesi yksityisyysselosteemme.",
             "accept": "Hyväksy ja luo tili",
             "decline": "Hylkää"
+        },
+        "updatedTermsModal": {
+            "title": "Päivitetyt ehdot ja yksityisyysseloste",
+            "notice": "Käyttöehtomme ja/tai yksityisyysselosteemme on päivitetty.",
+            "description": "Lue päivitetyt dokumentit jatkaaksesi palvelun käyttöä:",
+            "termsOfService": "Käyttöehdot",
+            "privacyPolicy": "Yksityisyysseloste",
+            "disclaimer": "Klikkaamalla Hyväksy hyväksyt päivitetyt käyttöehdot ja vahvistat lukeneesi päivitetyn yksityisyysselosteen.",
+            "dataRequest": "Jos et hyväksy ehtoja ja haluat pyytää tietojesi poistamista, ota yhteyttä:",
+            "accept": "Hyväksy",
+            "logout": "Kirjaudu ulos"
         }
     },
     "hero": {

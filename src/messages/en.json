@@ -18,6 +18,17 @@
             "disclaimer": "By clicking Accept, you agree to our Terms of Service and acknowledge that you have read our Privacy Policy.",
             "accept": "Accept & Create Account",
             "decline": "Decline"
+        },
+        "updatedTermsModal": {
+            "title": "Updated Terms & Privacy Policy",
+            "notice": "Our Terms of Service and/or Privacy Policy have been updated.",
+            "description": "Please review the updated documents to continue using the service:",
+            "termsOfService": "Terms of Service",
+            "privacyPolicy": "Privacy Policy",
+            "disclaimer": "By clicking Accept, you agree to the updated Terms of Service and acknowledge that you have read the updated Privacy Policy.",
+            "dataRequest": "If you do not agree and would like to request deletion of your data, please contact us at:",
+            "accept": "Accept",
+            "logout": "Log out"
         }
     },
     "hero": {

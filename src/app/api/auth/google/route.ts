@@ -8,10 +8,11 @@ import {
     clearSessionCookie,
     checkUserExists,
     findUserByGoogleId,
-    createUser
+    createUser,
+    updateTermsAccepted,
+    getTermsAcceptedDate
 } from '@/lib/auth';
-
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || "329262926570-c42l0cp1g01n80grfafhvgou5vomc9mk.apps.googleusercontent.com";
+import { legalConfig } from '@/config/legal';
 
 /**
  * POST /api/auth/google
@@ -20,6 +21,7 @@ const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || "329262926570-c42l0cp1g
  * Request body options:
  * - { credential, action: 'check' } - Check if user exists (for terms acceptance flow)
  * - { credential, action: 'create' } - Create new user (after terms acceptance)
+ * - { action: 'accept-terms' } - Accept updated terms (for existing users)
  * - { credential } - Legacy: find or create user
  */
 export async function POST(request: NextRequest) {
@@ -27,7 +29,31 @@ export async function POST(request: NextRequest) {
         const body = await request.json();
         const { credential, g_csrf_token, action } = body;
 
-        // Validate required fields
+        // Handle accept-terms action (doesn't require credential, uses session)
+        if (action === 'accept-terms') {
+            const session = await getSession();
+            if (!session) {
+                return NextResponse.json(
+                    { error: 'Not authenticated' },
+                    { status: 401 }
+                );
+            }
+
+            const updatedUser = await updateTermsAccepted(session.userId);
+            if (!updatedUser) {
+                return NextResponse.json(
+                    { error: 'Failed to update terms acceptance' },
+                    { status: 500 }
+                );
+            }
+
+            return NextResponse.json({
+                success: true,
+                termsAcceptedAt: updatedUser.terms_accepted_at,
+            });
+        }
+
+        // Validate required fields for other actions
         if (!credential) {
             return NextResponse.json(
                 { error: 'Missing credential token' },
@@ -159,6 +185,10 @@ export async function GET() {
             );
         }
 
+        // Check if user needs to re-accept terms
+        const termsAcceptedAt = await getTermsAcceptedDate(session.userId);
+        const needsTermsAcceptance = legalConfig.needsReAcceptance(termsAcceptedAt);
+
         return NextResponse.json({
             authenticated: true,
             user: {
@@ -166,6 +196,12 @@ export async function GET() {
                 email: session.email,
                 name: session.name,
                 picture: session.picture,
+            },
+            termsAcceptedAt,
+            needsTermsAcceptance,
+            legalConfig: {
+                contactEmail: legalConfig.contactEmail,
+                lastUpdated: legalConfig.getLatestUpdateDate().toISOString(),
             },
         });
     } catch (error) {

@@ -213,7 +213,7 @@ const StationStopDrawer = memo(function StationStopDrawer({
             name: station.stationName,
             translatedName: station.stationName
         };
-    }, [station?.uicCode, station?.shortCode, station?.stationName]);
+    }, [station]);
 
     // Calculate the arrival time at this station for the current train
     const arrivalDateTime = useMemo(() => {

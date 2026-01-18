@@ -50,13 +50,13 @@ setInterval(() => {
     }
 }, 60 * 1000);
 
-export function createTrainVerificationWSS(server: any): WebSocketServer {
+export function createTrainVerificationWSS(server: { on: (event: string, handler: (request: IncomingMessage, socket: import('stream').Duplex, head: Buffer) => void) => void }): WebSocketServer {
     const wss = new WebSocketServer({
         noServer: true,
         path: '/api/train-verification/ws'
     });
 
-    server.on('upgrade', (request: IncomingMessage, socket: any, head: Buffer) => {
+    server.on('upgrade', (request: IncomingMessage, socket: import('stream').Duplex, head: Buffer) => {
         const { pathname } = parse(request.url || '', true);
 
         if (pathname === '/api/train-verification/ws') {
@@ -66,7 +66,7 @@ export function createTrainVerificationWSS(server: any): WebSocketServer {
         }
     });
 
-    wss.on('connection', (ws: WebSocket, request: IncomingMessage) => {
+    wss.on('connection', (ws: WebSocket) => {
         const sessionId = crypto.randomUUID();
         console.log(`[TrainVerification] New WebSocket connection: ${sessionId}`);
 
@@ -94,7 +94,7 @@ export function createTrainVerificationWSS(server: any): WebSocketServer {
             try {
                 const message: ClientMessage = JSON.parse(data.toString());
                 handleClientMessage(sessionId, message);
-            } catch (error) {
+            } catch {
                 sendMessage(ws, {
                     type: 'error',
                     message: 'Invalid message format. Expected JSON.',
@@ -107,8 +107,8 @@ export function createTrainVerificationWSS(server: any): WebSocketServer {
             sessions.delete(sessionId);
         });
 
-        ws.on('error', (error) => {
-            console.error(`[TrainVerification] WebSocket error for ${sessionId}:`, error);
+        ws.on('error', () => {
+            console.error(`[TrainVerification] WebSocket error for ${sessionId}`);
             sessions.delete(sessionId);
         });
     });
@@ -135,7 +135,7 @@ function handleClientMessage(sessionId: string, message: ClientMessage): void {
         default:
             sendMessage(session.ws, {
                 type: 'error',
-                message: `Unknown message type: ${(message as any).type}`,
+                message: `Unknown message type: ${(message as { type?: string }).type}`,
             });
     }
 }

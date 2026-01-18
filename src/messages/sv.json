@@ -18,6 +18,17 @@
             "disclaimer": "Genom att klicka på Godkänn godkänner du våra användarvillkor och bekräftar att du har läst vår integritetspolicy.",
             "accept": "Godkänn & Skapa konto",
             "decline": "Avvisa"
+        },
+        "updatedTermsModal": {
+            "title": "Uppdaterade villkor och integritetspolicy",
+            "notice": "Våra användarvillkor och/eller integritetspolicy har uppdaterats.",
+            "description": "Vänligen granska de uppdaterade dokumenten för att fortsätta använda tjänsten:",
+            "termsOfService": "Användarvillkor",
+            "privacyPolicy": "Integritetspolicy",
+            "disclaimer": "Genom att klicka på Godkänn godkänner du de uppdaterade användarvillkoren och bekräftar att du har läst den uppdaterade integritetspolicyn.",
+            "dataRequest": "Om du inte accepterar och vill begära radering av dina uppgifter, vänligen kontakta oss på:",
+            "accept": "Godkänn",
+            "logout": "Logga ut"
         }
     },
     "hero": {

@@ -1,7 +1,7 @@
 import { OAuth2Client } from 'google-auth-library';
 import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
-import { query, queryOne } from './db';
+import { queryOne } from './db';
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || "329262926570-c42l0cp1g01n80grfafhvgou5vomc9mk.apps.googleusercontent.com";
 const JWT_SECRET = process.env.JWT_SECRET || (process.env.NODE_ENV === 'production'
@@ -31,6 +31,7 @@ export interface User {
     picture: string;
     created_at: Date;
     updated_at: Date;
+    terms_accepted_at: Date | null;
 }
 
 export interface SessionPayload {
@@ -135,8 +136,8 @@ export async function findUserByGoogleId(googleId: string): Promise<User | null>
  */
 export async function createUser(googleUser: GoogleUserPayload): Promise<User> {
     const user = await queryOne<User>(
-        `INSERT INTO users (google_id, email, name, picture, created_at, updated_at) 
-         VALUES ($1, $2, $3, $4, NOW(), NOW()) 
+        `INSERT INTO users (google_id, email, name, picture, terms_accepted_at, created_at, updated_at)
+         VALUES ($1, $2, $3, $4, NOW(), NOW(), NOW())
          RETURNING *`,
         [googleUser.sub, googleUser.email, googleUser.name, googleUser.picture]
     );
@@ -146,6 +147,30 @@ export async function createUser(googleUser: GoogleUserPayload): Promise<User> {
     }
 
     return user;
+}
+
+/**
+ * Update the terms accepted timestamp for a user
+ */
+export async function updateTermsAccepted(userId: number): Promise<User | null> {
+    return queryOne<User>(
+        `UPDATE users 
+         SET terms_accepted_at = NOW(), updated_at = NOW() 
+         WHERE id = $1 
+         RETURNING *`,
+        [userId]
+    );
+}
+
+/**
+ * Get user's terms acceptance date
+ */
+export async function getTermsAcceptedDate(userId: number): Promise<Date | null> {
+    const result = await queryOne<{ terms_accepted_at: Date | null }>(
+        'SELECT terms_accepted_at FROM users WHERE id = $1',
+        [userId]
+    );
+    return result?.terms_accepted_at || null;
 }
 
 /**
@@ -169,7 +194,7 @@ export function createSessionToken(user: User): string {
 export function verifySessionToken(token: string): SessionPayload | null {
     try {
         return jwt.verify(token, JWT_SECRET) as SessionPayload;
-    } catch (error) {
+    } catch {
         return null;
     }
 }

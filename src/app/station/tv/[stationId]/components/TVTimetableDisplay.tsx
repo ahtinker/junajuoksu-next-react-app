@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import Image from 'next/image';
 import { TVDisplayParams } from '../page';
-import { Train, TimeTableRow } from '../../../../../lib/types';
+import { Train } from '../../../../../lib/types';
 import { getTranslatedStationNameWithFallback } from '../../../../../lib/stationUtils';
 
 interface StationData {
@@ -95,7 +95,6 @@ export default function TVTimetableDisplay({
     const [trains, setTrains] = useState<DisplayTrain[]>([]);
     const [destinationName, setDestinationName] = useState<string>('');
     const [currentTime, setCurrentTime] = useState(new Date());
-    const [lastFetch, setLastFetch] = useState<Date | null>(null);
     const fetchIntervalRef = useRef<NodeJS.Timeout | null>(null);
     const displayUpdateRef = useRef<NodeJS.Timeout | null>(null);
     const [stationsMetadata, setStationsMetadata] = useState<Map<string, { uicCode: number; name: string }>>(new Map());
@@ -282,7 +281,6 @@ export default function TVTimetableDisplay({
             processedTrains.sort((a, b) => a.scheduledTime.getTime() - b.scheduledTime.getTime());
 
             setTrains(processedTrains);
-            setLastFetch(new Date());
         } catch (err) {
             console.error('Failed to fetch train data:', err);
         }

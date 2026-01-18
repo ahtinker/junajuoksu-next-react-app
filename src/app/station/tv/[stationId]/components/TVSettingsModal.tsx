@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { TVDisplayParams } from '../page';
 import { getTranslatedStationNameWithFallback } from '../../../../../lib/stationUtils';
 
@@ -178,16 +178,16 @@ export default function TVSettingsModal({
     }, [stations, searchQuery, stationData.shortCode]);
 
     // Get translated station name for display
-    const getStationDisplayName = (station: StationOption): string => {
+    const getStationDisplayName = useCallback((station: StationOption): string => {
         return getTranslatedStationNameWithFallback(station.uicCode, currentLanguage, station.shortCode);
-    };
+    }, [currentLanguage]);
 
     // Get current destination display name
     const currentDestinationName = useMemo(() => {
         if (!destination) return '';
         const station = stations.find(s => s.shortCode === destination.toUpperCase());
         return station ? getStationDisplayName(station) : destination;
-    }, [destination, stations, currentLanguage]);
+    }, [destination, stations, getStationDisplayName]);
 
     const handleApply = () => {
         onUpdate({

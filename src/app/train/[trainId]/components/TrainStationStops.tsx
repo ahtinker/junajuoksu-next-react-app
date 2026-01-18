@@ -117,8 +117,8 @@ export default function TrainStationStops({
     const [, setForceUpdate] = useState(Date.now());
     const [showAllStops, setShowAllStops] = useState(false);
     const [composition, setComposition] = useState<TrainComposition | null>(null);
-    const [compositionLoading, setCompositionLoading] = useState(true);
-    const [expandedSections, setExpandedSections] = useState<{ [key: number]: boolean }>({});
+    const [, setCompositionLoading] = useState(true);
+    const [, setExpandedSections] = useState<{ [key: number]: boolean }>({});
     const [boardingTime, setBoardingTime] = useState<string | null>(null);
     const [boardingTimeLoading, setBoardingTimeLoading] = useState(true);
     const [expandedCompositions, setExpandedCompositions] = useState<{ [key: number]: boolean }>({});
@@ -640,29 +640,6 @@ export default function TrainStationStops({
         };
     });
 
-    // Summary constants
-    const totalStations = stationStops.length;
-    const originStation = stationStopsData.find(stop => stop.isOrigin);
-    const destinationStation = stationStopsData.find(stop => stop.isDestination);
-    const passedStations = stationStopsData.filter(stop => stop.isPassed);
-    const upcomingStations = stationStopsData.filter(stop => stop.isUpcoming);
-
-    // Time-related constants
-    const journeyStartTime = originStation?.departure.scheduledTime;
-    const journeyEndTime = destinationStation?.arrival.scheduledTime || stationStopsData[stationStopsData.length - 1]?.arrival.scheduledTime;
-
-    // Status constants
-    const hasDelays = stationStopsData.some(stop => stop.arrival.isDelayed || stop.departure.isDelayed);
-    const hasCancellations = stationStopsData.some(stop => stop.arrival.isCancelled || stop.departure.isCancelled);
-    const maxDelaySeconds = Math.max(
-        ...stationStopsData.map(stop => Math.max(
-            Math.abs(stop.arrival.delaySeconds),
-            Math.abs(stop.departure.delaySeconds)
-        ))
-    );
-    const maxDelay = Math.floor(maxDelaySeconds / 60); // Legacy minutes for compatibility
-    const maxDelayFormatted = formatDelaySeconds(maxDelaySeconds);
-
     function getPositionAtCenter(element: HTMLElement | null) {
         if (!element) return { x: 0, y: 0 };
         const { top, left, width, height } = element.getBoundingClientRect();
@@ -860,7 +837,6 @@ export default function TrainStationStops({
         }
 
         const stop = stationStopsData[stopIndex];
-        const now = new Date().getTime();
 
         // For the first stop, always show the composition
         if (stopIndex === 0) {
@@ -871,7 +847,6 @@ export default function TrainStationStops({
         // For other stops, check if composition changes here
         for (const section of composition.journeySections) {
             const beginStation = section.beginTimeTableRow.stationShortCode;
-            const endStation = section.endTimeTableRow.stationShortCode;
 
             // Check if this stop matches the beginning of a journey section (composition change)
             if (stop.shortCode === beginStation) {
@@ -918,13 +893,6 @@ export default function TrainStationStops({
         }
 
         return cause.categoryCode || 'Unknown cause';
-    };
-
-    // Helper function to get cause code for display
-    const getCauseCode = (cause: Cause): string => {
-        if (cause.thirdCategoryCode) return cause.thirdCategoryCode;
-        if (cause.detailedCategoryCode) return cause.detailedCategoryCode;
-        return cause.categoryCode || '';
     };
 
     // Get all causes for a stop, including causes from non-stopping stations that should be shown here

@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
             message: 'Verification session created. Connect via WebSocket to continue.',
             wsEndpoint: `/api/train-verification/ws?sessionId=${sessionId}`,
         });
-    } catch (error) {
+    } catch {
         return Response.json({ error: 'Invalid request body' }, { status: 400 });
     }
 }
