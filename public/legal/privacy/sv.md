@@ -2,7 +2,7 @@
 
 * * *
 
-Detta är Junajuoksu.fi:s sekretesspolicy i enlighet med Europeiska unionens allmänna dataskyddsförordning. Giltig från och med 18.9.2022. Senast ändrad 1.3.2024.  
+Detta är Junajuoksu.fi:s sekretesspolicy i enlighet med Europeiska unionens allmänna dataskyddsförordning. Giltig från och med 18.9.2022. Senast ändrad 18.1.2026.  
   
 Denna integritetspolicy gäller för webbplatsen [junajuoksu.fi](https://junajuoksu.fi) ("Tjänsten") och Tjänsten förbinder sig att behandla användarnas personuppgifter i enlighet med denna policy. Du har också rätt att lyssna på denna integritetspolicy muntligt och kostnadsfritt genom att skicka ett e-postmeddelande till support@junajuoksu.fi.
 
@@ -25,11 +25,8 @@ Behandlingen av personuppgifter börjar från och med den tidpunkt då personen 
 *   Tåget som personen reser och tågar som hen har rest med
 *   Helsingfors regions transports bussar som hen reser och har rest med
 *   IP-adress för enhetens nätverk
-*   E-postadress
-*   Förnamn och efternamn
-*   Google-kontots profilbild
-*   Alla TågChatt-kopplingar
-*   Allt information som individen har själv angett
+*   E-postadress, profilbild, förnamn och efternamn associerad med Google-konto
+*   Allt information som individen har själv angett till Tjänsten
 
 Uppgifterna kommer att finnas kvar i databasen hos junajuoksu.fi. Vi överför eller marknadsför inte personuppgifter till tredjepartsleverantörer utanför denna tjänst, såvida inte mottagaren särskilt nämns i detta policy. Personuppgifter kan dock ingå i stora undersökningar, statistiker eller andra större sammanställningar där personuppgifterna inte kan kopplas direkt till en levande person. Personuppgifter kan också vid behov överföras till myndigheter.  
 
@@ -84,4 +81,4 @@ Tjänsten kan använda också kakor ("Cookies") från litade tredje partiers tj�
 
 ## 7\. Observera  
   
-Tjänsten kan ändra på sekretesspolicyn när som helst utan att meddela användaren. Denna sekretesspolicy är beroende av innehållet i vår [sida för användarvillkor](https://junajuoksu.fi/terms-of-service).
+Tjänsten kan ändra på sekretesspolicyn när som helst utan att meddela användaren. Användaren bes att godkänna en ändrad sekretesspolicy när användaren loggar in till Tjänsten efter att sekretesspolicyn har uppdaterats. Denna sekretesspolicy är beroende av innehållet i vår [sida för användarvillkor](https://junajuoksu.fi/terms-of-service).

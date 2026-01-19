@@ -6,7 +6,7 @@
 
 export const legalConfig = {
     // Contact email for data deletion requests and legal inquiries
-    contactEmail: 'privacy@junajuoksu.fi',
+    contactEmail: 'support@junajuoksu.fi',
 
     // Last update timestamps for legal documents (ISO 8601 format)
     termsOfService: {
@@ -14,7 +14,7 @@ export const legalConfig = {
         version: '1.0.0',
     },
     privacyPolicy: {
-        lastUpdated: '2026-01-18T00:00:00.000Z',
+        lastUpdated: '2026-01-19T00:00:00.000Z',
         version: '1.0.0',
     },
 

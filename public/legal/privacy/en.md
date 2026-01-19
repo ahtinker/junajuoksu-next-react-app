@@ -2,7 +2,7 @@
 
 * * *
 
-This is the privacy policy of Junajuoksu.fi in accordance with the European Union's General Data Protection Regulation (GDPR). Valid from 18.9.2022. Last modified on 1.3.2024 (day.month.year).  
+This is the privacy policy of Junajuoksu.fi in accordance with the European Union's General Data Protection Regulation (GDPR). Valid from 18.9.2022. Last modified on 18.1.2026 (day.month.year).  
   
 This privacy policy applies to the website [junajuoksu.fi](https://junajuoksu.fi) ("Service") and the service undertakes to process users' personal data in accordance with this policy. You also have the fundamental right to listen to this privacy policy by speech free of charge by sending an email to support@junajuoksu.fi.
 
@@ -25,10 +25,7 @@ The processing of personal data starts from the moment the person has given thei
 *   Trains that the person travels with and has travelled with
 *   Helsinki regional transport busses that the person travels with and has travelled with
 *   IP address of the device's network
-*   Email address
-*   First and last name
-*   Google account profile picture
-*   All TrainChat connections
+*   Email address, profile picture, first and last name associated with Google Account
 *   All data that the user has manually inputted 
 
 The data will remain in the database of Junajuoksu. We do not transmit or monetize personal data to any third party outside this service’s providers, unless the receiver is not mentioned in this policy. However, personal data may be included in large surveys, statistics or other larger aggregations where personal data cannot be directly linked to a living human being. Personal data may also be transmitted to authorities if necessary.  
@@ -84,4 +81,4 @@ The service may use cookies from third parties that it trusts. The third party c
 
 ## 7\. Notice  
   
-The service may update this privacy policy whenever it wants to without notifying its users. This privacy policy is dependent on the contents of the [terms of service](https://junajuoksu.fi/terms-of-service) page. 
+The service may update this privacy policy whenever it wants to without notifying its users. When neccessary, the User is shown a prompt to accept an updated privacy policy when the User logs in to the Service. This privacy policy is dependent on the contents of the [terms of service](https://junajuoksu.fi/terms-of-service) page. 

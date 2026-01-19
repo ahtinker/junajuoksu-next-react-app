@@ -2,7 +2,7 @@
 
 * * *
 
-Tämä on Junajuoksu.fi:n Euroopan Unionin yleisen tietosuoja-asetuksen mukainen rekisteri- ja tietosuojaseloste. Voimassa alkaen 18.9.2022. Viimeisin muutos 1.3.2024.  
+Tämä on Junajuoksu.fi:n Euroopan Unionin yleisen tietosuoja-asetuksen mukainen rekisteri- ja tietosuojaseloste. Voimassa alkaen 18.9.2022. Viimeisin muutos 18.1.2026.  
   
 Tämä tietosuojaseloste pätee verkkosivustolla [junajuoksu.fi](https://junajuoksu.fi) ("Palvelu") ja kyseinen palvelu sitoutuu käsittelemään käyttäjien henkilökohtaisia tietoja tämän selosteen mukaisesti. Sinulla on myös maksuton oikeus kuunnella tämä tietosuojaseloste suullisesti lähettämällä sähköposti osoitteeseen support@junajuoksu.fi.
 
@@ -20,15 +20,12 @@ Palvelun rekisterinpitäjänä toimii Ahti Ankeriasniemi ahti.ankeriasniemi@juna
   
 Henkilötietojen käsittely alkaa siitä hetkestä, kun henkilö on myöntänyt luvan tietojen käsittelyyn. Käsittelemme edellä mainittuja henkilötietoja:
 
-*   Laitteen tarkka geograafinen sijainti
+*   Laitteen tarkka maantieteellinen sijainti
 *   Laitteen fyysinen nopeus
 *   Juna, jota henkilö matkustaa, ja on matkustanut
 *   Helsingin seudun liikenteen bussit, jota henkilö matkustaa, ja on matkustanut
 *   Laitteen verkon IP-osoite
-*   Sähköpostiosoite
-*   Etu- ja sukunimi
-*   Google-tilin profiilikuva
-*   Kaikki JunaChat-yhteydet
+*   Google-tiliin liitetty sähköpostiosoite, profiilikuva, etu- ja sukunimi 
 *   Kaikki tiedot joita henkilö on itse myöntänyt palvelulle
 
 Tiedot pysyvät Junajuoksun tietokannassa. Emme välitä tai markkinoi henkilötietoja verkkosivuston palveluntarjoajien ulkopuolisille, ellei vastaanottajaa erikseen mainita tässä selosteessa. Henkilötietoja voidaan kuitenkin sisältää laajoissa tutkimuksissa, statistiikoissa tai muissa suuremmissa kokonaisuuksissa, joissa henkilötietoja ei voida yhdistää suoraan elävään luonnolliseen henkilöön. Henkilötietoja voidaan myös välittää viranomaisille tarpeen mukaisesti.  
@@ -47,7 +44,7 @@ Yhdistämme henkilötiedot takaisin niiden omistajilleen käyttämällä eväste
 
 *   JunaChat-viestisi
 *   Käyttäjänimesi
-*   Julkisen liikenteen matkoja, joissa olet vahvistanut läsnäolosi ja myös sen vahvistuksen päivämäärän kellonajan. Kuka tahansa joka haluaa tietää, että millä matkoilla olet ollut, ei voi saada täydellistä listaa matkoista joita olet matkustanut, vaan hän joutuu käymään läpi jokaisen Suomessa tehdyn julkisen liikenteen matkan ja kysymään palvelimelta että oletko ollut sillä yksittäisellä matkalla.
+*   Julkisen liikenteen matkoja, joissa olet vahvistanut läsnäolosi ja myös sen vahvistuksen päivämäärän kellonajan. Kuka tahansa joka haluaa tietää millä matkoilla olet ollut, ei voi saada täydellistä listaa matkoista joita olet matkustanut, vaan hän joutuu käymään läpi jokaisen Suomessa tehdyn julkisen liikenteen matkan ja kysymään palvelimelta että oletko ollut sillä yksittäisellä matkalla.
 
 Tässä on esimerkki uniikista tunnuksesta: ```11542603202-ae3b9d67-d0dd-4110-906c-d02aad86a953```
 
@@ -84,4 +81,4 @@ Palvelu saattaa käyttää myös luotettujen kolmansien osapuolten evästeitä, 
 
 ## 7\. Huomio  
   
-Palvelu voi muokata tätä tietosuojaselostetta milloin tahansa, ilmoittamatta käyttäjiänsä. Tämä tietosuojaseloste on riippuvainen [käyttöehtojen](https://junajuoksu.fi/terms-of-service) sisällöstä. 
+Palvelu voi muokata tätä tietosuojaselostetta milloin tahansa, ilmoittamatta käyttäjiänsä. Käyttäjälle esitetään kysely hyväksymään päivitetty tietosuojaseloste kun Käyttäjä kirjautuu sisään Palveluun tietosuojaselosteen päivityksen jälkeen. Tämä tietosuojaseloste on riippuvainen [käyttöehtojen](https://junajuoksu.fi/terms-of-service) sisällöstä. 
