@@ -90,7 +90,7 @@ function getCanonicalUrl(uicCode: number): string | null {
     if (!station) return null;
 
     const slug = stationNameToSlug(station.stationName_fi);
-    return `${BASE_URL}/station/${slug}`;
+    return `${BASE_URL}/asema/${slug}`;
 }
 
 /**

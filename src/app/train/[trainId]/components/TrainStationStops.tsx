@@ -41,6 +41,8 @@ interface TrainStationStopsProps {
     originStationUic: number;
     originStopIndex: number;
     selectedDestinationUic?: number;
+    onSetAsDeparture?: (uicCode: number, stopIndex: number) => void;
+    onSetAsDestination?: (uicCode: number) => void;
 }
 
 interface StationStop {
@@ -108,7 +110,9 @@ export default function TrainStationStops({
     train,
     originStationUic,
     originStopIndex,
-    selectedDestinationUic
+    selectedDestinationUic,
+    onSetAsDeparture,
+    onSetAsDestination
 }: TrainStationStopsProps) {
     const locale = useLocale();
     const t = useTranslations();
@@ -145,6 +149,31 @@ export default function TrainStationStops({
         departureDate: train.departureDate,
         trainNumber: train.trainNumber
     }), [train.departureDate, train.trainNumber]);
+
+    // Memoize origin departure time for the drawer
+    const originDepartureTime = useMemo(() => {
+        // Find the origin station's departure row based on stopIndex
+        let stopCount = 0;
+        for (const row of train.timeTableRows) {
+            if (row.stationUICCode === originStationUic && row.trainStopping && row.type === 'DEPARTURE') {
+                if (stopCount === originStopIndex) {
+                    return row.scheduledTime;
+                }
+                stopCount++;
+            }
+        }
+        // If no departure found (might be last station), check for arrival
+        stopCount = 0;
+        for (const row of train.timeTableRows) {
+            if (row.stationUICCode === originStationUic && row.trainStopping && row.type === 'ARRIVAL') {
+                if (stopCount === originStopIndex) {
+                    return row.scheduledTime;
+                }
+                stopCount++;
+            }
+        }
+        return undefined;
+    }, [train.timeTableRows, originStationUic, originStopIndex]);
 
     // Memoize drawer close handler
     const handleDrawerClose = useCallback(() => {
@@ -1297,6 +1326,12 @@ export default function TrainStationStops({
                 isOpen={isStationDrawerOpen}
                 onClose={handleDrawerClose}
                 trainInfo={trainInfoForDrawer}
+                currentOriginUic={originStationUic}
+                currentOriginStopIndex={originStopIndex}
+                currentOriginDepartureTime={originDepartureTime}
+                currentDestinationUic={selectedDestinationUic}
+                onSetAsDeparture={onSetAsDeparture}
+                onSetAsDestination={onSetAsDestination}
             />
         </div>
     );

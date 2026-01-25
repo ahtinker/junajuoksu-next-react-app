@@ -49,7 +49,7 @@ function getStationUrls(): MetadataRoute.Sitemap {
         const slug = stationNameToSlug(station.stationName_fi);
         
         return {
-            url: `${BASE_URL}/station/${slug}`,
+            url: `${BASE_URL}/asema/${slug}`,
             lastModified: new Date(),
             changeFrequency: 'daily' as const,
             priority: 0.8,

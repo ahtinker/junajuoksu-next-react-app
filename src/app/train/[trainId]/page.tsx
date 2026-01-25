@@ -2,7 +2,7 @@
 import '../../App.css';
 import "../../globals.scss";
 import { useEffect, useState, useRef, useCallback } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
 import mqtt, { MqttClient } from 'mqtt';
 import { Train } from '../../../lib/types';
@@ -36,6 +36,7 @@ interface ParsedTrainId {
 
 export default function TrainPage() {
     const params = useParams<TrainPageParams>();
+    const router = useRouter();
     const t = useTranslations('train');
     const locale = useLocale();
     const [train, setTrain] = useState<Train | null>(null);
@@ -51,6 +52,34 @@ export default function TrainPage() {
         parsedParams?.departureDate ?? null,
         train?.commuterLineID ?? null
     );
+
+    // Handlers for setting departure and destination stations
+    const handleSetAsDeparture = useCallback((uicCode: number, stopIndex: number) => {
+        if (!parsedParams) return;
+        const parts = [
+            parsedParams.departureDate,
+            parsedParams.trainNumber,
+            uicCode.toString(),
+            stopIndex.toString()
+        ];
+        // Preserve current destination if set
+        if (parsedParams.selectedDestinationUic) {
+            parts.push(parsedParams.selectedDestinationUic);
+        }
+        router.push(`/train/${parts.join('-')}`);
+    }, [parsedParams, router]);
+
+    const handleSetAsDestination = useCallback((uicCode: number) => {
+        if (!parsedParams) return;
+        const parts = [
+            parsedParams.departureDate,
+            parsedParams.trainNumber,
+            parsedParams.originStationUic,
+            parsedParams.originStopIndex,
+            uicCode.toString()
+        ];
+        router.push(`/train/${parts.join('-')}`);
+    }, [parsedParams, router]);
 
     /**
      * Connect to Digitraffic MQTT broker for train data updates
@@ -275,7 +304,7 @@ export default function TrainPage() {
             <section className="section is-fullheight has-text-left" style={{ backgroundColor: 'var(--bulma-scheme-main)' }}>
                 <div className="container">
                     {/* Train Header Information */}
-                    {/* <Link className="button is-ghost mb-4 pl-0" href={"/station/" + parsedParams.originStationUic}>
+                    {/* <Link className="button is-ghost mb-4 pl-0" href={"/asema/" + parsedParams.originStationUic}>
                         <span className="icon is-small">
                             <i className="fas fa-chevron-left"></i>
                         </span>
@@ -350,6 +379,8 @@ export default function TrainPage() {
                                 originStationUic={parseInt(parsedParams.originStationUic)}
                                 originStopIndex={parseInt(parsedParams.originStopIndex)}
                                 selectedDestinationUic={parsedParams.selectedDestinationUic ? parseInt(parsedParams.selectedDestinationUic) : undefined}
+                                onSetAsDeparture={handleSetAsDeparture}
+                                onSetAsDestination={handleSetAsDestination}
                             />
                         </div>
                         <div className="column">
@@ -357,6 +388,7 @@ export default function TrainPage() {
                                 train={train}
                                 highlightedStationUic={parseInt(parsedParams.originStationUic)}
                                 stopIndex={parseInt(parsedParams.originStopIndex)}
+                                selectedDestinationUic={parsedParams.selectedDestinationUic ? parseInt(parsedParams.selectedDestinationUic) : undefined}
                             />
                         </div>
                     </div>

@@ -5,7 +5,7 @@ import { useTranslations, useLocale } from 'next-intl';
 import { useState } from 'react';
 import StationElement from './stationelement';
 import { getTranslatedStationNameWithFallback, type StationFeature } from '../../../../lib/stationUtils';
-import TimetableList from '@/app/station/[stationId]/components/TimeTableList';
+import TimetableList from '@/app/asema/[stationId]/components/TimeTableList';
 
 interface StationDetailsDrawerProps {
     station: StationFeature | null;

@@ -4,7 +4,7 @@ import { Drawer } from 'vaul';
 import { useTranslations, useLocale } from 'next-intl';
 import { useState, memo, useMemo, useEffect } from 'react';
 import Link from 'next/link';
-import TimetableList from '@/app/station/[stationId]/components/TimeTableList';
+import TimetableList from '@/app/asema/[stationId]/components/TimeTableList';
 import { TimeTableRow, Cause } from '../../../../lib/types';
 import TrainCompositionView from './TrainCompositionView';
 
@@ -93,7 +93,12 @@ interface StationStopDrawerProps {
     isOpen: boolean;
     onClose: () => void;
     trainInfo: TrainInfo;
-    onSetAsHighlightedStation?: (uicCode: number, stopIndex: number) => void;
+    currentOriginUic?: number;
+    currentOriginStopIndex?: number;
+    currentOriginDepartureTime?: string;
+    currentDestinationUic?: number;
+    onSetAsDeparture?: (uicCode: number, stopIndex: number) => void;
+    onSetAsDestination?: (uicCode: number) => void;
 }
 
 const StationStopDrawer = memo(function StationStopDrawer({
@@ -101,7 +106,12 @@ const StationStopDrawer = memo(function StationStopDrawer({
     isOpen,
     onClose,
     trainInfo,
-    onSetAsHighlightedStation
+    currentOriginUic,
+    currentOriginStopIndex,
+    currentOriginDepartureTime,
+    currentDestinationUic,
+    onSetAsDeparture,
+    onSetAsDestination
 }: StationStopDrawerProps) {
     const t = useTranslations();
     const locale = useLocale();
@@ -321,23 +331,68 @@ const StationStopDrawer = memo(function StationStopDrawer({
     const causes = getCauses();
     const track = departureInfo?.track || arrivalInfo?.track;
 
-    // Build the URL for the train page with this station as the highlighted stop
-    const buildHighlightedStationUrl = () => {
+    // Build the URL for the train page with this station as the departure stop
+    const buildDepartureStationUrl = () => {
         const parts = [
             trainInfo.departureDate,
             trainInfo.trainNumber.toString(),
             station.uicCode.toString(),
             station.stopIndex.toString()
         ];
+        // Preserve current destination if set
+        if (currentDestinationUic) {
+            parts.push(currentDestinationUic.toString());
+        }
         return `/train/${parts.join('-')}`;
     };
 
-    const handleSetAsHighlighted = () => {
-        if (onSetAsHighlightedStation) {
-            onSetAsHighlightedStation(station.uicCode, station.stopIndex);
+    // Build the URL for the train page with this station as the destination
+    const buildDestinationStationUrl = () => {
+        const parts = [
+            trainInfo.departureDate,
+            trainInfo.trainNumber.toString(),
+            (currentOriginUic ?? station.uicCode).toString(),
+            (currentOriginStopIndex ?? station.stopIndex).toString(),
+            station.uicCode.toString()
+        ];
+        return `/train/${parts.join('-')}`;
+    };
+
+    const handleSetAsDeparture = () => {
+        if (onSetAsDeparture) {
+            onSetAsDeparture(station.uicCode, station.stopIndex);
         }
         onClose();
     };
+
+    const handleSetAsDestination = () => {
+        if (onSetAsDestination) {
+            onSetAsDestination(station.uicCode);
+        }
+        onClose();
+    };
+
+    // Check if this station can be set as destination
+    // It cannot be destination if:
+    // 1. It's the same station and stop as the current origin
+    // 2. It's before the current origin station (by scheduled time)
+    const isCurrentOrigin = currentOriginUic === station.uicCode && currentOriginStopIndex === station.stopIndex;
+    
+    const isBeforeOrigin = (() => {
+        if (!currentOriginDepartureTime) return false;
+        
+        // Get the scheduled time of this station's arrival (preferred) or departure
+        const thisStationTime = station.arrivalRow?.scheduledTime || station.departureRow?.scheduledTime;
+        if (!thisStationTime) return false;
+        
+        // Compare times - if this station's time is before or equal to origin's departure, it's "before"
+        const thisTime = new Date(thisStationTime).getTime();
+        const originTime = new Date(currentOriginDepartureTime).getTime();
+        
+        return thisTime <= originTime;
+    })();
+    
+    const canSetAsDestination = !isCurrentOrigin && !isBeforeOrigin;
 
     return (
         <Drawer.Root
@@ -417,7 +472,7 @@ const StationStopDrawer = memo(function StationStopDrawer({
                         {/* Action buttons */}
                         <div className="buttons">
                             <Link
-                                href={`/station/${station.uicCode}`}
+                                href={`/asema/${station.uicCode}`}
                                 className="button is-primary"
                             >
                                 <span className="icon">
@@ -426,15 +481,38 @@ const StationStopDrawer = memo(function StationStopDrawer({
                                 <span>{t('train.stationDrawer.openStationPage')}</span>
                             </Link>
                             <Link
-                                href={buildHighlightedStationUrl()}
+                                href={buildDepartureStationUrl()}
                                 className="button is-primary is-outlined"
-                                onClick={handleSetAsHighlighted}
+                                onClick={handleSetAsDeparture}
                             >
                                 <span className="icon">
-                                    <i className="fas fa-star"></i>
+                                    <i className="fas fa-sign-out-alt"></i>
                                 </span>
-                                <span>{t('train.stationDrawer.setAsHighlighted')}</span>
+                                <span>{t('train.stationDrawer.setAsDeparture')}</span>
                             </Link>
+                            {canSetAsDestination ? (
+                                <Link
+                                    href={buildDestinationStationUrl()}
+                                    className="button is-primary is-outlined"
+                                    onClick={handleSetAsDestination}
+                                >
+                                    <span className="icon">
+                                        <i className="fas fa-flag-checkered"></i>
+                                    </span>
+                                    <span>{t('train.stationDrawer.setAsDestination')}</span>
+                                </Link>
+                            ) : (
+                                <button
+                                    className="button is-primary is-outlined"
+                                    disabled
+                                    title={isCurrentOrigin ? t('train.stationDrawer.cannotDestinationSameAsOrigin') : t('train.stationDrawer.cannotDestinationBeforeOrigin')}
+                                >
+                                    <span className="icon">
+                                        <i className="fas fa-flag-checkered"></i>
+                                    </span>
+                                    <span>{t('train.stationDrawer.setAsDestination')}</span>
+                                </button>
+                            )}
                         </div>
 
                         {/* Arrival/Departure Times and Track */}

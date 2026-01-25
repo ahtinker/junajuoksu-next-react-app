@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { Train, TimeTableRow } from '../../../../lib/types';
 import { getTranslatedStationNameWithFallback } from '../../../../lib/stationUtils';
@@ -8,6 +9,7 @@ interface HighlightedStationPanelProps {
     train: Train;
     highlightedStationUic: number;
     stopIndex: number;
+    selectedDestinationUic?: number;
 }
 
 interface StationStopData {
@@ -52,23 +54,27 @@ function hasPassedStation(departureRow: TimeTableRow | undefined, arrivalRow: Ti
 export default function HighlightedStationPanel({
     train,
     highlightedStationUic,
-    stopIndex
+    stopIndex,
+    selectedDestinationUic
 }: HighlightedStationPanelProps) {
     const locale = useLocale();
     const t = useTranslations('train');
+    
+    // Tab state: 'departure' or 'destination'
+    const [activeTab, setActiveTab] = useState<'departure' | 'destination'>('departure');
 
     // Count total stops at this station
-    const getTotalStopsAtStation = (): number => {
+    const getTotalStopsAtStation = (stationUic: number): number => {
         let count = 0;
         for (const row of train.timeTableRows) {
-            if (row.stationUICCode === highlightedStationUic && row.trainStopping && row.type === 'DEPARTURE') {
+            if (row.stationUICCode === stationUic && row.trainStopping && row.type === 'DEPARTURE') {
                 count++;
             }
         }
         // If no departures found, check for arrival-only (last station)
         if (count === 0) {
             for (const row of train.timeTableRows) {
-                if (row.stationUICCode === highlightedStationUic && row.trainStopping && row.type === 'ARRIVAL') {
+                if (row.stationUICCode === stationUic && row.trainStopping && row.type === 'ARRIVAL') {
                     count++;
                 }
             }
@@ -76,10 +82,54 @@ export default function HighlightedStationPanel({
         return count;
     };
 
-    const totalStops = getTotalStopsAtStation();
+    // Find the destination stop index (first stop at selectedDestinationUic after the origin)
+    const findDestinationStopIndex = (): number => {
+        if (!selectedDestinationUic) return 0;
+        
+        let foundOrigin = false;
+        let stopCount = 0;
+        
+        for (let i = 0; i < train.timeTableRows.length; i++) {
+            const row = train.timeTableRows[i];
+            
+            // Track when we pass the origin
+            if (row.stationUICCode === highlightedStationUic && row.trainStopping) {
+                if (row.type === 'DEPARTURE') {
+                    if (stopCount === stopIndex) {
+                        foundOrigin = true;
+                    }
+                    stopCount++;
+                }
+            }
+            
+            // After origin, find first stop at destination
+            if (foundOrigin && row.stationUICCode === selectedDestinationUic && row.trainStopping) {
+                // Count which stop this is at the destination station
+                let destStopIndex = 0;
+                for (let j = 0; j < i; j++) {
+                    if (train.timeTableRows[j].stationUICCode === selectedDestinationUic && 
+                        train.timeTableRows[j].trainStopping && 
+                        train.timeTableRows[j].type === 'DEPARTURE') {
+                        destStopIndex++;
+                    }
+                }
+                return destStopIndex;
+            }
+        }
+        return 0;
+    };
 
-    // Find the station stop data for the highlighted station
+    const totalStopsAtOrigin = getTotalStopsAtStation(highlightedStationUic);
+    const totalStopsAtDestination = selectedDestinationUic ? getTotalStopsAtStation(selectedDestinationUic) : 0;
+    const destinationStopIndex = findDestinationStopIndex();
+
+    // Find the station stop data for the highlighted station (departure)
     const stationData = findStationStopData(train, highlightedStationUic, stopIndex);
+    
+    // Find the station stop data for the destination station
+    const destinationData = selectedDestinationUic 
+        ? findStationStopData(train, selectedDestinationUic, destinationStopIndex) 
+        : null;
 
     if (!stationData.arrivalRow && !stationData.departureRow) {
         return (
@@ -92,6 +142,7 @@ export default function HighlightedStationPanel({
         );
     }
 
+    // Departure station data
     const arrivalRow = stationData.arrivalRow;
     const departureRow = stationData.departureRow;
     const primaryRow = arrivalRow || departureRow;
@@ -111,26 +162,61 @@ export default function HighlightedStationPanel({
 
     const track = departureRow?.commercialTrack || arrivalRow?.commercialTrack;
 
-    return (
-        <div className="box is-shadowless" style={{ backgroundColor: 'var(--bulma-scheme-main-bis)' }}>
+    // Destination station data
+    const destArrivalRow = destinationData?.arrivalRow;
+    const destDepartureRow = destinationData?.departureRow;
+    const destPrimaryRow = destArrivalRow || destDepartureRow;
+
+    const destStationName = selectedDestinationUic ? getTranslatedStationNameWithFallback(
+        selectedDestinationUic,
+        locale,
+        destPrimaryRow?.stationName || 'Unknown'
+    ) : '';
+
+    const destIsPassed = hasPassedStation(destDepartureRow, destArrivalRow);
+    const destIsLastStation = !!destArrivalRow && !destDepartureRow;
+
+    const destArrivalDelay = getDelayMinutes(destArrivalRow);
+    const destDepartureDelay = getDelayMinutes(destDepartureRow);
+
+    const destTrack = destDepartureRow?.commercialTrack || destArrivalRow?.commercialTrack;
+
+    // Render station info panel content
+    const renderStationContent = (
+        isDestination: boolean,
+        name: string,
+        arrival: TimeTableRow | undefined,
+        departure: TimeTableRow | undefined,
+        passed: boolean,
+        firstStation: boolean,
+        lastStation: boolean,
+        arrDelay: number | null,
+        depDelay: number | null,
+        stationTrack: string | undefined,
+        totalStops: number,
+        currentStopIndex: number
+    ) => (
+        <>
             {/* Station Name Header */}
             <div className="has-text-centered mb-4">
-                <p className="is-size-7 has-text-grey mb-1">{t('highlighted_stop')}</p>
+                <p className="is-size-7 has-text-grey mb-1">
+                    {isDestination ? t('destination_stop') : t('departure_stop')}
+                </p>
                 <span className="icon-text is-justify-content-center">
-                    <span className="title is-4">{stationName}</span>
+                    <span className="title is-4">{name}</span>
                 </span>
                 {totalStops > 1 && (
                     <p className="is-size-7 has-text-grey mt-1">
-                        {t('stop_number', { current: stopIndex + 1, total: totalStops })}
+                        {t('stop_number', { current: currentStopIndex + 1, total: totalStops })}
                     </p>
                 )}
                 <p className="is-size-7 has-text-grey mt-1">
-                    {isPassed ? t('station_passed') : (isFirstStation ? t('departure_station') : (isLastStation ? t('arrival_station') : t('station_upcoming')))}
+                    {passed ? t('station_passed') : (firstStation ? t('departure_station') : (lastStation ? t('arrival_station') : t('station_upcoming')))}
                 </p>
             </div>
 
             {/* Cancelled indicator */}
-            {(arrivalRow?.cancelled || departureRow?.cancelled) && (
+            {(arrival?.cancelled || departure?.cancelled) && (
                 <div className="notification is-danger is-light has-text-centered mb-4">
                     <span className="icon-text is-justify-content-center">
                         <span className="icon">
@@ -144,63 +230,142 @@ export default function HighlightedStationPanel({
             {/* Inline Layout */}
             <div className="is-flex is-flex-wrap-wrap is-justify-content-center is-align-items-center" style={{ gap: '2.5rem' }}>
                 {/* Arrival Time */}
-                {arrivalRow && (
+                {arrival && (
                     <div className="has-text-centered">
                         <p className="is-size-7 has-text-grey mb-1">{t('arrival')}</p>
                         <p className={`is-size-5 has-text-weight-bold`}>
-                            {formatTime(getBestTime(arrivalRow))}
+                            {formatTime(getBestTime(arrival))}
                         </p>
-                        {arrivalRow.scheduledTime !== getBestTime(arrivalRow) && (
+                        {arrival.scheduledTime !== getBestTime(arrival) && (
                             <span className="is-size-7 has-text-grey">
-                                <s>{formatTime(arrivalRow.scheduledTime)}</s>
+                                <s>{formatTime(arrival.scheduledTime)}</s>
                             </span>
                         )}
-                        {arrivalDelay !== null && arrivalDelay !== 0 && (
-                            <span className={`ml-2 is-size-7 ${arrivalDelay > 0 ? 'has-text-danger' : 'has-text-success'}`}>
-                                {arrivalDelay > 0 ? '+' : ''}{arrivalDelay} min
+                        {arrDelay !== null && arrDelay !== 0 && (
+                            <span className={`ml-2 is-size-7 ${arrDelay > 0 ? 'has-text-danger' : 'has-text-success'}`}>
+                                {arrDelay > 0 ? '+' : ''}{arrDelay} min
                             </span>
                         )}
                     </div>
                 )}
 
                 {/* Departure Time */}
-                {departureRow && (
+                {departure && (
                     <div className="has-text-centered">
                         <p className="is-size-7 has-text-grey mb-1">{t('departure')}</p>
                         <p className={`is-size-5 has-text-weight-bold`}>
-                            {formatTime(getBestTime(departureRow))}
+                            {formatTime(getBestTime(departure))}
                         </p>
-                        {departureRow.scheduledTime !== getBestTime(departureRow) && (
+                        {departure.scheduledTime !== getBestTime(departure) && (
                             <span className="is-size-7 has-text-grey">
-                                <s>{formatTime(departureRow.scheduledTime)}</s>
+                                <s>{formatTime(departure.scheduledTime)}</s>
                             </span>
                         )}
-                        {departureDelay !== null && departureDelay !== 0 && (
-                            <span className={`ml-2 is-size-7 ${departureDelay > 0 ? 'has-text-danger' : 'has-text-success'}`}>
-                                {departureDelay > 0 ? '+' : ''}{departureDelay} min
+                        {depDelay !== null && depDelay !== 0 && (
+                            <span className={`ml-2 is-size-7 ${depDelay > 0 ? 'has-text-danger' : 'has-text-success'}`}>
+                                {depDelay > 0 ? '+' : ''}{depDelay} min
                             </span>
                         )}
                     </div>
                 )}
 
                 {/* Track */}
-                {track && (
+                {stationTrack && (
                     <div className="has-text-centered">
                         <p className="is-size-7 has-text-grey mb-1">{t('track')}</p>
-                        <p className="is-size-5 has-text-weight-bold">{track}</p>
+                        <p className="is-size-5 has-text-weight-bold">{stationTrack}</p>
                     </div>
                 )}
 
                 {/* Stop Duration - only show if 2 minutes or more */}
-                {arrivalRow && departureRow && getStopDurationMinutes(arrivalRow.scheduledTime, departureRow.scheduledTime) >= 2 && (
+                {arrival && departure && getStopDurationMinutes(arrival.scheduledTime, departure.scheduledTime) >= 2 && (
                     <div className="has-text-centered">
                         <p className="is-size-7 has-text-grey mb-1">{t('stop_duration')}</p>
                         <p className="is-size-5 has-text-weight-bold">
-                            {calculateStopDuration(arrivalRow.scheduledTime, departureRow.scheduledTime)}
+                            {calculateStopDuration(arrival.scheduledTime, departure.scheduledTime)}
                         </p>
                     </div>
                 )}
+                <button className="button is-fullwidth is-primary">
+                    {t('verify_passenger')}
+                </button>
             </div>
+        </>
+    );
+
+    return (
+        <div className="box is-shadowless" style={{ backgroundColor: 'var(--bulma-scheme-main-bis)' }}>
+            {/* Tabs - only show if destination is selected */}
+            {selectedDestinationUic && destinationData && (destArrivalRow || destDepartureRow) && (
+                <div className="tabs is-centered is-boxed mb-4" style={{ backgroundColor: 'var(--bulma-scheme-main-bis)' }}>
+                    <ul>
+                        <li className={activeTab === 'departure' ? 'is-active' : ''}>
+                            <a onClick={() => setActiveTab('departure')}>
+                                <span className="icon is-small">
+                                    <i className="fas fa-sign-out-alt"></i>
+                                </span>
+                                <span>{stationName}</span>
+                            </a>
+                        </li>
+                        <li className={activeTab === 'destination' ? 'is-active' : ''}>
+                            <a onClick={() => setActiveTab('destination')}>
+                                <span className="icon is-small">
+                                    <i className="fas fa-flag-checkered"></i>
+                                </span>
+                                <span>{destStationName}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            )}
+
+            {/* Content based on active tab */}
+            {activeTab === 'departure' ? (
+                renderStationContent(
+                    false,
+                    stationName,
+                    arrivalRow,
+                    departureRow,
+                    isPassed,
+                    isFirstStation,
+                    isLastStation,
+                    arrivalDelay,
+                    departureDelay,
+                    track,
+                    totalStopsAtOrigin,
+                    stopIndex
+                )
+            ) : selectedDestinationUic && destinationData && (destArrivalRow || destDepartureRow) ? (
+                renderStationContent(
+                    true,
+                    destStationName,
+                    destArrivalRow,
+                    destDepartureRow,
+                    destIsPassed,
+                    false,
+                    destIsLastStation,
+                    destArrivalDelay,
+                    destDepartureDelay,
+                    destTrack,
+                    totalStopsAtDestination,
+                    destinationStopIndex
+                )
+            ) : (
+                renderStationContent(
+                    false,
+                    stationName,
+                    arrivalRow,
+                    departureRow,
+                    isPassed,
+                    isFirstStation,
+                    isLastStation,
+                    arrivalDelay,
+                    departureDelay,
+                    track,
+                    totalStopsAtOrigin,
+                    stopIndex
+                )
+            )}
         </div>
     );
 }

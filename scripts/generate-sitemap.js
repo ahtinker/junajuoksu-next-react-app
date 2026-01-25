@@ -55,7 +55,7 @@ function getStationUrls() {
     const lastmod = getCurrentDate();
     
     return stations.map((station) => ({
-        loc: `${BASE_URL}/station/${stationNameToSlug(station.stationName_fi)}`,
+        loc: `${BASE_URL}/asema/${stationNameToSlug(station.stationName_fi)}`,
         lastmod,
         changefreq: 'daily',
         priority: 0.8,

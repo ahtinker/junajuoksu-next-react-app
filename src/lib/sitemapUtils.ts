@@ -71,7 +71,7 @@ export function getAllStationsWithSlugs(): (StationTranslation & { slug: string 
 /**
  * Get the SEO-friendly URL for a station
  * @param stationUICCode - The UIC code of the station
- * @returns The SEO-friendly URL path (e.g., "/station/helsinki")
+ * @returns The SEO-friendly URL path (e.g., "/asema/helsinki")
  */
 export function getStationSeoUrl(stationUICCode: number): string | null {
     const stations = stationTranslations.stations as StationTranslation[];
@@ -79,5 +79,5 @@ export function getStationSeoUrl(stationUICCode: number): string | null {
     
     if (!station) return null;
     
-    return `/station/${stationNameToSlug(station.stationName_fi)}`;
+    return `/asema/${stationNameToSlug(station.stationName_fi)}`;
 }

@@ -702,7 +702,7 @@ nextDate: trainsByDepartureDate(departureDate: "${nextDateStr}", where: {timeTab
                         ) : (
                             <button
                                 className={`button is-primary ${styles['tablet-primary-background']} ${styles['tv-button']}`}
-                                onClick={() => window.open(`/station/tv/${stationData.shortCode}?language=${locale}`, '_blank', 'noopener,noreferrer')}
+                                onClick={() => window.open(`/asema/tv/${stationData.shortCode}?language=${locale}`, '_blank', 'noopener,noreferrer')}
                                 title={t('timetables.stationTimetables.openTVDisplay')}
                             >
                                 <span className="icon">
