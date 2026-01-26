@@ -1005,7 +1005,12 @@ export default function TrainStationStops({
                         display: getNextStopIndex() === 0 ? 'none' : 'block',
                     }}>
                         <button className="button" onClick={() => setShowAllStops(!showAllStops)}>
+                        <span className="icon">
+                            <i className={`fa-solid fa-caret-${showAllStops ? 'down' : 'up'}`}></i>
+                        </span>
+                        <span>
                             {showAllStops ? t('train.centerNextStop') : t('train.showAllStops')}
+                        </span>
                         </button>
                     </div>
                     <div style={{

@@ -202,6 +202,12 @@
         "stop_duration": "Pysähdyksen kesto",
         "stop_number": "{current}/{total} pysähdys",
         "verify_passenger": "Vahvista matkustajuus",
+        "save_journey": "Tallenna matka",
+        "select_destination": "Valitse määränpää",
+        "select_destination_modal_title": "Valitse määränpää",
+        "select_destination_modal_message": "Valitse määränpääasema jatkaaksesi.",
+        "select_destination_modal_button": "Valitse kartalta",
+        "cancel": "Peruuta",
         "exceptionCause": "Myöhästymisen syy",
         "causeFromStation": "Tapahtui asemalla {station} (juna ei pysähdy)",
         "stationDrawer": {
@@ -216,7 +222,26 @@
             "showConnectingOnly": "Vain jatkoyhteydet",
             "trainsAfter": "Junat klo {time} jälkeen",
             "scheduled": "Aikataulun mukaan"
-        }
+        },
+        "login_required_title": "Kirjautuminen vaaditaan",
+        "login_required_message": "Kirjaudu sisään tallentaaksesi matkoja ja vahvistaaksesi matkustajuutesi.",
+        "login_with_google": "Kirjaudu Google-tilillä",
+        "journey_saved": "Matka tallennettu",
+        "journey_removed": "Matka poistettu",
+        "unsave_journey": "Poista tallennettu matka"
+    },
+    "savedJourneys": {
+        "title": "Tallennetut matkat",
+        "noJourneys": "Ei tallennettuja matkoja",
+        "noJourneysDescription": "Tallenna matka junasivulta nähdäksesi sen täällä.",
+        "trainTo": "kohteeseen",
+        "from": "Mistä",
+        "to": "Minne",
+        "openTrain": "Avaa juna",
+        "loadingJourneys": "Ladataan matkoja...",
+        "loginToSee": "Kirjaudu nähdäksesi tallennetut matkasi",
+        "today": "Tänään",
+        "yesterday": "Eilen"
     },
     "blogCommon": {
         "blog": "Blogi"

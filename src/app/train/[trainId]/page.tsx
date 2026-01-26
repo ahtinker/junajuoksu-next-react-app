@@ -389,6 +389,7 @@ export default function TrainPage() {
                                 highlightedStationUic={parseInt(parsedParams.originStationUic)}
                                 stopIndex={parseInt(parsedParams.originStopIndex)}
                                 selectedDestinationUic={parsedParams.selectedDestinationUic ? parseInt(parsedParams.selectedDestinationUic) : undefined}
+                                onSelectDestination={handleSetAsDestination}
                             />
                         </div>
                     </div>

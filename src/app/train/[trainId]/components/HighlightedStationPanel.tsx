@@ -1,15 +1,32 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { Train, TimeTableRow } from '../../../../lib/types';
 import { getTranslatedStationNameWithFallback } from '../../../../lib/stationUtils';
+
+type ModalAction = 'save_journey' | 'verify_passenger' | null;
+type ModalType = 'destination' | 'login' | null;
+
+interface User {
+    id?: number;
+    email: string;
+    name: string;
+    picture: string;
+}
 
 interface HighlightedStationPanelProps {
     train: Train;
     highlightedStationUic: number;
     stopIndex: number;
     selectedDestinationUic?: number;
+    onSelectDestination?: (stationUic: number) => void;
+}
+
+interface AvailableDestination {
+    stationUic: number;
+    stationName: string;
+    scheduledArrival?: string;
 }
 
 interface StationStopData {
@@ -55,13 +72,229 @@ export default function HighlightedStationPanel({
     train,
     highlightedStationUic,
     stopIndex,
-    selectedDestinationUic
+    selectedDestinationUic,
+    onSelectDestination
 }: HighlightedStationPanelProps) {
     const locale = useLocale();
     const t = useTranslations('train');
     
     // Tab state: 'departure' or 'destination'
     const [activeTab, setActiveTab] = useState<'departure' | 'destination'>('departure');
+
+    // Modal state
+    const [activeModal, setActiveModal] = useState<ModalType>(null);
+    const [pendingAction, setPendingAction] = useState<ModalAction>(null);
+
+    // User authentication state
+    const [user, setUser] = useState<User | null>(null);
+    const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+
+    // Journey saved state
+    const [isJourneySaved, setIsJourneySaved] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
+
+    // Check authentication status on mount
+    useEffect(() => {
+        const checkAuth = async () => {
+            try {
+                const response = await fetch('/api/auth/google');
+                const data = await response.json();
+                if (data.authenticated && data.user) {
+                    setUser(data.user);
+                }
+            } catch (error) {
+                console.error('Error checking auth:', error);
+            } finally {
+                setIsCheckingAuth(false);
+            }
+        };
+        checkAuth();
+    }, []);
+
+    // Check if journey is already saved when destination changes
+    useEffect(() => {
+        if (!user || !selectedDestinationUic) {
+            setIsJourneySaved(false);
+            return;
+        }
+
+        const checkSavedJourney = async () => {
+            try {
+                const response = await fetch('/api/saved-journeys');
+                if (response.ok) {
+                    const data = await response.json();
+                    const isSaved = data.journeys?.some((j: {
+                        train_number: number;
+                        departure_date: string;
+                        origin_station_uic: number;
+                        destination_station_uic: number
+                    }) =>
+                        j.train_number === train.trainNumber &&
+                        j.departure_date.split('T')[0] === train.departureDate &&
+                        j.origin_station_uic === highlightedStationUic &&
+                        j.destination_station_uic === selectedDestinationUic
+                    );
+                    setIsJourneySaved(!!isSaved);
+                }
+            } catch (error) {
+                console.error('Error checking saved journey:', error);
+            }
+        };
+        checkSavedJourney();
+    }, [user, selectedDestinationUic, train.trainNumber, train.departureDate, highlightedStationUic]);
+
+    // Get available destinations (stations after the departure station)
+    const getAvailableDestinations = (): AvailableDestination[] => {
+        const destinations: AvailableDestination[] = [];
+        let foundDeparture = false;
+        let currentStopCount = 0;
+        const seenStations = new Set<number>();
+
+        for (const row of train.timeTableRows) {
+            // Find when we pass the departure station at the correct stop index
+            if (row.stationUICCode === highlightedStationUic && row.trainStopping) {
+                if (row.type === 'DEPARTURE') {
+                    if (currentStopCount === stopIndex) {
+                        foundDeparture = true;
+                    }
+                    currentStopCount++;
+                }
+            }
+
+            // After departure, collect all stopping stations
+            if (foundDeparture && row.trainStopping && row.stationUICCode !== highlightedStationUic) {
+                if (!seenStations.has(row.stationUICCode)) {
+                    seenStations.add(row.stationUICCode);
+                    destinations.push({
+                        stationUic: row.stationUICCode,
+                        stationName: row.stationName || 'Unknown',
+                        scheduledArrival: row.type === 'ARRIVAL' ? row.scheduledTime : undefined
+                    });
+                }
+            }
+        }
+
+        return destinations;
+    };
+
+    const availableDestinations = getAvailableDestinations();
+
+    // Get station data for saving journey
+    const getStationData = useCallback(() => {
+        const originRow = train.timeTableRows.find(r => r.stationUICCode === highlightedStationUic && r.trainStopping);
+        const destRow = selectedDestinationUic
+            ? train.timeTableRows.find(r => r.stationUICCode === selectedDestinationUic && r.trainStopping && r.type === 'ARRIVAL')
+            : null;
+        const finalDestRow = train.timeTableRows[train.timeTableRows.length - 1];
+
+        return {
+            originStationName: originRow?.stationName,
+            destinationStationName: destRow?.stationName,
+            finalDestinationName: finalDestRow?.stationName,
+            scheduledDeparture: originRow?.scheduledTime,
+            scheduledArrival: destRow?.scheduledTime
+        };
+    }, [train.timeTableRows, highlightedStationUic, selectedDestinationUic]);
+
+    // Save or unsave journey
+    const saveJourney = useCallback(async () => {
+        if (!selectedDestinationUic || isSaving) return;
+
+        setIsSaving(true);
+        try {
+            const stationData = getStationData();
+            const response = await fetch('/api/saved-journeys', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    trainNumber: train.trainNumber,
+                    departureDate: train.departureDate,
+                    trainType: train.trainType,
+                    trainCommuterLine: train.commuterLineID,
+                    originStationUic: highlightedStationUic,
+                    originStopIndex: stopIndex,
+                    destinationStationUic: selectedDestinationUic,
+                    ...stationData
+                })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setIsJourneySaved(data.action === 'saved');
+            }
+        } catch (error) {
+            console.error('Error saving journey:', error);
+        } finally {
+            setIsSaving(false);
+        }
+    }, [selectedDestinationUic, isSaving, getStationData, train, highlightedStationUic, stopIndex]);
+
+    // Handler for verify passenger button
+    const handleVerifyPassenger = () => {
+        if (!user) {
+            setPendingAction('verify_passenger');
+            setActiveModal('login');
+            return;
+        }
+        if (!selectedDestinationUic) {
+            setPendingAction('verify_passenger');
+            setActiveModal('destination');
+        } else {
+            // TODO: Initiate verification process
+        }
+    };
+
+    // Handler for save journey button
+    const handleSaveJourney = () => {
+        if (!user) {
+            setPendingAction('save_journey');
+            setActiveModal('login');
+            return;
+        }
+        if (!selectedDestinationUic) {
+            setPendingAction('save_journey');
+            setActiveModal('destination');
+        } else {
+            saveJourney();
+        }
+    };
+
+    // Handler for destination tab click
+    const handleDestinationTabClick = () => {
+        if (!selectedDestinationUic) {
+            // No destination selected, show modal to select one
+            setPendingAction(null);
+            setActiveModal('destination');
+        } else {
+            // Destination exists, just switch tab
+            setActiveTab('destination');
+        }
+    };
+
+    // Handler for when user selects a destination from the modal list
+    const handleSelectDestinationFromList = (stationUic: number) => {
+        setActiveModal(null);
+
+        if (onSelectDestination) {
+            onSelectDestination(stationUic);
+        }
+
+        // If there was a pending action, handle it after destination is set
+        if (pendingAction === 'verify_passenger') {
+            // TODO: Initiate verification process after destination is selected
+        } else if (pendingAction === 'save_journey') {
+            // Save will trigger after destination is set via useEffect
+        }
+
+        setPendingAction(null);
+        setActiveTab('destination');
+    };
+
+    // Handler to close modal
+    const handleCloseModal = () => {
+        setActiveModal(null);
+        setPendingAction(null);
+    };
 
     // Count total stops at this station
     const getTotalStopsAtStation = (stationUic: number): number => {
@@ -286,38 +519,136 @@ export default function HighlightedStationPanel({
                         </p>
                     </div>
                 )}
-                <button className="button is-fullwidth is-primary">
-                    {t('verify_passenger')}
-                </button>
+                <div className="buttons is-centered" style={{ width: "100%" }}>
+                    <button className="button is-primary" onClick={handleVerifyPassenger} disabled={isCheckingAuth}>
+                        <span className="icon">
+                            <i className="fas fa-chair"></i>
+                        </span>
+                        <span>
+                            {t('verify_passenger')}
+                        </span>
+                    </button>
+                    <button
+                        className={`button ${isSaving ? "is-loading" : isJourneySaved ? 'is-ghost' : 'is-primary is-outlined'}`}
+                        onClick={handleSaveJourney}
+                        disabled={isCheckingAuth || isSaving}
+                    >
+                        <span className="icon">
+                            <i className={`fas ${isJourneySaved ? 'fa-bookmark' : 'fa-bookmark'}`}></i>
+                        </span>
+                        <span>
+                            {isJourneySaved ? t('unsave_journey') : t('save_journey')}
+                        </span>
+                    </button>
+                </div>
+
             </div>
         </>
     );
 
     return (
         <div className="box is-shadowless" style={{ backgroundColor: 'var(--bulma-scheme-main-bis)' }}>
-            {/* Tabs - only show if destination is selected */}
-            {selectedDestinationUic && destinationData && (destArrivalRow || destDepartureRow) && (
-                <div className="tabs is-centered is-boxed mb-4" style={{ backgroundColor: 'var(--bulma-scheme-main-bis)' }}>
-                    <ul>
-                        <li className={activeTab === 'departure' ? 'is-active' : ''}>
-                            <a onClick={() => setActiveTab('departure')}>
-                                <span className="icon is-small">
-                                    <i className="fas fa-sign-out-alt"></i>
+            {/* Login Required Modal */}
+            <div className={`modal ${activeModal === 'login' ? 'is-active' : ''}`}>
+                <div className="modal-background" onClick={handleCloseModal}></div>
+                <div className="modal-card">
+                    <header className="modal-card-head is-shadowless">
+                        <p className="modal-card-title">{t('login_required_title')}</p>
+                        <button className="delete" aria-label="close" onClick={handleCloseModal}></button>
+                    </header>
+                    <section className="modal-card-body has-text-centered">
+                        <span className="icon has-text-warning is-large mb-4">
+                            <i className="fas fa-user-lock fa-3x"></i>
+                        </span>
+                        <p className="mb-4">{t('login_required_message')}</p>
+                        <div id="google-signin-button-modal" className="is-flex is-justify-content-center">
+                            {/* Google Sign-In button will be rendered here by the navbar's Google Identity Services */}
+                            <button
+                                className="button is-light is-medium"
+                                onClick={() => {
+                                    handleCloseModal();
+                                    // Trigger Google Sign-In by clicking the navbar button
+                                    const navbarButton = document.querySelector('[data-google-signin]') as HTMLElement;
+                                    if (navbarButton) {
+                                        navbarButton.click();
+                                    } else {
+                                        // Fallback: scroll to top where navbar is
+                                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                                    }
+                                }}
+                            >
+                                <span className="icon">
+                                    <i className="fab fa-google"></i>
                                 </span>
-                                <span>{stationName}</span>
-                            </a>
-                        </li>
-                        <li className={activeTab === 'destination' ? 'is-active' : ''}>
-                            <a onClick={() => setActiveTab('destination')}>
-                                <span className="icon is-small">
-                                    <i className="fas fa-flag-checkered"></i>
-                                </span>
-                                <span>{destStationName}</span>
-                            </a>
-                        </li>
-                    </ul>
+                                <span>{t('login_with_google')}</span>
+                            </button>
+                        </div>
+                    </section>
+                    <footer className="modal-card-foot">
+                        <button className="button" onClick={handleCloseModal}>{t('cancel')}</button>
+                    </footer>
                 </div>
-            )}
+            </div>
+
+            {/* Destination Selection Modal */}
+            <div className={`modal ${activeModal === 'destination' ? 'is-active' : ''}`}>
+                <div className="modal-background" onClick={handleCloseModal}></div>
+                <div className="modal-card">
+                    <header className="modal-card-head is-shadowless">
+                        <p className="modal-card-title">{t('select_destination_modal_title')}</p>
+                        <button className="delete" aria-label="close" onClick={handleCloseModal}></button>
+                    </header>
+                    <section className="modal-card-body" style={{ maxHeight: '60vh', overflowY: 'auto' }}>
+                        <p className="mb-4">{t('select_destination_modal_message')}</p>
+                        <div className="menu">
+                            <ul className="menu-list">
+                                {availableDestinations.map((dest) => (
+                                    <li key={dest.stationUic}>
+                                        <a
+                                            onClick={() => handleSelectDestinationFromList(dest.stationUic)}
+                                            className="is-flex is-justify-content-space-between is-align-items-center has-text-primary"
+                                        >
+                                            <span>
+                                                {getTranslatedStationNameWithFallback(dest.stationUic, locale, dest.stationName)}
+                                            </span>
+                                            {dest.scheduledArrival && (
+                                                <span className="tag is-rounded">
+                                                    {formatTime(dest.scheduledArrival).substring(0, 5)}
+                                                </span>
+                                            )}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </section>
+                    <footer className="modal-card-foot">
+                        <button className="button" onClick={handleCloseModal}>{t('cancel')}</button>
+                    </footer>
+                </div>
+            </div>
+
+            {/* Tabs - always show two tabs */}
+            <div className="tabs is-centered is-boxed mb-4" style={{ backgroundColor: 'var(--bulma-scheme-main-bis)' }}>
+                <ul>
+                    <li className={activeTab === 'departure' ? 'is-active' : ''}>
+                        <a onClick={() => setActiveTab('departure')}>
+                            <span className="icon is-small">
+                                <i className="fas fa-sign-out-alt"></i>
+                            </span>
+                            <span>{stationName}</span>
+                        </a>
+                    </li>
+                    <li className={activeTab === 'destination' ? 'is-active' : ''}>
+                        <a onClick={handleDestinationTabClick}>
+                            <span className="icon is-small">
+                                <i className={selectedDestinationUic && destinationData ? 'fas fa-flag-checkered' : 'fas fa-plus'}></i>
+                            </span>
+                            <span>{selectedDestinationUic && destinationData ? destStationName : t('select_destination')}</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
 
             {/* Content based on active tab */}
             {activeTab === 'departure' ? (
@@ -351,20 +682,14 @@ export default function HighlightedStationPanel({
                     destinationStopIndex
                 )
             ) : (
-                renderStationContent(
-                    false,
-                    stationName,
-                    arrivalRow,
-                    departureRow,
-                    isPassed,
-                    isFirstStation,
-                    isLastStation,
-                    arrivalDelay,
-                    departureDelay,
-                    track,
-                    totalStopsAtOrigin,
-                    stopIndex
-                )
+                        /* No destination selected - show prompt to select destination */
+                        <div className="has-text-centered py-5">
+                            <span className="icon has-text-grey is-large mb-3">
+                                <i className="fas fa-map-marker-alt fa-2x"></i>
+                            </span>
+                            <p className="title is-5 has-text-grey">{t('select_destination')}</p>
+                            <p className="subtitle is-6 has-text-grey">{t('select_destination_modal_message')}</p>
+                        </div>
             )}
         </div>
     );

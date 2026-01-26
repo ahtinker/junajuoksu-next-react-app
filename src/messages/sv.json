@@ -202,6 +202,12 @@
         "stop_duration": "Uppehållstid",
         "stop_number": "{current}/{total} stopp",
         "verify_passenger": "Bekräfta passagerarstatus",
+        "save_journey": "Spara resan",
+        "select_destination": "Välj destination",
+        "select_destination_modal_title": "Välj destination",
+        "select_destination_modal_message": "Välj en destinationsstation för att fortsätta.",
+        "select_destination_modal_button": "Välj på kartan",
+        "cancel": "Avbryt",
         "exceptionCause": "Förseningsorsak",
         "causeFromStation": "Inträffade vid {station} (tåget stannar inte)",
         "stationDrawer": {
@@ -216,7 +222,26 @@
             "showConnectingOnly": "Endast anslutande",
             "trainsAfter": "Tåg efter {time}",
             "scheduled": "Planerad"
-        }
+        },
+        "login_required_title": "Inloggning krävs",
+        "login_required_message": "Logga in för att spara resor och bekräfta din passagerarstatus.",
+        "login_with_google": "Logga in med Google",
+        "journey_saved": "Resa sparad",
+        "journey_removed": "Resa borttagen",
+        "unsave_journey": "Ta bort sparad resa"
+    },
+    "savedJourneys": {
+        "title": "Sparade resor",
+        "noJourneys": "Inga sparade resor",
+        "noJourneysDescription": "Spara en resa från tågsidan för att se den här.",
+        "trainTo": "till",
+        "from": "Från",
+        "to": "Till",
+        "openTrain": "Öppna tåg",
+        "loadingJourneys": "Laddar resor...",
+        "loginToSee": "Logga in för att se dina sparade resor",
+        "today": "Idag",
+        "yesterday": "Igår"
     },
     "blogCommon": {
         "blog": "Blogg"

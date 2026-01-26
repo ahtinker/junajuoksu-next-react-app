@@ -6,6 +6,7 @@ import Footer from './components/site/footer';
 import StationList from './components/site/stationlist/stationlist';
 import { useTranslations } from 'next-intl';
 import BlogCard from './components/site/blogcard/card';
+import SavedJourneys from './components/site/savedJourneys/SavedJourneys';
 import Image from 'next/image';
 import type { Metadata } from 'next';
 
@@ -41,7 +42,18 @@ function Home() {
           </div>
         </section>
       </div>
-      <div className="" style={{ marginBottom: '-7px', zIndex: 2 }}>
+      <div className="" style={{ marginBottom: '-5.5px', zIndex: 2 }}>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgb(61, 136, 61, 0.8)" fillOpacity="1" d="M0,160L1440,320L1440,320L0,320Z"></path></svg>
+      </div>
+      <section className="section" style={{ backgroundColor: 'rgba(61, 136, 61, 0.8)', paddingBottom: "400px", marginBottom: "-400px" }}>
+        <div className="container has-text-left">
+          <h2 className="title mb-6 has-text-white">
+            {t('savedJourneys.title')}
+          </h2>
+          <SavedJourneys />
+        </div>
+      </section>
+      <div className="" style={{ marginBottom: '-5.5px', zIndex: 2 }}>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgb(61, 136, 61)" fillOpacity="1" d="M0,160L1440,320L1440,320L0,320Z"></path></svg>
       </div>
       <section className="section has-background-primary">

@@ -202,6 +202,12 @@
         "stop_duration": "Stop duration",
         "stop_number": "{current}/{total} stop",
         "verify_passenger": "Verify passenger status",
+        "save_journey": "Save journey",
+        "select_destination": "Select destination",
+        "select_destination_modal_title": "Select Destination",
+        "select_destination_modal_message": "Please select a destination station to continue.",
+        "select_destination_modal_button": "Select on map",
+        "cancel": "Cancel",
         "exceptionCause": "Delay Cause",
         "causeFromStation": "Occurred at {station} (train does not stop)",
         "stationDrawer": {
@@ -216,7 +222,26 @@
             "showConnectingOnly": "Connecting Only",
             "trainsAfter": "Trains after {time}",
             "scheduled": "Scheduled"
-        }
+        },
+        "login_required_title": "Login Required",
+        "login_required_message": "Please log in to save journeys and verify your passenger status.",
+        "login_with_google": "Log in with Google",
+        "journey_saved": "Journey saved",
+        "journey_removed": "Journey removed",
+        "unsave_journey": "Remove saved journey"
+    },
+    "savedJourneys": {
+        "title": "Saved Journeys",
+        "noJourneys": "No saved journeys",
+        "noJourneysDescription": "Save a journey from the train page to see it here.",
+        "trainTo": "to",
+        "from": "From",
+        "to": "To",
+        "openTrain": "Open train",
+        "loadingJourneys": "Loading journeys...",
+        "loginToSee": "Log in to see your saved journeys",
+        "today": "Today",
+        "yesterday": "Yesterday"
     },
     "blogCommon": {
         "blog": "Blog"
