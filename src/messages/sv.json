@@ -156,6 +156,7 @@
         "departs": "Avgår",
         "departed": "Avgick",
         "cancelled": "Inställd",
+        "stopCancelled": "Stopp inställt",
         "running": "Kör",
         "not_active": "Ej startat",
         "origin": "Avgångsstation",

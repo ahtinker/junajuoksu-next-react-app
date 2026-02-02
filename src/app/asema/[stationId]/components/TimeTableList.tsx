@@ -521,8 +521,8 @@ nextDate: trainsByDepartureDate(departureDate: "${nextDateStr}", where: {timeTab
                         .filter(stop => {
                             const { arrivalRow, departureRow } = stop;
 
-                            // Check if this is a commercial stop
-                            const isCommercialStop = (arrivalRow && arrivalRow.trainStopping) || (departureRow && departureRow.trainStopping);
+                            // Check if this is a commercial stop (must have commercialStop: true)
+                            const isCommercialStop = (arrivalRow?.commercialStop) || (departureRow?.commercialStop);
                             if (!isCommercialStop) return false;
 
                             // Check if it's a passenger train
@@ -680,7 +680,7 @@ nextDate: trainsByDepartureDate(departureDate: "${nextDateStr}", where: {timeTab
 
     return (
         <article className={"panel is-primary is-shadowless " + classNames} style={{ marginTop: "-2px" }}>
-            <div className={`${styles['mobile-border']}`} style={hideTop ? { position: 'sticky', top: 0, zIndex: 1 } : { position: 'sticky', top: 0, zIndex: 1, border: 'solid var(--bulma-scheme-main' }}>
+            <div className={`${styles['mobile-border']} mt-2`} style={hideTop ? { position: 'sticky', top: 0, zIndex: 1 } : { position: 'sticky', top: "0.5rem", zIndex: 1, border: 'solid var(--bulma-scheme-main' }}>
                 <div className={`panel-heading level is-mobile mb-0 py-2 ${styles['tablet-primary-background']} `}>
                     <div className="level-left has-text-left is-block py-2">
                         <div className={`title is-4 has-text-left m-0  ${isRealtime ? styles['tablet-primary-background'] : "has-text-primary-70"}`}>
@@ -956,6 +956,10 @@ nextDate: trainsByDepartureDate(departureDate: "${nextDateStr}", where: {timeTab
                                                         <span style={{ color: 'var(--bulma-danger)' }} className="is-size-5 has-text-weight-bold">
                                                             {t('timetables.cancelled')}
                                                         </span>
+                                                    ) : (arrivalRow?.cancelled || departureRow?.cancelled) ? (
+                                                        <span style={{ color: 'var(--bulma-danger)' }} className="is-size-5 has-text-weight-bold">
+                                                            {t('train.stopCancelled')}
+                                                        </span>
                                                     ) : (
                                                         <>
                                                                 {activeTab === 'all' && arrivalRow && departureRow && `${t('timetables.stopsAt')} ${getStationGrammarForms(stationData.uicCode, locale)?.inessive || stationData.translatedName || stationData.name}`}
@@ -971,7 +975,7 @@ nextDate: trainsByDepartureDate(departureDate: "${nextDateStr}", where: {timeTab
                                     </div>
                                 </div>
                             </div>
-                            <div className="column is-narrow" style={{opacity: `${train.cancelled ? 0.5 : 1}`}}>
+                            <div className="column is-narrow" style={{ opacity: `${train.cancelled || arrivalRow?.cancelled || departureRow?.cancelled ? 0.5 : 1}` }}>
                                 {/* Bottom part */}
                                 <div className="">
                                     <div className="columns is-mobile has-text-left">

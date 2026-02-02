@@ -1,0 +1,34 @@
+.embla {
+    overflow: hidden;
+}
+
+.embla__container {
+    display: flex;
+}
+
+.embla__slide {
+    flex: 0 0 100%;
+    min-width: 0;
+    padding-right: 1rem;
+}
+
+/* Tablet: 2 slides per view */
+@media (min-width: 769px) {
+    .embla__slide {
+        flex: 0 0 50%;
+    }
+}
+
+/* Desktop: 3 slides per view */
+@media (min-width: 1024px) {
+    .embla__slide {
+        flex: 0 0 33.333%;
+    }
+}
+
+/* Widescreen: 4 slides per view */
+@media (min-width: 1216px) {
+    .embla__slide {
+        flex: 0 0 25%;
+    }
+}

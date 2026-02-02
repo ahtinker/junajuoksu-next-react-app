@@ -665,7 +665,12 @@ export default function TrainStationStops({
             hasArrival: !!stop.arrivalRow,
             hasDeparture: !!stop.departureRow,
             isTerminal: !!stop.arrivalRow && !stop.departureRow,
-            isStarting: !stop.arrivalRow && !!stop.departureRow
+            isStarting: !stop.arrivalRow && !!stop.departureRow,
+
+            // Cancelled flag - stop is cancelled if both arrival and departure are cancelled (or whichever exists)
+            isCancelled: (stop.arrivalRow?.cancelled ?? false) && (stop.departureRow?.cancelled ?? false),
+            arrivalCancelled: stop.arrivalRow?.cancelled ?? false,
+            departureCancelled: stop.departureRow?.cancelled ?? false
         };
     });
 
@@ -1138,7 +1143,7 @@ export default function TrainStationStops({
                                         </div>
                                             <span
                                                 className={`station-name title is-5 has-text-weight-bold ml-5 pl-2 ${styles['clickable-station-name']}`}
-                                                style={{ color: statusColor(), zIndex: 2, position: "absolute" }}
+                                                style={{ color: stop.isCancelled ? 'var(--bulma-danger)' : statusColor(), zIndex: 2, position: "absolute", textDecoration: stop.isCancelled ? 'line-through' : 'none' }}
                                                 onClick={() => {
                                                     setSelectedStationForDrawer({
                                                         uicCode: stop.uicCode,
@@ -1152,13 +1157,18 @@ export default function TrainStationStops({
                                                 }}
                                             >
                                             {stop.stationName}
+                                                {stop.isCancelled && (
+                                                    <span className="tag is-danger ml-2" style={{ verticalAlign: 'middle', fontSize: '0.7rem' }}>
+                                                        {t('train.stopCancelled')}
+                                                    </span>
+                                                )}
                                         </span>
                                             <div className={"ml-5 pl-2 mt-5 pt-2 is-3 is-hidden-touch is-hidden-widescreen"}>
                                                 <div className="title is-6 mb-1 has-text-weight-semibold">
                                                     {t('train.track')}
                                                 </div>
                                                 <div className="tag is-size-6 px-4" style={{ backgroundColor: 'var(--bulma-scheme-main)', color: 'var(--bulma-text-strong)' }}>
-                                                    {getStationTrack(stop.departure.track ? index : index - 1)}
+                                                    {getStationTrack(stop.arrival.track ? index : stop.departure.track ? index + 1 : -1) || "?"}
                                                 </div>
                                             </div>
                                     </div>
@@ -1172,7 +1182,7 @@ export default function TrainStationStops({
                                                         {t('train.track')}
                                                     </div>
                                                     <div className="tag is-size-6 px-4" style={{ backgroundColor: 'var(--bulma-scheme-main)', color: 'var(--bulma-text-strong)' }}>
-                                                        {getStationTrack(stop.departure.track ? index : index - 1)}
+                                                        {getStationTrack(stop.arrival.track ? index : stop.departure.track ? index + 1 : -1) || "?"}
                                                     </div>
                                                 </div>
                                                 <div className={"column " + (!stop.hasArrival && !(index === 0 && boardingTime) ? "is-hidden" : "")}>
@@ -1190,8 +1200,11 @@ export default function TrainStationStops({
                                                         })()}
                                                 </div>
                                                 {stop.hasArrival && (
-                                                    <div>
-                                                        <div className={`${stop.arrival.delaySeconds > 0 ? 'has-text-danger' : stop.arrival.delaySeconds < 0 ? 'has-text-success' : ''}`}>
+                                                        <div style={{ opacity: stop.arrivalCancelled ? 0.5 : 1 }}>
+                                                            <div
+                                                                className={`${stop.arrivalCancelled ? 'has-text-grey' : stop.arrival.delaySeconds > 0 ? 'has-text-danger' : stop.arrival.delaySeconds < 0 ? 'has-text-success' : ''}`}
+                                                                style={{ textDecoration: stop.arrivalCancelled ? 'line-through' : 'none' }}
+                                                            >
                                                             {stop.arrival.time}
                                                         </div>
                                                         <div className={`is-size-7 ${stop.arrival.delaySeconds > 0 || stop.arrival.delaySeconds < 0 ? '' : 'is-hidden'}`}>
@@ -1222,8 +1235,11 @@ export default function TrainStationStops({
                                                         })()}
                                                 </div>
                                                 {stop.hasDeparture && (
-                                                    <div>
-                                                        <div className={`${stop.departure.delaySeconds > 0 ? 'has-text-danger' : stop.departure.delaySeconds < 0 ? 'has-text-success' : ''}`}>
+                                                        <div style={{ opacity: stop.departureCancelled ? 0.5 : 1 }}>
+                                                            <div
+                                                                className={`${stop.departureCancelled ? 'has-text-grey' : stop.departure.delaySeconds > 0 ? 'has-text-danger' : stop.departure.delaySeconds < 0 ? 'has-text-success' : ''}`}
+                                                                style={{ textDecoration: stop.departureCancelled ? 'line-through' : 'none' }}
+                                                            >
                                                             {stop.departure.time}
                                                         </div>
                                                         <div className={`is-size-7 ${stop.departure.delaySeconds > 0 || stop.departure.delaySeconds < 0 ? '' : 'is-hidden'}`}>

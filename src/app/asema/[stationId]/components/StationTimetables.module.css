@@ -22,7 +22,7 @@
             color: var(--bulma-color) !important;
         }
     .mobile-border {
-        border-width: 10px 0 0 0 !important;
+        border-width: 50px 0 0 0 !important;
     }
                                 
 }

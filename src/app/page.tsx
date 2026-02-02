@@ -42,10 +42,10 @@ function Home() {
           </div>
         </section>
       </div>
-      <div className="" style={{ marginBottom: '-5.5px', zIndex: 2 }}>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgb(61, 136, 61, 0.8)" fillOpacity="1" d="M0,160L1440,320L1440,320L0,320Z"></path></svg>
+      <div className="" style={{ marginBottom: '-7px', zIndex: 2 }}>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(45, 97, 45, 1)" fillOpacity="1" d="M0,160L1440,320L1440,320L0,320Z"></path></svg>
       </div>
-      <section className="section" style={{ backgroundColor: 'rgba(61, 136, 61, 0.8)', paddingBottom: "400px", marginBottom: "-400px" }}>
+      <section className="section" style={{ backgroundColor: 'rgba(45, 97, 45, 1)', paddingBottom: "450px", marginBottom: "-450px" }}>
         <div className="container has-text-left">
           <h2 className="title mb-6 has-text-white">
             {t('savedJourneys.title')}
@@ -53,7 +53,7 @@ function Home() {
           <SavedJourneys />
         </div>
       </section>
-      <div className="" style={{ marginBottom: '-5.5px', zIndex: 2 }}>
+      <div className="" style={{ marginBottom: '-7px', zIndex: 2 }}>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgb(61, 136, 61)" fillOpacity="1" d="M0,160L1440,320L1440,320L0,320Z"></path></svg>
       </div>
       <section className="section has-background-primary">

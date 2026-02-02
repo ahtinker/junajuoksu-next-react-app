@@ -33,7 +33,7 @@ export default async function RootLayout({
       <head>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable}`} style={{ marginRight: "0px !important" }}>
+      <body className={`${geistSans.variable} ${geistMono.variable} pt-6`} style={{ marginRight: "0px !important" }}>
         <NextIntlClientProvider messages={messages}>
           {children}
         </NextIntlClientProvider>

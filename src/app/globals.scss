@@ -13,9 +13,14 @@ $green: rgb(61, 136, 61);
     --wagon-svg-filter: none;
 }
 
+// Override shadow color in dark mode to be dark instead of light
 @media (prefers-color-scheme: dark) {
     :root {
         --wagon-svg-filter: brightness(50) invert(0.7);
+        // Set shadow to black in dark mode
+            --bulma-shadow-h: 0deg;
+            --bulma-shadow-s: 0%;
+            --bulma-shadow-l: 0%;
     }
 }
 

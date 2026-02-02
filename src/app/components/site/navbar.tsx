@@ -454,7 +454,7 @@ const NavBar = () => {
                 onLoad={initializeGoogle}
             />
 
-            <nav className="navbar px-4" style={{ width: "100%", backgroundColor: "transparent !important" }}>
+            <nav className="navbar px-4 is-fixed-top is-boxed">
             <div className="container">
                 <div className="navbar-brand">
                     <Link className="navbar-item" href="/">

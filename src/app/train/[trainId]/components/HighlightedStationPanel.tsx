@@ -450,7 +450,7 @@ export default function HighlightedStationPanel({
 
             {/* Cancelled indicator */}
             {(arrival?.cancelled || departure?.cancelled) && (
-                <div className="notification is-danger is-light has-text-centered mb-4">
+                <div className="notification is-danger has-text-centered mb-4">
                     <span className="icon-text is-justify-content-center">
                         <span className="icon">
                             <i className="fas fa-times-circle"></i>
@@ -547,7 +547,7 @@ export default function HighlightedStationPanel({
     );
 
     return (
-        <div className="box is-shadowless" style={{ backgroundColor: 'var(--bulma-scheme-main-bis)' }}>
+        <div className="box" style={{ backgroundColor: 'var(--bulma-background)' }}>
             {/* Login Required Modal */}
             <div className={`modal ${activeModal === 'login' ? 'is-active' : ''}`}>
                 <div className="modal-background" onClick={handleCloseModal}></div>
@@ -629,7 +629,7 @@ export default function HighlightedStationPanel({
             </div>
 
             {/* Tabs - always show two tabs */}
-            <div className="tabs is-centered is-boxed mb-4" style={{ backgroundColor: 'var(--bulma-scheme-main-bis)' }}>
+            <div className="tabs is-centered is-boxed mb-4" style={{ backgroundColor: 'var(--bulma-background)' }}>
                 <ul>
                     <li className={activeTab === 'departure' ? 'is-active' : ''}>
                         <a onClick={() => setActiveTab('departure')}>

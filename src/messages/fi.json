@@ -156,6 +156,7 @@
         "departs": "Lähtee",
         "departed": "Lähti",
         "cancelled": "Peruttu",
+        "stopCancelled": "Pysähdys peruttu",
         "running": "Liikkeellä",
         "not_active": "Ei aloittanut",
         "origin": "Lähtöasema",
