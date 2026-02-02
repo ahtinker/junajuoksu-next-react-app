@@ -552,36 +552,17 @@ export default function HighlightedStationPanel({
             <div className={`modal ${activeModal === 'login' ? 'is-active' : ''}`}>
                 <div className="modal-background" onClick={handleCloseModal}></div>
                 <div className="modal-card">
-                    <header className="modal-card-head is-shadowless">
+                    <header className="modal-card-head ">
                         <p className="modal-card-title">{t('login_required_title')}</p>
                         <button className="delete" aria-label="close" onClick={handleCloseModal}></button>
                     </header>
                     <section className="modal-card-body has-text-centered">
-                        <span className="icon has-text-warning is-large mb-4">
-                            <i className="fas fa-user-lock fa-3x"></i>
+                        <span className="icon has-text-primary is-large mb-4">
+                            <i className="fab fa-google fa-2x"></i>
                         </span>
                         <p className="mb-4">{t('login_required_message')}</p>
                         <div id="google-signin-button-modal" className="is-flex is-justify-content-center">
                             {/* Google Sign-In button will be rendered here by the navbar's Google Identity Services */}
-                            <button
-                                className="button is-light is-medium"
-                                onClick={() => {
-                                    handleCloseModal();
-                                    // Trigger Google Sign-In by clicking the navbar button
-                                    const navbarButton = document.querySelector('[data-google-signin]') as HTMLElement;
-                                    if (navbarButton) {
-                                        navbarButton.click();
-                                    } else {
-                                        // Fallback: scroll to top where navbar is
-                                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                                    }
-                                }}
-                            >
-                                <span className="icon">
-                                    <i className="fab fa-google"></i>
-                                </span>
-                                <span>{t('login_with_google')}</span>
-                            </button>
                         </div>
                     </section>
                     <footer className="modal-card-foot">
@@ -594,7 +575,7 @@ export default function HighlightedStationPanel({
             <div className={`modal ${activeModal === 'destination' ? 'is-active' : ''}`}>
                 <div className="modal-background" onClick={handleCloseModal}></div>
                 <div className="modal-card">
-                    <header className="modal-card-head is-shadowless">
+                    <header className="modal-card-head ">
                         <p className="modal-card-title">{t('select_destination_modal_title')}</p>
                         <button className="delete" aria-label="close" onClick={handleCloseModal}></button>
                     </header>

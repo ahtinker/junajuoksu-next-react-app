@@ -128,7 +128,7 @@ export default function SavedJourneys() {
 
     if (!user) {
         return (
-            <div className="box has-text-centered is-shadowless" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}>
+            <div className="box has-text-centered " style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}>
                 <span className="icon is-large has-text-white-ter mb-3">
                     <i className="fas fa-user-lock fa-2x"></i>
                 </span>
@@ -139,7 +139,7 @@ export default function SavedJourneys() {
 
     if (journeys.length === 0) {
         return (
-            <div className="box has-text-centered is-shadowless" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}>
+            <div className="box has-text-centered " style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}>
                 <span className="icon is-large has-text-white-ter mb-3">
                     <i className="fas fa-bookmark fa-2x"></i>
                 </span>
@@ -221,7 +221,7 @@ function Carousel({ journeys, locale, t, formatDateLabel, formatTime, formatTrai
                                 key={journey.id}
                                 className={styles.embla__slide}
                             >
-                                <div className="card is-shadowless" style={{ backgroundColor: "var(--bulma-background)", height: '100%' }}>
+                                <div className="card " style={{ backgroundColor: "var(--bulma-background)", height: '100%' }}>
                                     <div className="card-content">
                                         {/* Date label based on scheduled departure */}
                                         <p className="is-size-5 mb-4">{formatDateLabel(journey.scheduled_departure)}</p>

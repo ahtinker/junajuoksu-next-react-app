@@ -222,10 +222,15 @@
             "showAllTrains": "Visa alla",
             "showConnectingOnly": "Endast anslutande",
             "trainsAfter": "Tåg efter {time}",
-            "scheduled": "Planerad"
+            "scheduled": "Planerad",
+            "trainAtStation": "Tåget vid stationen",
+            "trainApproaching": "Tåget närmar sig",
+            "distanceToStation": "Avstånd",            "currentSpeed": "{speed} km/h",            "timeToArrival": "Anländer om",
+            "timeToDeparture": "Avgår om",
+            "positionAge": "Uppdaterad för {age} sedan"
         },
         "login_required_title": "Inloggning krävs",
-        "login_required_message": "Logga in för att spara resor och bekräfta din passagerarstatus.",
+        "login_required_message": "Logga in med Google-ikonen längst upp till höger på sidan.",
         "login_with_google": "Logga in med Google",
         "journey_saved": "Resa sparad",
         "journey_removed": "Resa borttagen",

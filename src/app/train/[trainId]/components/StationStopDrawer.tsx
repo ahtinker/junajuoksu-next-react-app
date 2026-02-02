@@ -7,6 +7,7 @@ import Link from 'next/link';
 import TimetableList from '@/app/asema/[stationId]/components/TimeTableList';
 import { TimeTableRow, Cause } from '../../../../lib/types';
 import TrainCompositionView from './TrainCompositionView';
+import { getStationGeolocations, calculateDistance, formatDistance } from '../../../../lib/stationGeolocations';
 
 // Cause code types - names are localized
 interface LocalizedName {
@@ -88,6 +89,13 @@ interface TrainInfo {
     trainNumber: number;
 }
 
+interface TrainPositionInfo {
+    latitude: number | null;
+    longitude: number | null;
+    speed: number | null;
+    timestamp: string | null;
+}
+
 interface StationStopDrawerProps {
     station: StationStopInfo | null;
     isOpen: boolean;
@@ -99,6 +107,8 @@ interface StationStopDrawerProps {
     currentDestinationUic?: number;
     onSetAsDeparture?: (uicCode: number, stopIndex: number) => void;
     onSetAsDestination?: (uicCode: number) => void;
+    trainPosition?: TrainPositionInfo | null;
+    isTrainRunning?: boolean;
 }
 
 const StationStopDrawer = memo(function StationStopDrawer({
@@ -111,7 +121,9 @@ const StationStopDrawer = memo(function StationStopDrawer({
     currentOriginDepartureTime,
     currentDestinationUic,
     onSetAsDeparture,
-    onSetAsDestination
+    onSetAsDestination,
+    trainPosition,
+    isTrainRunning
 }: StationStopDrawerProps) {
     const t = useTranslations();
     const locale = useLocale();
@@ -132,6 +144,38 @@ const StationStopDrawer = memo(function StationStopDrawer({
     const [causeCategories, setCauseCategories] = useState<CauseCategory[]>([]);
     const [detailedCauseCategories, setDetailedCauseCategories] = useState<DetailedCauseCategory[]>([]);
     const [thirdCauseCategories, setThirdCauseCategories] = useState<ThirdCauseCategory[]>([]);
+
+    // Station geolocation state
+    const [stationGeolocation, setStationGeolocation] = useState<{ latitude: number; longitude: number } | null>(null);
+
+    // Current time for countdown (updates every second)
+    const [currentTime, setCurrentTime] = useState(new Date());
+
+    // Fetch station geolocation when drawer opens
+    useEffect(() => {
+        if (!isOpen || !station) return;
+
+        const fetchGeolocation = async () => {
+            const geolocations = await getStationGeolocations();
+            const geo = geolocations.get(station.uicCode);
+            if (geo) {
+                setStationGeolocation({ latitude: geo.latitude, longitude: geo.longitude });
+            }
+        };
+
+        fetchGeolocation();
+    }, [isOpen, station]);
+
+    // Update current time every second for countdown
+    useEffect(() => {
+        if (!isOpen) return;
+
+        const interval = setInterval(() => {
+            setCurrentTime(new Date());
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, [isOpen]);
 
     // Fetch cause codes
     useEffect(() => {
@@ -322,6 +366,121 @@ const StationStopDrawer = memo(function StationStopDrawer({
         if (station.arrivalRow?.causes) causes.push(...station.arrivalRow.causes);
         if (station.departureRow?.causes) causes.push(...station.departureRow.causes);
         return causes;
+    };
+
+    // Calculate tracking information
+    const trackingInfo = useMemo(() => {
+        if (!station || !isTrainRunning) return null;
+
+        const now = currentTime.getTime();
+
+        // Get arrival and departure times
+        const arrivalRow = station.arrivalRow;
+        const departureRow = station.departureRow;
+
+        const arrivalTimeStr = arrivalRow?.actualTime || arrivalRow?.liveEstimateTime || arrivalRow?.scheduledTime;
+        const departureTimeStr = departureRow?.actualTime || departureRow?.liveEstimateTime || departureRow?.scheduledTime;
+
+        const arrivalTime = arrivalTimeStr ? new Date(arrivalTimeStr).getTime() : null;
+        const departureTime = departureTimeStr ? new Date(departureTimeStr).getTime() : null;
+
+        // Determine station status
+        let isUpcoming = false;
+        let isAtStation = false;
+        let timeUntilMs: number | null = null;
+        let timeUntilType: 'arrival' | 'departure' | null = null;
+
+        if (arrivalTime && departureTime) {
+            // Station has both arrival and departure
+            if (now < arrivalTime) {
+                // Train hasn't arrived yet
+                isUpcoming = true;
+                timeUntilMs = arrivalTime - now;
+                timeUntilType = 'arrival';
+            } else if (now >= arrivalTime && now < departureTime) {
+                // Train is at the station
+                isAtStation = true;
+                timeUntilMs = departureTime - now;
+                timeUntilType = 'departure';
+            }
+            // else: train has departed
+        } else if (departureTime && !arrivalTime) {
+            // First station (only departure)
+            if (now < departureTime) {
+                isAtStation = true;
+                timeUntilMs = departureTime - now;
+                timeUntilType = 'departure';
+            }
+        } else if (arrivalTime && !departureTime) {
+            // Last station (only arrival)
+            if (now < arrivalTime) {
+                isUpcoming = true;
+                timeUntilMs = arrivalTime - now;
+                timeUntilType = 'arrival';
+            } else {
+                isAtStation = true; // Train has arrived at final destination
+            }
+        }
+
+        // Calculate distance if train position and station geolocation are available
+        // Show distance while approaching AND while at station (until departure is confirmed)
+        let distance: number | null = null;
+        let positionAge: number | null = null;
+
+        if ((isUpcoming || isAtStation) && trainPosition?.latitude && trainPosition?.longitude && stationGeolocation) {
+            distance = calculateDistance(
+                trainPosition.latitude,
+                trainPosition.longitude,
+                stationGeolocation.latitude,
+                stationGeolocation.longitude
+            );
+
+            if (trainPosition.timestamp) {
+                positionAge = Math.floor((now - new Date(trainPosition.timestamp).getTime()) / 1000) + 1;
+            }
+        }
+
+        // Check if departure has been confirmed (actualTime is set)
+        const departureConfirmed = !!departureRow?.actualTime;
+
+        // Hide tracking box only after departure is confirmed
+        if (departureConfirmed) return null;
+        if (!isUpcoming && !isAtStation) return null;
+
+        return {
+            isUpcoming,
+            isAtStation,
+            timeUntilMs,
+            timeUntilType,
+            distance,
+            positionAge
+        };
+    }, [station, isTrainRunning, currentTime, trainPosition, stationGeolocation]);
+
+    // Format time until as "x h, x min, x s"
+    const formatTimeUntil = (ms: number): string => {
+        if (ms <= 0) return '0 s';
+
+        const totalSeconds = Math.floor(ms / 1000);
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+
+        const parts: string[] = [];
+        if (hours > 0) parts.push(`${hours} h`);
+        if (minutes > 0) parts.push(`${minutes} min`);
+        if (seconds > 0 || parts.length === 0) parts.push(`${seconds} s`);
+
+        return parts.join(', ');
+    };
+
+    // Format position age
+    const formatPositionAge = (seconds: number): string => {
+        if (seconds < 60) {
+            return `${seconds} s`;
+        }
+        const minutes = Math.floor(seconds / 60);
+        return `${minutes} min`;
     };
 
     if (!station || !stationData) return null;
@@ -515,8 +674,64 @@ const StationStopDrawer = memo(function StationStopDrawer({
                             )}
                         </div>
 
+                        {/* Train tracking section - only shown when train is running and station is upcoming or current */}
+                        {trackingInfo && (
+                            <div className="box mt-4 mx-0 p-3" style={{ backgroundColor: 'var(--bulma-scheme-main-bis)' }}>
+                                <div className="is-flex is-align-items-center mb-2">
+                                    <span className="icon has-text-primary">
+                                        <i className="fas fa-location-arrow"></i>
+                                    </span>
+                                    <span className="has-text-weight-semibold ml-1">
+                                        {trackingInfo.isAtStation
+                                            ? t('train.stationDrawer.trainAtStation')
+                                            : t('train.stationDrawer.trainApproaching')
+                                        }
+                                    </span>
+                                </div>
+
+                                <div className="columns is-mobile is-multiline">
+                                    {/* Distance to station - shown while approaching and at station */}
+                                    {(trackingInfo.isUpcoming || trackingInfo.isAtStation) && trackingInfo.distance !== null && (
+                                        <div className="column is-narrow">
+                                            <div className="has-text-weight-semibold is-size-7 mb-1">
+                                                {t('train.stationDrawer.distanceToStation')}
+                                            </div>
+                                            <div className="is-size-5 has-text-weight-bold">
+                                                {formatDistance(trackingInfo.distance)}
+                                            </div>
+                                            {trainPosition?.speed !== null && trainPosition?.speed !== undefined && (
+                                                <div className="is-size-7 has-text-grey">
+                                                    {t('train.stationDrawer.currentSpeed', { speed: trainPosition.speed })}
+                                                </div>
+                                            )}
+                                            {trackingInfo.positionAge !== null && (
+                                                <div className="is-size-7 has-text-grey">
+                                                    {t('train.stationDrawer.positionAge', { age: formatPositionAge(trackingInfo.positionAge) })}
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {/* Time until arrival/departure */}
+                                    {trackingInfo.timeUntilMs !== null && trackingInfo.timeUntilMs > 0 && (
+                                        <div className="column is-narrow">
+                                            <div className="has-text-weight-semibold is-size-7 mb-1">
+                                                {trackingInfo.timeUntilType === 'arrival'
+                                                    ? t('train.stationDrawer.timeToArrival')
+                                                    : t('train.stationDrawer.timeToDeparture')
+                                                }
+                                            </div>
+                                            <div className="is-size-5 has-text-weight-bold">
+                                                {formatTimeUntil(trackingInfo.timeUntilMs)}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
                         {/* Arrival/Departure Times and Track */}
-                        <div className="columns is-mobile mt-4 mb-0 box is-shadowless mx-0 p-1" style={{ backgroundColor: 'var(--bulma-scheme-main-bis)' }}>
+                        <div className="columns is-mobile mb-0 box  mx-0 p-1" style={{ backgroundColor: 'var(--bulma-scheme-main-bis)' }}>
                             {track && (
                                 <div className="column is-narrow">
                                     <div className="has-text-weight-semibold is-size-7 mb-1">{t('train.track')}</div>
@@ -588,7 +803,7 @@ const StationStopDrawer = memo(function StationStopDrawer({
                                 </span>
                             </button>
                             {compositionExpanded && (
-                                <div className="p-3 box is-shadowless" style={{ backgroundColor: 'var(--bulma-scheme-main-bis)' }}>
+                                <div className="p-3 box " style={{ backgroundColor: 'var(--bulma-scheme-main-bis)' }}>
                                     {compositionLoading ? (
                                         <div className="has-text-centered py-3">
                                             <span className="icon">

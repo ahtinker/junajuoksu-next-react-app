@@ -381,8 +381,10 @@ export default function TrainPage() {
                                 selectedDestinationUic={parsedParams.selectedDestinationUic ? parseInt(parsedParams.selectedDestinationUic) : undefined}
                                 onSetAsDeparture={handleSetAsDeparture}
                                 onSetAsDestination={handleSetAsDestination}
+                                trainPosition={trainPosition}
                             />
                         </div>
+                        <div className="column is-hidden-tablet mt-5"></div>
                         <div className="column">
                             <HighlightedStationPanel
                                 train={train}

@@ -83,7 +83,7 @@ export default function PassengerInformation({ stationShortCode }: PassengerInfo
     }
 
     return (
-        <article className="panel is-shadowless is-warning has-text-left">
+        <article className="panel  is-warning has-text-left">
             <div className="panel-heading">
                 <span className="icon-text">
                     <span className="icon">

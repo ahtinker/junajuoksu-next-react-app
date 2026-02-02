@@ -26,7 +26,7 @@ const UpdatedTermsModal = ({
         <div className={`modal ${isOpen ? 'is-active' : ''}`}>
             <div className="modal-background"></div>
             <div className="modal-card" style={{ maxWidth: '500px' }}>
-                <header className="modal-card-head is-shadowless">
+                <header className="modal-card-head ">
                     <p className="modal-card-title">
                         {t('auth.updatedTermsModal.title')}
                     </p>

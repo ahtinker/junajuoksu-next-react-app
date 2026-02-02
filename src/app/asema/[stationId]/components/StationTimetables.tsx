@@ -313,7 +313,7 @@ export default function StationTimetables({ stationId }: StationTimetablesProps)
             <div className="container">
                 <div className="columns is-centered">
                     <div className="column is-8">
-                        <div className="box is-shadowless">
+                        <div className="box ">
                             <div className="notification is-danger">
                                 <p className="has-text-centered">
                                     <i className="fas fa-exclamation-triangle"></i>&nbsp;
@@ -336,7 +336,7 @@ export default function StationTimetables({ stationId }: StationTimetablesProps)
             <div className="columns is-centered is-tablet" style={{ minHeight: '100vh' }}>
                 <div className={`column is-4-desktop is-6-tablet ${styles['mobile-full-height']}`}>
                     <div className={`pt-2`} style={{ position: 'sticky', top: 50, marginTop: "50px" }}>
-                        <article className="panel is-shadowless is-primary themebackground">
+                        <article className="panel  is-primary themebackground">
                             <div className="panel-heading level is-mobile mb-0"
                                 style={{
                                     position: 'relative',
@@ -378,7 +378,7 @@ export default function StationTimetables({ stationId }: StationTimetablesProps)
                                         <button
                                             type="button"
                                             onClick={handleSearchClose}
-                                            className={`button is-primary px-5 is-shadowless has-text-light ${styles['search-close-button']}`}
+                                            className={`button is-primary px-5  has-text-light ${styles['search-close-button']}`}
                                         >
                                             <span className="icon">
                                                 <i className="fas fa-times"></i>
@@ -500,7 +500,7 @@ export default function StationTimetables({ stationId }: StationTimetablesProps)
                 <div className="column is-responsive">
                     <TimetableList
                         stationData={stationData}
-                        classNames="is-shadowless"
+                        classNames=""
                         selectedDateTime={selectedDateTime}
                         isRealtime={isRealtime}
                         selectedDestination={selectedDestination}

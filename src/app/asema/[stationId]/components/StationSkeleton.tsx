@@ -16,14 +16,14 @@ export default function StationSkeleton({ showFullLayout = true }: StationSkelet
                     <div className={`column is-4-desktop is-6-tablet ${styles['mobile-full-height']}`}>
                         <div>
 
-                            <div className="box is-shadowless is-skeleton" style={{ height: "184px", opacity: "0.2" }}>
+                            <div className="box  is-skeleton" style={{ height: "184px", opacity: "0.2" }}>
                             </div>
                         </div>
                     </div>
 
                     {/* Right Panel (Timetables) Skeleton */}
                     <div className="column is-responsive">
-                        <div className="box is-shadowless is-skeleton" style={{ height: "300px", opacity: "0.2" }}>
+                        <div className="box  is-skeleton" style={{ height: "300px", opacity: "0.2" }}>
                         </div>
                     </div>
                 </div>

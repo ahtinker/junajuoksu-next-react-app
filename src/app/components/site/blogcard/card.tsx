@@ -11,7 +11,7 @@ export default function BlogCard({ blogId = 1 }: BlogCardProps) {
     const t = useTranslations();
 
     return (
-        <div className="card is-shadowless" style={{ backgroundColor: "var(--bulma-background)" }}>
+        <div className="card " style={{ backgroundColor: "var(--bulma-background)" }}>
             <div className="card-image">
                 <figure className="image is-4by1">
                     <Image

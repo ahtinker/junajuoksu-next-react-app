@@ -43,6 +43,14 @@ interface TrainStationStopsProps {
     selectedDestinationUic?: number;
     onSetAsDeparture?: (uicCode: number, stopIndex: number) => void;
     onSetAsDestination?: (uicCode: number) => void;
+    trainPosition?: {
+        latitude: number | null;
+        longitude: number | null;
+        speed: number | null;
+        timestamp: string | null;
+        source: 'HSL' | 'VR' | null;
+        heading?: number | null;
+    };
 }
 
 interface StationStop {
@@ -112,7 +120,8 @@ export default function TrainStationStops({
     originStopIndex,
     selectedDestinationUic,
     onSetAsDeparture,
-    onSetAsDestination
+    onSetAsDestination,
+    trainPosition
 }: TrainStationStopsProps) {
     const locale = useLocale();
     const t = useTranslations();
@@ -1047,7 +1056,7 @@ export default function TrainStationStops({
 
                         return (
                             <div key={`${stop.uicCode}-${stop.stopIndex}`}>
-                                <div className={`box is-shadowless ${styles["station-stop"]} ${stop.isOrigin ? 'is-origin' : ''} ${stop.isDestination ? 'is-destination' : ''}`}>
+                                <div style={{ backgroundColor: "var(--bulma-background)" }} className={`box  ${styles["station-stop"]} ${stop.isOrigin ? 'is-origin' : ''} ${stop.isDestination ? 'is-destination' : ''}`}>
                                     <div className="columns is-desktop" style={{ position: "relative" }}>
                                         <div className="column is-5-tablet is-5-desktop is-5-widescreen">
                                         {index == 0 ?
@@ -1318,7 +1327,7 @@ export default function TrainStationStops({
                                                                 </p>
                                                             )}
                                                             {causeGroup.causes.map((cause, causeIndex) => (
-                                                                <div key={causeIndex} className="box is-shadowless py-2 px-3 mb-2" style={{ backgroundColor: 'var(--bulma-scheme-main-bis)' }}>
+                                                                <div key={causeIndex} className="box  py-2 px-3 mb-2" style={{ backgroundColor: 'var(--bulma-scheme-main-bis)' }}>
                                                                     <div className="is-flex is-align-items-center">
                                                                         <span className="is-size-6">
                                                                             {getCauseDescription(cause)}
@@ -1353,6 +1362,8 @@ export default function TrainStationStops({
                 currentDestinationUic={selectedDestinationUic}
                 onSetAsDeparture={onSetAsDeparture}
                 onSetAsDestination={onSetAsDestination}
+                trainPosition={trainPosition}
+                isTrainRunning={train.runningCurrently}
             />
         </div>
     );
