@@ -679,7 +679,7 @@ nextDate: trainsByDepartureDate(departureDate: "${nextDateStr}", where: {timeTab
     }
 
     return (
-        <article className={"panel is-primary  " + classNames} style={{ marginTop: "-2px" }}>
+        <article className={"panel is-primary is-shadowless " + classNames} style={{ marginTop: "-2px" }}>
             <div className={`${styles['mobile-border']} mt-2`} style={hideTop ? { position: 'sticky', top: 0, zIndex: 1 } : { position: 'sticky', top: "0.5rem", zIndex: 1, border: 'solid var(--bulma-scheme-main' }}>
                 <div className={`panel-heading level is-mobile mb-0 py-2 ${styles['tablet-primary-background']} `}>
                     <div className="level-left has-text-left is-block py-2">

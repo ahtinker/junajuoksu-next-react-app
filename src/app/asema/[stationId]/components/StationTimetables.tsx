@@ -336,7 +336,7 @@ export default function StationTimetables({ stationId }: StationTimetablesProps)
             <div className="columns is-centered is-tablet" style={{ minHeight: '100vh' }}>
                 <div className={`column is-4-desktop is-6-tablet ${styles['mobile-full-height']}`}>
                     <div className={`pt-2`} style={{ position: 'sticky', top: 50, marginTop: "50px" }}>
-                        <article className="panel  is-primary themebackground">
+                        <article className="panel is-primary themebackground">
                             <div className="panel-heading level is-mobile mb-0"
                                 style={{
                                     position: 'relative',

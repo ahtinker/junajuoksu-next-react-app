@@ -1177,7 +1177,7 @@ export default function TrainStationStops({
                                                     {t('train.track')}
                                                 </div>
                                                 <div className="tag is-size-6 px-4" style={{ backgroundColor: 'var(--bulma-scheme-main)', color: 'var(--bulma-text-strong)' }}>
-                                                    {getStationTrack(stop.arrival.track ? index : stop.departure.track ? index + 1 : -1) || "?"}
+                                                    {stop.arrival.track || stop.departure.track || "?"}
                                                 </div>
                                             </div>
                                     </div>
@@ -1191,7 +1191,7 @@ export default function TrainStationStops({
                                                         {t('train.track')}
                                                     </div>
                                                     <div className="tag is-size-6 px-4" style={{ backgroundColor: 'var(--bulma-scheme-main)', color: 'var(--bulma-text-strong)' }}>
-                                                        {getStationTrack(stop.arrival.track ? index : stop.departure.track ? index + 1 : -1) || "?"}
+                                                        {stop.arrival.track || stop.departure.track || "?"}
                                                     </div>
                                                 </div>
                                                 <div className={"column " + (!stop.hasArrival && !(index === 0 && boardingTime) ? "is-hidden" : "")}>
