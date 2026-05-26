@@ -398,7 +398,7 @@ export default function TrainPage() {
 
 
                     {/* Debug Section - Realtime Position Data */}
-                    <div className="box mt-6" style={{ backgroundColor: 'var(--bulma-scheme-main-bis)' }}>
+                    <div className="box mt-6 is-hidden" style={{ backgroundColor: 'var(--bulma-scheme-main-bis)' }}>
                         <h3 className="title is-5">
                             <span className="icon-text">
                                 <span className="icon">

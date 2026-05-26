@@ -29,7 +29,8 @@ const Footer = () => {
                     <hr className="is-hidden-desktop" />
                     <div className="column">
                         <h2>{t('footer.additionalInfo')}</h2>
-                        <div>{t('footer.implementedBy')}</div>
+                        <span>{t('footer.implementedBy')}</span> <a className="has-text-info-45" href="https://vanke.fi">vanke.fi</a>
+                        <br></br>
                         <Image className="mt-5" src="/va-logo.svg" alt="Verkkokehitys Ankeriasniemi" width={75} height={30} />
 
                         <div className="my-4">

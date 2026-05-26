@@ -75,7 +75,7 @@ function Home() {
         </div>
       </section>
 
-      <div style={{ position: "absolute", width: "100%", height: "100vh", overflowX: "hidden", overflowY: "visible"}}>
+      <div style={{ position: "absolute", width: "100%", height: "100vh", overflowX: "hidden", overflowY: "visible", pointerEvents: "none"}}>
         <Image
           style={{
             position: "absolute",
